@@ -2,6 +2,8 @@
 
 Add Animatable Material Components in Android Jetpack Compose. Create basic ui animations painless.
 
+## How it looks
+
 ## Usage
 
 ### AnimatableText
