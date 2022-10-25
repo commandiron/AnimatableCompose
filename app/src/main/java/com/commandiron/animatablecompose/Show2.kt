@@ -1,6 +1,5 @@
 package com.commandiron.animatablecompose
 
-import androidx.compose.animation.core.tween
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -12,7 +11,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
-import com.commandiron.animatable_compose.state.AnimatableCard
+import com.commandiron.animatable_compose.AnimatableCard
 import com.commandiron.animatable_compose.state.rememberAnimatableCardState
 import kotlinx.coroutines.launch
 
@@ -24,15 +23,14 @@ fun Show2() {
         initialShape = CircleShape,
         targetShape = RoundedCornerShape(0.dp, 0.dp, 24.dp, 0.dp),
         initialOffset = DpOffset(x = 0.dp, y = 0.dp),
-        targetOffset = DpOffset(x = - Dp.Infinity, y = -Dp.Infinity),
-        offsetAnimationSpec = tween(1000)
+        targetOffset = DpOffset(x = - Dp.Infinity, y = -Dp.Infinity)
     )
     val scope = rememberCoroutineScope()
     AnimatableCard(
         modifier = Modifier.size(100.dp),
         onClick = {
             scope.launch {
-                animatableCardState.transform()
+                animatableCardState.animate()
             }
         },
         elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),

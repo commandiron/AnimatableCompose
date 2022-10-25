@@ -1,5 +1,6 @@
-package com.commandiron.animatable_compose.state
+package com.commandiron.animatable_compose
 
+import androidx.compose.foundation.layout.offset
 import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -13,7 +14,9 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.TextUnit
+import com.commandiron.animatable_compose.state.AnimatableState
 
 @Composable
 fun AnimatableText(
@@ -32,11 +35,23 @@ fun AnimatableText(
     maxLines: Int = Int.MAX_VALUE,
     onTextLayout: (TextLayoutResult) -> Unit = {},
     style: TextStyle = LocalTextStyle.current,
-    state: AnimatableState
+    state: AnimatableState,
+    fixedOffset: DpOffset = DpOffset.Unspecified,
 ) {
     Text(
         text = text,
-        modifier = modifier,
+        modifier = Modifier
+            .offset(
+                x = when (fixedOffset) {
+                    DpOffset.Unspecified -> state.animatedOffset.x
+                    else -> fixedOffset.x
+                },
+                y = when (fixedOffset) {
+                    DpOffset.Unspecified -> state.animatedOffset.y
+                    else -> fixedOffset.y
+                }
+            )
+            .then(modifier),
         color = color,
         fontSize = state.animatedFontSize,
         fontStyle = fontStyle,

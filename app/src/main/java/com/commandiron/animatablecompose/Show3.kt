@@ -5,7 +5,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.sp
-import com.commandiron.animatable_compose.state.AnimatableText
+import com.commandiron.animatable_compose.AnimatableText
 import com.commandiron.animatable_compose.state.rememberAnimatableTextState
 import kotlinx.coroutines.launch
 
@@ -20,7 +20,7 @@ fun Show3() {
         modifier = Modifier
             .clickable {
                 scope.launch {
-                    animatableTextState.transform()
+                    animatableTextState.animate()
                 }
         },
         text = "Animatable",

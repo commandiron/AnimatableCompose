@@ -1,19 +1,19 @@
-package com.commandiron.animatable_compose.state
+package com.commandiron.animatable_compose
 
+import androidx.annotation.FloatRange
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.interaction.MutableInteractionSource
-import androidx.compose.foundation.layout.ColumnScope
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.offset
-import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.DpSize
+import com.commandiron.animatable_compose.state.AnimatableState
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -29,10 +29,11 @@ fun AnimatableCard(
     fixedWidth: Dp = Dp.Unspecified,
     fixedHeight: Dp = Dp.Unspecified,
     fixedShape: Shape? = null,
+    @FloatRange(from = 0.0, to = 1.0)
+    fixedAlpha: Float? = null,
     fixedOffset: DpOffset = DpOffset.Unspecified,
     content: @Composable ColumnScope.() -> Unit
 ) {
-
     Card(
         onClick = onClick,
         modifier = Modifier
@@ -64,6 +65,7 @@ fun AnimatableCard(
                     else -> fixedOffset.y
                 }
             )
+            .alpha(fixedAlpha ?: state.animatedAlpha)
             .then(modifier),
         enabled = enabled,
         interactionSource = interactionSource,

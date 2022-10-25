@@ -31,7 +31,7 @@ fun Show1() {
             .border(1.dp, Color.Red)
             .clickable {
                 scope.launch {
-                    animatableBoxState.transform()
+                    animatableBoxState.animate()
                 }
             },
         state = animatableBoxState
