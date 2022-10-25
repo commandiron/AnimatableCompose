@@ -14,7 +14,7 @@ Add Animatable Material Components in Android Jetpack Compose. Create basic ui a
 <td>
     
 ```kotlin
-    // Simply create state and pass it to AnimatableText
+// Simply create state and pass it to AnimatableText
 val state = rememberAnimatableTextState(
     initialFontSize = 12.sp,
     targetFontSize = 60.sp
