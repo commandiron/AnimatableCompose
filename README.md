@@ -3,14 +3,78 @@
 Add Animatable Material Components in Android Jetpack Compose. Create basic ui animations painless.
 
 ## Usage
-|Result|Usage|
-|------|-----|
-|<img src="https://user-images.githubusercontent.com/50905347/189122534-72e2140f-e5cf-414c-897d-36e6876555a1.gif" width="256" height="256">|```WheelDateTimePicker { snappedDateTime -> }```|
-|<img src="https://user-images.githubusercontent.com/50905347/189132165-6d2611a2-4f41-467d-900a-34d87dbbc68c.gif" width="256" height="256">|```WheelDatePicker { snappedDate -> }```|
-|<img src="https://user-images.githubusercontent.com/50905347/189145244-887aac1c-17aa-4f65-9049-252898e28a30.gif" width="256" height="256">|```WheelTimePicker { snappedTime -> }```|
-|<img src="https://user-images.githubusercontent.com/50905347/189645296-cc9733fa-52bd-46e2-897a-9a256275209b.gif" width="256" height="256">|```WheelTextPicker(texts = (1..6).map { "Text $it" })```|
-|<img src="https://user-images.githubusercontent.com/50905347/189134369-8c01dba5-4331-474d-8010-d3926c8fe669.gif" width="256" height="256">|```WheelPicker(count = 6) { index, snappedIndex ->```<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;```Card(Modifier.size(128.dp).padding(8.dp)) {}```<br/>```}```|
 
+### AnimatableText
+
+<table border="0">
+<tr>
+<td>
+    <img src="https://user-images.githubusercontent.com/50905347/195865007-3c1b2670-d0eb-41ae-9a0d-5757ff63779e.gif" width="250" height="530">
+</td>
+<td>
+    
+```kotlin
+    val state = rememberAnimatableTextState(
+        initialFontSize = 12.sp,
+        targetFontSize = 60.sp
+    )
+    Column(
+        modifier = Modifier.fillMaxSize().clickable {
+            state.animate()
+        },
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        AnimatableText(
+            text = "Animatable",
+            state = state
+        )
+        AnimatableText(
+            text = "Compose",
+            state = state
+        )
+    }
+```
+</td>
+</tr>
+</table>
+
+### AnimatableBox
+
+<table border="0">
+<tr>
+<td>
+    <img src="https://user-images.githubusercontent.com/50905347/195865007-3c1b2670-d0eb-41ae-9a0d-5757ff63779e.gif" width="250" height="530">
+</td>
+<td>
+    
+```kotlin
+val animatableBoxState = rememberAnimatableBoxState(
+    initialSize = DpSize(60.dp, 60.dp),
+    targetSize = DpSize(Dp.Infinity, 120.dp),
+    initialOffset = DpOffset(x = 0.dp, y = 0.dp),
+    targetOffset = DpOffset(x = 0.dp, y = - Dp.Infinity)
+)
+AnimatableBox(
+    modifier = Modifier
+        .border(1.dp, Color.Red)
+        .clickable {
+            animatableBoxState.animate()
+        },
+    contentAlignment = Alignment.TopEnd,
+    state = animatableBoxState,
+) {
+    Icon(
+        modifier = Modifier.padding(8.dp),
+        imageVector = Icons.Default.Add,
+        contentDescription = null
+    )
+}
+
+```
+</td>
+</tr>
+</table>
 
 ## Setup
 1. Open the file `settings.gradle` (it looks like that)
