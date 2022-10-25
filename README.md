@@ -14,26 +14,29 @@ Add Animatable Material Components in Android Jetpack Compose. Create basic ui a
 <td>
     
 ```kotlin
-    val state = rememberAnimatableTextState(
-        initialFontSize = 12.sp,
-        targetFontSize = 60.sp
-    )
-    Column(
-        modifier = Modifier.fillMaxSize().clickable {
-            state.animate()
+    // Simply create state and pass it to AnimatableText
+val state = rememberAnimatableTextState(
+    initialFontSize = 12.sp,
+    targetFontSize = 60.sp
+)
+Column(
+    modifier = Modifier
+        .fillMaxSize()
+        .clickable {
+            state.animate() // animate
         },
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        AnimatableText(
-            text = "Animatable",
-            state = state
-        )
-        AnimatableText(
-            text = "Compose",
-            state = state
-        )
-    }
+    verticalArrangement = Arrangement.Center,
+    horizontalAlignment = Alignment.CenterHorizontally
+) {
+    AnimatableText(
+        text = "Animatable",
+        state = state // pass state.
+    )
+    AnimatableText(
+        text = "Compose",
+        state = state // pass state
+    )
+}
 ```
 </td>
 </tr>
@@ -49,20 +52,22 @@ Add Animatable Material Components in Android Jetpack Compose. Create basic ui a
 <td>
     
 ```kotlin
-val animatableBoxState = rememberAnimatableBoxState(
-    initialSize = DpSize(60.dp, 60.dp),
-    targetSize = DpSize(Dp.Infinity, 120.dp),
-    initialOffset = DpOffset(x = 0.dp, y = 0.dp),
-    targetOffset = DpOffset(x = 0.dp, y = - Dp.Infinity)
+// Simply create box state and pass it to AnimatableBox
+val state = rememberAnimatableBoxState(
+    initialSize = DpSize(60.dp, 60.dp), // set initial size.
+    targetSize = DpSize(Dp.Infinity, 120.dp), // set target size.
+    initialOffset = DpOffset(x = 0.dp, y = 0.dp), // set initial offset.
+    targetOffset = DpOffset(x = 0.dp, y = - Dp.Infinity) // set target offset.
+    // Dp.Infinity will take the maximum value according to the screen size
 )
 AnimatableBox(
     modifier = Modifier
         .border(1.dp, Color.Red)
         .clickable {
-            animatableBoxState.animate()
+            state.animate() // animate
         },
     contentAlignment = Alignment.TopEnd,
-    state = animatableBoxState,
+    state = state, // pass state
 ) {
     Icon(
         modifier = Modifier.padding(8.dp),
@@ -70,7 +75,6 @@ AnimatableBox(
         contentDescription = null
     )
 }
-
 ```
 </td>
 </tr>
