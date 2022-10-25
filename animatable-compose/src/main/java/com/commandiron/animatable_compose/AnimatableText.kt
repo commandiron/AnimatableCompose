@@ -17,6 +17,63 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.TextUnit
 import com.commandiron.animatable_compose.state.AnimatableState
+import com.commandiron.animatable_compose.state.AnimatableStateTag
+import com.commandiron.animatable_compose.state.SharedAnimatableState
+
+@Composable
+fun AnimatableText(
+    text: String,
+    modifier: Modifier = Modifier,
+    color: Color = Color.Unspecified,
+    fontStyle: FontStyle? = null,
+    fontWeight: FontWeight? = null,
+    fontFamily: FontFamily? = null,
+    letterSpacing: TextUnit = TextUnit.Unspecified,
+    textDecoration: TextDecoration? = null,
+    textAlign: TextAlign? = null,
+    lineHeight: TextUnit = TextUnit.Unspecified,
+    overflow: TextOverflow = TextOverflow.Clip,
+    softWrap: Boolean = true,
+    maxLines: Int = Int.MAX_VALUE,
+    onTextLayout: (TextLayoutResult) -> Unit = {},
+    style: TextStyle = LocalTextStyle.current,
+    state: SharedAnimatableState,
+    stateIndex: Int = 0,
+    fixedOffset: DpOffset = DpOffset.Unspecified,
+) {
+    val stateIn = state.getState(AnimatableStateTag.TEXT, stateIndex) ?: throw (
+            IllegalArgumentException("no animatableState has this index: $stateIndex")
+    )
+    Text(
+        text = text,
+        modifier = Modifier
+            .offset(
+                x = when (fixedOffset) {
+                    DpOffset.Unspecified -> stateIn.animatedOffset.x
+                    else -> fixedOffset.x
+                },
+                y = when (fixedOffset) {
+                    DpOffset.Unspecified -> stateIn.animatedOffset.y
+                    else -> fixedOffset.y
+                }
+            )
+            .then(modifier),
+        color = color,
+        fontSize = stateIn.animatedFontSize,
+        fontStyle = fontStyle,
+        fontWeight = fontWeight,
+        fontFamily = fontFamily,
+        letterSpacing = letterSpacing,
+        textDecoration = textDecoration,
+        textAlign = textAlign,
+        lineHeight = lineHeight,
+        overflow = overflow,
+        softWrap = softWrap,
+        maxLines = maxLines,
+        onTextLayout = onTextLayout,
+        style= style
+    )
+}
 
 @Composable
 fun AnimatableText(

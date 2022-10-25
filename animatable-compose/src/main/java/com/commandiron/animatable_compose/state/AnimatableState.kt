@@ -14,58 +14,84 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.*
 
 @Composable
-fun rememberAnimatableSharedState(
-    initialSize: DpSize? = null,
-    targetSize: DpSize? = null,
-    toTargetSizeAnimationSpec: AnimationSpec<Size> = tween(500),
-    toInitialSizeAnimationSpec: AnimationSpec<Size> = tween(500),
-    onSizeAnimation: (AnimationState) -> Unit = {},
-    initialShape: Shape? = null,
-    targetShape: Shape? = null,
-    toTargetShapeAnimationSpec: AnimationSpec<Float> = tween(500),
-    toInitialShapeAnimationSpec: AnimationSpec<Float> = tween(500),
-    onShapeAnimation: (AnimationState) -> Unit = {},
+fun rememberSharedAnimatableState(
+    animatableStates: List<AnimatableState>
+): SharedAnimatableState {
+    return remember {
+        SharedAnimatableState(
+            animatableStates = animatableStates
+        )
+    }
+}
+
+data class SharedAnimatableState(
+    private val animatableStates: List<AnimatableState>
+) {
+    fun getState(
+        animatableStateTag: AnimatableStateTag,
+        index: Int
+    ): AnimatableState? {
+        val states = animatableStates.filter { it.animatableStateTag == animatableStateTag }
+        return states.getOrNull(index)
+    }
+
+    fun animate() {
+        animatableStates.forEach { it.animate() }
+    }
+
+    fun animateToTarget() {
+        animatableStates.forEach { it.animateToTarget() }
+    }
+    fun animateToInitial() {
+        animatableStates.forEach { it.animateToInitial() }
+    }
+}
+
+@Composable
+fun rememberAnimatableTextState(
+    index: Int = 0,
+    initialFontSize: TextUnit,
+    targetFontSize: TextUnit,
+    toTargetFontSizeAnimationSpec: AnimationSpec<Float> = tween(500),
+    toInitialFontSizeAnimationSpec: AnimationSpec<Float> = tween(500),
+    onFontSizeAnimation: (AnimationState) -> Unit = {},
+    initialAlpha: Float? = null,
+    targetAlpha: Float? = null,
+    toTargetAlphaAnimationSpec: AnimationSpec<Float> = tween(500),
+    toInitialAlphaAnimationSpec: AnimationSpec<Float> = tween(500),
+    onAlphaAnimation: (AnimationState) -> Unit = {},
     initialOffset: DpOffset? = null,
     targetOffset: DpOffset? = null,
     toTargetOffsetAnimationSpec: AnimationSpec<Size> = tween(500),
     toInitialOffsetAnimationSpec: AnimationSpec<Size> = tween(500),
-    onOffsetAnimation: (AnimationState) -> Unit = {},
-    initialFontSize: TextUnit? = null,
-    targetFontSize: TextUnit? = null,
-    toTargetFontSizeAnimationSpec: AnimationSpec<Float> = tween(500),
-    toInitialFontSizeAnimationSpec: AnimationSpec<Float> = tween(500),
-    onFontSizeAnimation: (AnimationState) -> Unit = {},
-    onAnimation: (AnimationState) -> Unit = {}
+    onOffsetAnimation: (AnimationState) -> Unit = {}
 ): AnimatableState {
     return remember {
         AnimatableState(
-            initialSize = initialSize,
-            targetSize = targetSize,
-            toTargetSizeAnimationSpec = toTargetSizeAnimationSpec,
-            toInitialSizeAnimationSpec = toInitialSizeAnimationSpec,
-            onSizeAnimation = onSizeAnimation,
-            initialShape = initialShape,
-            targetShape = targetShape,
-            toTargetShapeAnimationSpec = toTargetShapeAnimationSpec,
-            toInitialShapeAnimationSpec = toInitialShapeAnimationSpec,
-            onShapeAnimation = onShapeAnimation,
+            animatableStateTag = AnimatableStateTag.TEXT,
+            index = index,
+            initialFontSize = initialFontSize,
+            targetFontSize = targetFontSize,
+            toTargetFontSizeAnimationSpec = toTargetFontSizeAnimationSpec,
+            toInitialFontSizeAnimationSpec = toInitialFontSizeAnimationSpec,
+            onFontSizeAnimation = onFontSizeAnimation,
+            initialAlpha = initialAlpha,
+            targetAlpha = targetAlpha,
+            toTargetAlphaAnimationSpec = toTargetAlphaAnimationSpec,
+            toInitialAlphaAnimationSpec = toInitialAlphaAnimationSpec,
+            onAlphaAnimation = onAlphaAnimation,
             initialOffset = initialOffset,
             targetOffset = targetOffset,
             toTargetOffsetAnimationSpec = toTargetOffsetAnimationSpec,
             toInitialOffsetAnimationSpec = toInitialOffsetAnimationSpec,
-            onOffsetAnimation = onOffsetAnimation,
-            initialFontSize = initialFontSize,
-            targetFontSize = targetFontSize,
-            toTargetFontSizeAnimationSpec =  toTargetFontSizeAnimationSpec,
-            toInitialFontSizeAnimationSpec =  toInitialFontSizeAnimationSpec,
-            onFontSizeAnimation = onFontSizeAnimation,
-            onAnimation= onAnimation
+            onOffsetAnimation = onOffsetAnimation
         )
     }
 }
 
 @Composable
 fun rememberAnimatableBoxState(
+    index: Int = 0,
     initialSize: DpSize? = null,
     targetSize: DpSize? = null,
     toTargetSizeAnimationSpec: AnimationSpec<Size> = tween(500),
@@ -79,6 +105,8 @@ fun rememberAnimatableBoxState(
 ): AnimatableState {
     return remember {
         AnimatableState(
+            animatableStateTag = AnimatableStateTag.BOX,
+            index = index,
             initialSize = initialSize,
             targetSize = targetSize,
             toTargetSizeAnimationSpec = toTargetSizeAnimationSpec,
@@ -95,6 +123,7 @@ fun rememberAnimatableBoxState(
 
 @Composable
 fun rememberAnimatableCardState(
+    index: Int = 0,
     initialSize: DpSize? = null,
     targetSize: DpSize? = null,
     toTargetSizeAnimationSpec: AnimationSpec<Size> = tween(500),
@@ -118,6 +147,8 @@ fun rememberAnimatableCardState(
 ): AnimatableState {
     return remember {
         AnimatableState(
+            animatableStateTag = AnimatableStateTag.CARD,
+            index = index,
             initialSize = initialSize,
             targetSize = targetSize,
             toTargetSizeAnimationSpec = toTargetSizeAnimationSpec,
@@ -143,36 +174,8 @@ fun rememberAnimatableCardState(
 }
 
 @Composable
-fun rememberAnimatableTextState(
-    initialFontSize: TextUnit,
-    targetFontSize: TextUnit,
-    toTargetFontSizeAnimationSpec: AnimationSpec<Float> = tween(500),
-    toInitialFontSizeAnimationSpec: AnimationSpec<Float> = tween(500),
-    onFontSizeAnimation: (AnimationState) -> Unit = {},
-    initialOffset: DpOffset? = null,
-    targetOffset: DpOffset? = null,
-    toTargetOffsetAnimationSpec: AnimationSpec<Size> = tween(500),
-    toInitialOffsetAnimationSpec: AnimationSpec<Size> = tween(500),
-    onOffsetAnimation: (AnimationState) -> Unit = {}
-): AnimatableState {
-    return remember {
-        AnimatableState(
-            initialFontSize = initialFontSize,
-            targetFontSize = targetFontSize,
-            toTargetFontSizeAnimationSpec = toTargetFontSizeAnimationSpec,
-            toInitialFontSizeAnimationSpec = toInitialFontSizeAnimationSpec,
-            onFontSizeAnimation = onFontSizeAnimation,
-            initialOffset = initialOffset,
-            targetOffset = targetOffset,
-            toTargetOffsetAnimationSpec = toTargetOffsetAnimationSpec,
-            toInitialOffsetAnimationSpec = toInitialOffsetAnimationSpec,
-            onOffsetAnimation = onOffsetAnimation
-        )
-    }
-}
-
-@Composable
 fun rememberAnimatableIconState(
+    index: Int = 0,
     initialSize: DpSize? = null,
     targetSize: DpSize? = null,
     toTargetSizeAnimationSpec: AnimationSpec<Size> = tween(500),
@@ -186,6 +189,8 @@ fun rememberAnimatableIconState(
 ): AnimatableState {
     return remember {
         AnimatableState(
+            animatableStateTag = AnimatableStateTag.ICON,
+            index = index,
             initialSize = initialSize,
             targetSize = targetSize,
             toTargetSizeAnimationSpec = toTargetSizeAnimationSpec,
@@ -201,6 +206,9 @@ fun rememberAnimatableIconState(
 }
 
 data class AnimatableState(
+    val animatableStateTag: AnimatableStateTag,
+    val index: Int,
+
     private val initialSize: DpSize? = null,
     private val targetSize: DpSize? = null,
     private val toTargetSizeAnimationSpec: AnimationSpec<Size>? = null,
@@ -752,4 +760,8 @@ data class AnimatableState(
 
 enum class AnimationState {
     INITIAL, INITIAL_TO_TARGET, TARGET_TO_INITIAL, TARGET
+}
+
+enum class AnimatableStateTag {
+    BOX, TEXT, CARD, ICON,
 }

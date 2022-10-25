@@ -12,7 +12,8 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.DpSize
-import com.commandiron.animatable_compose.state.AnimatableState
+import com.commandiron.animatable_compose.state.AnimatableStateTag
+import com.commandiron.animatable_compose.state.SharedAnimatableState
 
 @Composable
 fun AnimatableIcon(
@@ -20,40 +21,44 @@ fun AnimatableIcon(
     contentDescription: String?,
     modifier: Modifier = Modifier,
     tint: Color = LocalContentColor.current,
-    state: AnimatableState,
+    state: SharedAnimatableState,
+    stateIndex: Int = 0,
     fixedWidth: Dp = Dp.Unspecified,
     fixedHeight: Dp = Dp.Unspecified,
     fixedOffset: DpOffset = DpOffset.Unspecified,
 ) {
+    val stateIn = state.getState(AnimatableStateTag.ICON, stateIndex) ?: throw (
+            IllegalArgumentException("no animatableState has this index: $stateIndex")
+    )
     Icon(
         imageVector = imageVector,
         contentDescription = contentDescription,
         modifier = Modifier
             .width(
                 when (fixedWidth) {
-                    Dp.Unspecified -> if (state.animatedSize == DpSize.Unspecified) {
+                    Dp.Unspecified -> if (stateIn.animatedSize == DpSize.Unspecified) {
                         Dp.Unspecified
-                    } else state.animatedSize.width
-                    Dp.Infinity -> state.screenWidth
+                    } else stateIn.animatedSize.width
+                    Dp.Infinity -> stateIn.screenWidth
                     else -> fixedWidth
                 }
             )
             .height(
                 when (fixedHeight) {
-                    Dp.Unspecified -> if (state.animatedSize == DpSize.Unspecified) {
+                    Dp.Unspecified -> if (stateIn.animatedSize == DpSize.Unspecified) {
                         Dp.Unspecified
-                    } else state.animatedSize.height
-                    Dp.Infinity -> state.screenHeight
+                    } else stateIn.animatedSize.height
+                    Dp.Infinity -> stateIn.screenHeight
                     else -> fixedHeight
                 }
             )
             .offset(
                 x = when (fixedOffset) {
-                    DpOffset.Unspecified -> state.animatedOffset.x
+                    DpOffset.Unspecified -> stateIn.animatedOffset.x
                     else -> fixedOffset.x
                 },
                 y = when (fixedOffset) {
-                    DpOffset.Unspecified -> state.animatedOffset.y
+                    DpOffset.Unspecified -> stateIn.animatedOffset.y
                     else -> fixedOffset.y
                 }
             )
