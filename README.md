@@ -80,6 +80,44 @@ AnimatableBox(
 </tr>
 </table>
 
+### AnimatableCard
+
+<table border="0">
+<tr>
+<td>
+    <img src="https://user-images.githubusercontent.com/50905347/195865007-3c1b2670-d0eb-41ae-9a0d-5757ff63779e.gif" width="250" height="530">
+</td>
+<td>
+    
+```kotlin
+// Simply create box state and pass it to AnimatableBox
+val state = rememberAnimatableBoxState(
+    initialSize = DpSize(60.dp, 60.dp), // set initial size.
+    targetSize = DpSize(Dp.Infinity, 120.dp), // set target size.
+    initialOffset = DpOffset(x = 0.dp, y = 0.dp), // set initial offset.
+    targetOffset = DpOffset(x = 0.dp, y = - Dp.Infinity) // set target offset.
+    // Dp.Infinity will take the maximum value according to the screen size
+)
+AnimatableBox(
+    modifier = Modifier
+        .border(1.dp, Color.Red)
+        .clickable {
+            state.animate() // animate
+        },
+    contentAlignment = Alignment.TopEnd,
+    state = state, // pass state
+) {
+    Icon(
+        modifier = Modifier.padding(8.dp),
+        imageVector = Icons.Default.Add,
+        contentDescription = null
+    )
+}
+```
+</td>
+</tr>
+</table>
+
 ## Setup
 1. Open the file `settings.gradle` (it looks like that)
 ```groovy
