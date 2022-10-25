@@ -1,15 +1,16 @@
 plugins {
     id 'com.android.library'
     id 'org.jetbrains.kotlin.android'
+    id 'maven-publish'
 }
 
 android {
     namespace 'com.commandiron.animatable_compose'
-    compileSdk 32
+    compileSdk 33
 
     defaultConfig {
         minSdk 23
-        targetSdk 32
+        targetSdk 33
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles "consumer-rules.pro"
@@ -39,4 +40,18 @@ android {
 dependencies {
     implementation "androidx.compose.ui:ui:$compose_ui_version"
     implementation "androidx.compose.material3:material3:1.0.0-alpha15"
+}
+
+afterEvaluate {
+    publishing{
+        publications {
+            release(MavenPublication){
+                from components.release
+
+                groupId = 'com.github.commandiron'
+                artifactId = 'animatable-compose'
+                version = '1.0.0'
+            }
+        }
+    }
 }
