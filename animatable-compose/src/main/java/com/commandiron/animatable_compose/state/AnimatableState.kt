@@ -50,8 +50,8 @@ data class SharedAnimatableState(
 @Composable
 fun rememberAnimatableTextState(
     index: Int = 0,
-    initialFontSize: TextUnit,
-    targetFontSize: TextUnit,
+    initialFontSize: TextUnit? = null,
+    targetFontSize: TextUnit? = null,
     toTargetFontSizeAnimationSpec: AnimationSpec<Float> = tween(500),
     toInitialFontSizeAnimationSpec: AnimationSpec<Float> = tween(500),
     onFontSizeAnimation: (AnimationState) -> Unit = {},
@@ -632,11 +632,11 @@ data class AnimatableState(
                                 if(initialOffset.x == Dp.Infinity
                                     || initialOffset.x == - Dp.Infinity
                                     || initialOffset.y == Dp.Infinity
-                                    || initialOffset.x == - Dp.Infinity
+                                    || initialOffset.y == - Dp.Infinity
                                     || targetOffset.x == Dp.Infinity
                                     || targetOffset.x == - Dp.Infinity
                                     || targetOffset.y == Dp.Infinity
-                                    || targetOffset.x == - Dp.Infinity
+                                    || targetOffset.y == - Dp.Infinity
                                 ){
                                     throw IllegalArgumentException(
                                         "Please specify size in state for use Dp.Infinity in offset animation"

@@ -17,7 +17,7 @@ import com.commandiron.animatable_compose.AnimatableCard
 import com.commandiron.animatable_compose.state.rememberAnimatableCardState
 
 @Composable
-fun Show3() {
+fun Show3AnimatableCard() {
     val animatableCardState = rememberAnimatableCardState(
         initialSize = DpSize(width = 70.dp, height = 70.dp),
         targetSize = DpSize(width = 200.dp, height = 70.dp),

@@ -12,7 +12,7 @@ import com.commandiron.animatable_compose.AnimatableText
 import com.commandiron.animatable_compose.state.rememberAnimatableTextState
 
 @Composable
-fun Show1() {
+fun Show1AnimatableText() {
     // Simply create state and pass it to AnimatableText
     val state = rememberAnimatableTextState(
         initialFontSize = 12.sp,

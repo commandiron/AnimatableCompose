@@ -22,7 +22,7 @@ import com.commandiron.animatable_compose.state.rememberAnimatableTextState
 import com.commandiron.animatable_compose.state.rememberSharedAnimatableState
 
 @Composable
-fun Show4() {
+fun Show5ExpandablePhoneNumber() {
     //Create components state
     val animatableCardState = rememberAnimatableCardState(
         initialSize = DpSize(80.dp, 80.dp),
@@ -39,8 +39,6 @@ fun Show4() {
         initialSize = DpSize(40.dp, 40.dp),
         targetSize = DpSize(80.dp, 80.dp),
         toTargetSizeAnimationSpec = tween(500,500),
-        initialAlpha = 0.3f,
-        targetAlpha = 1f,
         toTargetAlphaAnimationSpec = tween(5000, 500),
         initialOffset = DpOffset(0.dp, 0.dp),
         targetOffset = DpOffset((-50).dp, 0.dp),

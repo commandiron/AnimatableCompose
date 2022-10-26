@@ -7,7 +7,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.Dp
@@ -18,7 +17,7 @@ import com.commandiron.animatable_compose.AnimatableBox
 import com.commandiron.animatable_compose.state.rememberAnimatableBoxState
 
 @Composable
-fun Show2() {
+fun Show2AnimatableBox() {
     val state = rememberAnimatableBoxState(
         initialSize = DpSize(60.dp, 60.dp), // set initial size
         targetSize = DpSize(Dp.Infinity, 120.dp), // set target size
