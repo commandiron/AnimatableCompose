@@ -6,6 +6,107 @@ Add Animatable Material Components in Android Jetpack Compose. Create basic ui a
 
 <img src="https://user-images.githubusercontent.com/50905347/197984728-7bfe5536-b78e-41e1-91cb-5bc167e51850.gif" width="250" height="530">&nbsp;&nbsp;<img src="https://user-images.githubusercontent.com/50905347/198032696-f78f2b66-964c-494d-9614-14107ecde244.gif" width="250" height="530">
 
+### Expandable Phone Number
+
+<details closed>
+<summary>States</summary>
+<br>
+
+        
+```kotlin
+//Create components state
+val animatableCardState = rememberAnimatableCardState(
+    initialSize = DpSize(80.dp, 80.dp),
+    targetSize = DpSize(Dp.Infinity, 120.dp),
+    toTargetSizeAnimationSpec = tween(500, 500), // add delay(500) for target
+    initialShape = RoundedCornerShape(32.dp),
+    targetShape = RoundedCornerShape(0.dp),
+    toTargetShapeAnimationSpec = tween(500, 500),
+    initialOffset = DpOffset(0.dp, 0.dp),
+    targetOffset = DpOffset(0.dp, - Dp.Infinity),
+    toInitialOffsetAnimationSpec = tween(500, 500),
+)
+val animatableIconState = rememberAnimatableIconState(
+    initialSize = DpSize(40.dp, 40.dp),
+    targetSize = DpSize(80.dp, 80.dp),
+    toTargetSizeAnimationSpec = tween(500,500),
+    initialOffset = DpOffset(0.dp, 0.dp),
+    targetOffset = DpOffset((-50).dp, 0.dp),
+    toTargetOffsetAnimationSpec = tween(500, 500)
+)
+val animatableTextState = rememberAnimatableTextState(
+    initialFontSize = 0.sp,
+    targetFontSize = 26.sp,
+    toTargetFontSizeAnimationSpec = tween(500, 500),
+    initialOffset = DpOffset(0.dp, 0.dp),
+    targetOffset = DpOffset((-25).dp, 0.dp),
+    toTargetOffsetAnimationSpec = tween(500, 500)
+)
+        
+// Create shared state
+val sharedAnimatableState = rememberSharedAnimatableState(
+    listOf(
+        animatableCardState,
+        animatableIconState, // default index = 0
+        animatableIconState.copy( // create state with copy func. for same params.
+            index = 1, // specify index for same components
+            initialSize = DpSize(0.dp, 0.dp),
+            targetSize = DpSize(36.dp, 36.dp),
+            targetOffset = DpOffset(40.dp, 0.dp),
+        ),
+        animatableTextState, // default index = 0
+        animatableTextState.copy(
+            index = 1, // specify index for same components
+            targetFontSize = 12.sp
+        )
+    )
+)
+```
+</details>
+<details closed>
+<summary>Components</summary>
+<br>
+
+        
+```kotlin
+AnimatableCard(
+    onClick = {
+        sharedAnimatableState.animate()
+    },
+    state = sharedAnimatableState // pass shared state
+) {
+    Row(
+        modifier = Modifier.fillMaxSize(),
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.Center
+    ) {
+        AnimatableIcon(
+            imageVector = Icons.Default.Person,
+            contentDescription = null,
+            state = sharedAnimatableState // pass shared state
+        )
+        Column {
+            AnimatableText(
+                text = "Emir Demirli",
+                state = sharedAnimatableState // pass shared state
+            )
+            AnimatableText(
+                text = "+90 0535 508 55 52",
+                state = sharedAnimatableState, // pass shared state
+                stateIndex = 1 // specify index for same components
+            )
+        }
+        AnimatableIcon(
+            imageVector = Icons.Default.Phone,
+            contentDescription = null,
+            state = sharedAnimatableState, // pass shared state
+            stateIndex = 1 // specify index for same components
+        )
+    }
+}
+```
+</details>
+
 ### Card Dealer (just a few code)
 
 <details closed>
@@ -221,107 +322,6 @@ Box(
         },
         state = animatableCardState
     ) {}
-}
-```
-</details>
-
-### Expandable Phone Number (Shared State)
-
-<details closed>
-<summary>States</summary>
-<br>
-
-        
-```kotlin
-//Create components state
-val animatableCardState = rememberAnimatableCardState(
-    initialSize = DpSize(80.dp, 80.dp),
-    targetSize = DpSize(Dp.Infinity, 120.dp),
-    toTargetSizeAnimationSpec = tween(500, 500), // add delay(500) for target
-    initialShape = RoundedCornerShape(32.dp),
-    targetShape = RoundedCornerShape(0.dp),
-    toTargetShapeAnimationSpec = tween(500, 500),
-    initialOffset = DpOffset(0.dp, 0.dp),
-    targetOffset = DpOffset(0.dp, - Dp.Infinity),
-    toInitialOffsetAnimationSpec = tween(500, 500),
-)
-val animatableIconState = rememberAnimatableIconState(
-    initialSize = DpSize(40.dp, 40.dp),
-    targetSize = DpSize(80.dp, 80.dp),
-    toTargetSizeAnimationSpec = tween(500,500),
-    initialOffset = DpOffset(0.dp, 0.dp),
-    targetOffset = DpOffset((-50).dp, 0.dp),
-    toTargetOffsetAnimationSpec = tween(500, 500)
-)
-val animatableTextState = rememberAnimatableTextState(
-    initialFontSize = 0.sp,
-    targetFontSize = 26.sp,
-    toTargetFontSizeAnimationSpec = tween(500, 500),
-    initialOffset = DpOffset(0.dp, 0.dp),
-    targetOffset = DpOffset((-25).dp, 0.dp),
-    toTargetOffsetAnimationSpec = tween(500, 500)
-)
-        
-// Create shared state
-val sharedAnimatableState = rememberSharedAnimatableState(
-    listOf(
-        animatableCardState,
-        animatableIconState, // default index = 0
-        animatableIconState.copy( // create state with copy func. for same params.
-            index = 1, // specify index for same components
-            initialSize = DpSize(0.dp, 0.dp),
-            targetSize = DpSize(36.dp, 36.dp),
-            targetOffset = DpOffset(40.dp, 0.dp),
-        ),
-        animatableTextState, // default index = 0
-        animatableTextState.copy(
-            index = 1, // specify index for same components
-            targetFontSize = 12.sp
-        )
-    )
-)
-```
-</details>
-<details closed>
-<summary>Components</summary>
-<br>
-
-        
-```kotlin
-AnimatableCard(
-    onClick = {
-        sharedAnimatableState.animate()
-    },
-    state = sharedAnimatableState // pass shared state
-) {
-    Row(
-        modifier = Modifier.fillMaxSize(),
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.Center
-    ) {
-        AnimatableIcon(
-            imageVector = Icons.Default.Person,
-            contentDescription = null,
-            state = sharedAnimatableState // pass shared state
-        )
-        Column {
-            AnimatableText(
-                text = "Emir Demirli",
-                state = sharedAnimatableState // pass shared state
-            )
-            AnimatableText(
-                text = "+90 0535 508 55 52",
-                state = sharedAnimatableState, // pass shared state
-                stateIndex = 1 // specify index for same components
-            )
-        }
-        AnimatableIcon(
-            imageVector = Icons.Default.Phone,
-            contentDescription = null,
-            state = sharedAnimatableState, // pass shared state
-            stateIndex = 1 // specify index for same components
-        )
-    }
 }
 ```
 </details>
