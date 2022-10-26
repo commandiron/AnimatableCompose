@@ -132,30 +132,89 @@ Box(
 <td>
     
 ```kotlin
-// Simply create card state and pass it to AnimatableCard
+//Create components state
 val animatableCardState = rememberAnimatableCardState(
-    initialSize = DpSize(width = 70.dp, height = 70.dp), // set initial size
-    targetSize = DpSize(width = 200.dp, height = 70.dp), // set target size
-    initialShape = CircleShape, // set initial shape
-    targetShape = RoundedCornerShape(0.dp, 0.dp, 24.dp, 0.dp), // set target shape
-    initialOffset = DpOffset(x = 0.dp, y = 0.dp), // set initial offset
-    targetOffset = DpOffset(x = - Dp.Infinity, y = - Dp.Infinity) // set target offset
+    initialSize = DpSize(80.dp, 80.dp),
+    targetSize = DpSize(Dp.Infinity, 120.dp),
+    toTargetSizeAnimationSpec = tween(500, 500),
+    initialShape = RoundedCornerShape(32.dp),
+    targetShape = RoundedCornerShape(0.dp),
+    toTargetShapeAnimationSpec = tween(500, 500),
+    toTargetAlphaAnimationSpec = tween(500, 500),
+    initialOffset = DpOffset(0.dp, 0.dp),
+    targetOffset = DpOffset(0.dp, - Dp.Infinity),
+    toInitialOffsetAnimationSpec = tween(500, 500),
 )
-Box(
-    modifier = Modifier
-        .fillMaxSize()
-        .clickable {
-            animatableCardState.animateToInitial() // animate to initial
-        },
-    contentAlignment = Alignment.Center
+val animatableIconState = rememberAnimatableIconState(
+    initialSize = DpSize(40.dp, 40.dp),
+    targetSize = DpSize(80.dp, 80.dp),
+    toTargetSizeAnimationSpec = tween(500,500),
+    initialOffset = DpOffset(0.dp, 0.dp),
+    targetOffset = DpOffset((-50).dp, 0.dp),
+    toTargetOffsetAnimationSpec = tween(500, 500)
+)
+val animatableTextState = rememberAnimatableTextState(
+    initialFontSize = 0.sp,
+    targetFontSize = 26.sp,
+    toTargetFontSizeAnimationSpec = tween(500, 500),
+    initialOffset = DpOffset(0.dp, 0.dp),
+    targetOffset = DpOffset((-25).dp, 0.dp),
+    toTargetOffsetAnimationSpec = tween(500, 500)
+)
+
+// Create shared state
+val sharedAnimatableState = rememberSharedAnimatableState(
+    listOf(
+        animatableCardState,
+        animatableIconState, // default index = 0
+        animatableIconState.copy( // create state with copy func. for same params.
+            index = 1, // specify index for same components
+            initialSize = DpSize(0.dp, 0.dp),
+            targetSize = DpSize(36.dp, 36.dp),
+            targetOffset = DpOffset(40.dp, 0.dp),
+        ),
+        animatableTextState, // default index = 0
+        animatableTextState.copy(
+            index = 1, // specify index for same components
+            targetFontSize = 12.sp
+        )
+    )
+)
+
+AnimatableCard(
+    onClick = {
+        sharedAnimatableState.animate()
+    },
+    state = sharedAnimatableState // pass shared state
 ) {
-    AnimatableCard(
-        modifier = Modifier.size(100.dp),
-        onClick = {
-            animatableCardState.animateToTarget() // animate to target
-        },
-        state = animatableCardState // pass state
-    ) {}
+    Row(
+        modifier = Modifier.fillMaxSize(),
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.Center
+    ) {
+        AnimatableIcon(
+            imageVector = Icons.Default.Person,
+            contentDescription = null,
+            state = sharedAnimatableState // pass shared state
+        )
+        Column {
+            AnimatableText(
+                text = "Emir Demirli",
+                state = sharedAnimatableState // pass shared state
+            )
+            AnimatableText(
+                text = "+90 0535 508 55 52",
+                state = sharedAnimatableState, // pass shared state
+                stateIndex = 1 // specify index for same components
+            )
+        }
+        AnimatableIcon(
+            imageVector = Icons.Default.Phone,
+            contentDescription = null,
+            state = sharedAnimatableState, // pass shared state
+            stateIndex = 1 // specify index for same components
+        )
+    }
 }
 ```
 </td>
