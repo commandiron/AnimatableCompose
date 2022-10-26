@@ -92,28 +92,30 @@ AnimatableBox(
 <td>
     
 ```kotlin
-// Simply create box state and pass it to AnimatableBox
-val state = rememberAnimatableBoxState(
-    initialSize = DpSize(60.dp, 60.dp), // set initial size
-    targetSize = DpSize(Dp.Infinity, 120.dp), // set target size
+// Simply create card state and pass it to AnimatableCard
+val animatableCardState = rememberAnimatableCardState(
+    initialSize = DpSize(width = 70.dp, height = 70.dp), // set initial size
+    targetSize = DpSize(width = 200.dp, height = 70.dp), // set target size
+    initialShape = CircleShape, // set initial shape
+    targetShape = RoundedCornerShape(0.dp, 0.dp, 24.dp, 0.dp), // set target shape
     initialOffset = DpOffset(x = 0.dp, y = 0.dp), // set initial offset
-    targetOffset = DpOffset(x = 0.dp, y = - Dp.Infinity) // set target offset
-    // Dp.Infinity will take the maximum value according to the screen size
+    targetOffset = DpOffset(x = - Dp.Infinity, y = - Dp.Infinity) // set target offset
 )
-AnimatableBox(
+Box(
     modifier = Modifier
-        .border(1.dp, Color.Red)
+        .fillMaxSize()
         .clickable {
-            state.animate() // animate
+            animatableCardState.animateToInitial() // animate to initial
         },
-    contentAlignment = Alignment.TopEnd,
-    state = state, // pass state
+    contentAlignment = Alignment.Center
 ) {
-    Icon(
-        modifier = Modifier.padding(8.dp),
-        imageVector = Icons.Default.Add,
-        contentDescription = null
-    )
+    AnimatableCard(
+        modifier = Modifier.size(100.dp),
+        onClick = {
+            animatableCardState.animateToTarget() // animate to target
+        },
+        state = animatableCardState // pass state
+    ) {}
 }
 ```
 </td>
