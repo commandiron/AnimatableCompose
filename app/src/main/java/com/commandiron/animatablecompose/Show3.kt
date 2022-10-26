@@ -30,14 +30,14 @@ fun Show3() {
         modifier = Modifier
             .fillMaxSize()
             .clickable {
-                animatableCardState.animateToInitial()
+                animatableCardState.animateToInitial() // animate to initial
             },
         contentAlignment = Alignment.Center
     ) {
         AnimatableCard(
             modifier = Modifier.size(100.dp),
             onClick = {
-                animatableCardState.animateToTarget()
+                animatableCardState.animateToTarget() // animate to target
             },
             state = animatableCardState
         ) {}

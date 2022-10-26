@@ -25,7 +25,7 @@ fun AnimatableBox(
     val stateIn = state.getState(AnimatableStateTag.CARD, stateIndex) ?: throw (
         IllegalArgumentException("no animatableState has this index: $stateIndex")
     )
-    BoxWithConstraints(
+    Box(
         modifier = Modifier
             .width(
                 when(fixedWidth) {
@@ -70,7 +70,7 @@ fun AnimatableBox(
     fixedOffset: DpOffset = DpOffset.Unspecified,
     content: @Composable BoxScope.() -> Unit,
 ) {
-    BoxWithConstraints(
+    Box(
         modifier = Modifier
             .width(
                 when(fixedWidth) {

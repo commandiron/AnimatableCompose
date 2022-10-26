@@ -19,20 +19,20 @@ import com.commandiron.animatable_compose.state.rememberAnimatableBoxState
 
 @Composable
 fun Show2() {
-    val animatableBoxState = rememberAnimatableBoxState(
-        initialSize = DpSize(60.dp, 60.dp),
-        targetSize = DpSize(Dp.Infinity, 120.dp),
-        initialOffset = DpOffset(x = 0.dp, y = 0.dp),
-        targetOffset = DpOffset(x = 0.dp, y = - Dp.Infinity)
+    val state = rememberAnimatableBoxState(
+        initialSize = DpSize(60.dp, 60.dp), // set initial size
+        targetSize = DpSize(Dp.Infinity, 120.dp), // set target size
+        initialOffset = DpOffset(x = 0.dp, y = 0.dp), // set initial offset
+        targetOffset = DpOffset(x = 0.dp, y = - Dp.Infinity) // set target offset
+        // Dp.Infinity will take the maximum value according to the screen size
     )
     AnimatableBox(
         modifier = Modifier
             .border(1.dp, Color.Red)
             .clickable {
-                animatableBoxState.animate()
+                state.animate()
             },
-        contentAlignment = Alignment.TopEnd,
-        state = animatableBoxState,
+        state = state
     ) {
         Icon(
             modifier = Modifier.padding(8.dp),

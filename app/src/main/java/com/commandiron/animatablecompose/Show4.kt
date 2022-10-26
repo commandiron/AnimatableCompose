@@ -23,6 +23,7 @@ import com.commandiron.animatable_compose.state.rememberSharedAnimatableState
 
 @Composable
 fun Show4() {
+    //Create components state
     val animatableCardState = rememberAnimatableCardState(
         initialSize = DpSize(80.dp, 80.dp),
         targetSize = DpSize(Dp.Infinity, 120.dp),
@@ -52,27 +53,30 @@ fun Show4() {
         toTargetOffsetAnimationSpec = tween(500, 500)
     )
 
+    // Create shared state
     val sharedAnimatableState = rememberSharedAnimatableState(
         listOf(
             animatableCardState,
-            animatableIconState,
-            animatableIconState.copy(
-                index = 1,
+            animatableIconState, // default index = 0
+            animatableIconState.copy( // create state with copy func. for same params.
+                index = 1, // specify index for same components
                 initialSize = DpSize(0.dp, 0.dp),
                 targetSize = DpSize(36.dp, 36.dp),
                 targetOffset = DpOffset(40.dp, 0.dp),
             ),
-            animatableTextState,
+            animatableTextState, // default index = 0
             animatableTextState.copy(
-                index = 1,
+                index = 1, // specify index for same components
                 targetFontSize = 12.sp
             )
         )
     )
 
     AnimatableCard(
-        onClick = { sharedAnimatableState.animate() },
-        state = sharedAnimatableState
+        onClick = {
+            sharedAnimatableState.animate()
+        },
+        state = sharedAnimatableState // pass shared state
     ) {
         Row(
             modifier = Modifier.fillMaxSize(),
@@ -82,24 +86,24 @@ fun Show4() {
             AnimatableIcon(
                 imageVector = Icons.Default.Person,
                 contentDescription = null,
-                state = sharedAnimatableState
+                state = sharedAnimatableState // pass shared state
             )
             Column {
                 AnimatableText(
                     text = "Emir Demirli",
-                    state = sharedAnimatableState
+                    state = sharedAnimatableState // pass shared state
                 )
                 AnimatableText(
                     text = "+90 0535 508 55 52",
-                    state = sharedAnimatableState,
-                    stateIndex = 1
+                    state = sharedAnimatableState, // pass shared state
+                    stateIndex = 1 // specify index for same components
                 )
             }
             AnimatableIcon(
                 imageVector = Icons.Default.Phone,
                 contentDescription = null,
-                state = sharedAnimatableState,
-                stateIndex = 1
+                state = sharedAnimatableState, // pass shared state
+                stateIndex = 1 // specify index for same components
             )
         }
     }
