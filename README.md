@@ -173,18 +173,18 @@ Box(
         },
     contentAlignment = Alignment.Center
 ) {
-    for(i in deck.indices) {
+    deck.indices.forEach {
         AnimatableCard(
             onClick = {},
             state = sharedAnimatableState,
-            stateIndex = i,
+            stateIndex = it,
             fixedShape = RoundedCornerShape(16.dp)
         ) {
             Box(Modifier.fillMaxSize(), Alignment.Center) {
                 AnimatableText(
-                    text = deck[i],
+                    text = deck[it],
                     state = sharedAnimatableState,
-                    stateIndex = i
+                    stateIndex = it
                 )
             }
         }
