@@ -68,8 +68,7 @@ AnimatableBox(
         .clickable {
             state.animate()
         },
-    contentAlignment = Alignment.TopEnd,
-    state = state,
+    state = state
 ) {
     Icon(
         modifier = Modifier.padding(8.dp),
