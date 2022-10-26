@@ -193,7 +193,7 @@ Box(
         
 ## How to use
         
-You can learn to use it step by step
+You can learn to use it step by step, you need to use state and components together.
 
 ### AnimatableText
 
