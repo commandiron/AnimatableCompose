@@ -122,6 +122,46 @@ Box(
 </tr>
 </table>
 
+### Multiple Animatable Components at the same time (Shared State)
+
+<table border="0">
+<tr>
+<td>
+    <img src="https://user-images.githubusercontent.com/50905347/195865007-3c1b2670-d0eb-41ae-9a0d-5757ff63779e.gif" width="250" height="530">
+</td>
+<td>
+    
+```kotlin
+// Simply create card state and pass it to AnimatableCard
+val animatableCardState = rememberAnimatableCardState(
+    initialSize = DpSize(width = 70.dp, height = 70.dp), // set initial size
+    targetSize = DpSize(width = 200.dp, height = 70.dp), // set target size
+    initialShape = CircleShape, // set initial shape
+    targetShape = RoundedCornerShape(0.dp, 0.dp, 24.dp, 0.dp), // set target shape
+    initialOffset = DpOffset(x = 0.dp, y = 0.dp), // set initial offset
+    targetOffset = DpOffset(x = - Dp.Infinity, y = - Dp.Infinity) // set target offset
+)
+Box(
+    modifier = Modifier
+        .fillMaxSize()
+        .clickable {
+            animatableCardState.animateToInitial() // animate to initial
+        },
+    contentAlignment = Alignment.Center
+) {
+    AnimatableCard(
+        modifier = Modifier.size(100.dp),
+        onClick = {
+            animatableCardState.animateToTarget() // animate to target
+        },
+        state = animatableCardState // pass state
+    ) {}
+}
+```
+</td>
+</tr>
+</table>
+
 ## Setup
 1. Open the file `settings.gradle` (it looks like that)
 ```groovy
