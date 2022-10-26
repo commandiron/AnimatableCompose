@@ -92,7 +92,7 @@ Box(
         
 ## How to use
 
-# AnimatableText
+### AnimatableText
 
 <img src="https://user-images.githubusercontent.com/50905347/197984582-1988a82a-db0a-4e8f-a1f7-f0a134b8e45a.gif" width="250" height="530">
 
@@ -136,7 +136,7 @@ Column(
 ```
 </details>
 
-# AnimatableBox
+### AnimatableBox
 
 <img src="https://user-images.githubusercontent.com/50905347/197984666-b660f0b6-d9fb-469c-af08-b88cb2911deb.gif" width="250" height="530">
 
@@ -179,7 +179,7 @@ AnimatableBox(
 ```
 </details>
 
-# AnimatableCard
+### AnimatableCard
 
 <img src="https://user-images.githubusercontent.com/50905347/197984698-12536dc4-9a5b-40e1-9627-484738600b60.gif" width="250" height="530">
 
@@ -225,7 +225,7 @@ Box(
 ```
 </details>
 
-## Expandable Phone Number (Shared State)
+### Expandable Phone Number (Shared State)
 
 <details closed>
 <summary>States</summary>
