@@ -141,13 +141,13 @@ Box(
 
 ### Multiple Animatable Components at the same time (Shared State)
 
-<table border="0">
-<tr>
-<td>
-    <img src="https://user-images.githubusercontent.com/50905347/197984728-7bfe5536-b78e-41e1-91cb-5bc167e51850.gif" width="250" height="530">
-</td>
-<td>
-    
+<img src="https://user-images.githubusercontent.com/50905347/197984728-7bfe5536-b78e-41e1-91cb-5bc167e51850.gif" width="250" height="530">
+
+<details open>
+<summary>States</summary>
+<br>
+
+        
 ```kotlin
 //Create components state
 val animatableCardState = rememberAnimatableCardState(
@@ -178,7 +178,7 @@ val animatableTextState = rememberAnimatableTextState(
     targetOffset = DpOffset((-25).dp, 0.dp),
     toTargetOffsetAnimationSpec = tween(500, 500)
 )
-
+        
 // Create shared state
 val sharedAnimatableState = rememberSharedAnimatableState(
     listOf(
@@ -197,7 +197,14 @@ val sharedAnimatableState = rememberSharedAnimatableState(
         )
     )
 )
+```
+</details>
+<details open>
+<summary>Components</summary>
+<br>
 
+        
+```kotlin
 AnimatableCard(
     onClick = {
         sharedAnimatableState.animate()
@@ -234,9 +241,7 @@ AnimatableCard(
     }
 }
 ```
-</td>
-</tr>
-</table>
+</details>
 
 ## Setup
 1. Open the file `settings.gradle` (it looks like that)
