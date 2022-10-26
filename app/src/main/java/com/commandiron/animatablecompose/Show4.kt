@@ -31,7 +31,6 @@ fun Show4() {
         initialShape = RoundedCornerShape(32.dp),
         targetShape = RoundedCornerShape(0.dp),
         toTargetShapeAnimationSpec = tween(500, 500),
-        toTargetAlphaAnimationSpec = tween(500, 500),
         initialOffset = DpOffset(0.dp, 0.dp),
         targetOffset = DpOffset(0.dp, - Dp.Infinity),
         toInitialOffsetAnimationSpec = tween(500, 500),
@@ -40,6 +39,9 @@ fun Show4() {
         initialSize = DpSize(40.dp, 40.dp),
         targetSize = DpSize(80.dp, 80.dp),
         toTargetSizeAnimationSpec = tween(500,500),
+        initialAlpha = 0.3f,
+        targetAlpha = 1f,
+        toTargetAlphaAnimationSpec = tween(5000, 500),
         initialOffset = DpOffset(0.dp, 0.dp),
         targetOffset = DpOffset((-50).dp, 0.dp),
         toTargetOffsetAnimationSpec = tween(500, 500)

@@ -1,10 +1,12 @@
 package com.commandiron.animatable_compose
 
+import androidx.annotation.FloatRange
 import androidx.compose.foundation.layout.offset
 import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextLayoutResult
 import androidx.compose.ui.text.TextStyle
@@ -39,6 +41,8 @@ fun AnimatableText(
     style: TextStyle = LocalTextStyle.current,
     state: SharedAnimatableState,
     stateIndex: Int = 0,
+    @FloatRange(from = 0.0, to = 1.0)
+    fixedAlpha: Float? = null,
     fixedOffset: DpOffset = DpOffset.Unspecified,
 ) {
     val stateIn = state.getState(AnimatableStateTag.TEXT, stateIndex) ?: throw (
@@ -57,6 +61,7 @@ fun AnimatableText(
                     else -> fixedOffset.y
                 }
             )
+            .alpha(fixedAlpha ?: stateIn.animatedAlpha)
             .then(modifier),
         color = color,
         fontSize = stateIn.animatedFontSize,
@@ -93,6 +98,8 @@ fun AnimatableText(
     onTextLayout: (TextLayoutResult) -> Unit = {},
     style: TextStyle = LocalTextStyle.current,
     state: AnimatableState,
+    @FloatRange(from = 0.0, to = 1.0)
+    fixedAlpha: Float? = null,
     fixedOffset: DpOffset = DpOffset.Unspecified,
 ) {
     Text(
@@ -108,6 +115,7 @@ fun AnimatableText(
                     else -> fixedOffset.y
                 }
             )
+            .alpha(fixedAlpha ?: state.animatedAlpha)
             .then(modifier),
         color = color,
         fontSize = state.animatedFontSize,
