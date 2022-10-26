@@ -4,9 +4,7 @@ Add Animatable Material Components in Android Jetpack Compose. Create basic ui a
 
 ## How it looks
 
-## Usage
-
-### AnimatableText
+## AnimatableText
 
 <img src="https://user-images.githubusercontent.com/50905347/197984582-1988a82a-db0a-4e8f-a1f7-f0a134b8e45a.gif" width="250" height="530">
 
@@ -50,7 +48,7 @@ Column(
 ```
 </details>
 
-### AnimatableBox
+## AnimatableBox
 
 <img src="https://user-images.githubusercontent.com/50905347/197984666-b660f0b6-d9fb-469c-af08-b88cb2911deb.gif" width="250" height="530">
 
@@ -93,7 +91,7 @@ AnimatableBox(
 ```
 </details>
 
-### AnimatableCard
+## AnimatableCard
 
 <img src="https://user-images.githubusercontent.com/50905347/197984698-12536dc4-9a5b-40e1-9627-484738600b60.gif" width="250" height="530">
 
@@ -139,7 +137,7 @@ Box(
 ```
 </details>
 
-### Multiple Animatable Components at the same time (Shared State)
+## Multiple Animatable Components at the same time (Shared State)
 
 <img src="https://user-images.githubusercontent.com/50905347/197984728-7bfe5536-b78e-41e1-91cb-5bc167e51850.gif" width="250" height="530">
 
