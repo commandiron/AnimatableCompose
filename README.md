@@ -295,7 +295,7 @@ AnimatableBox(
 
         
 ```kotlin
-// Simply create box state and pass it to AnimatableBox
+// Simply create card state and pass it to AnimatableCard
 val animatableCardState = rememberAnimatableCardState(
     initialSize = DpSize(width = 70.dp, height = 70.dp),
     targetSize = DpSize(width = 200.dp, height = 70.dp),
