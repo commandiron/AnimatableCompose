@@ -6,7 +6,6 @@ Add Animatable Material Components in Android Jetpack Compose. Create basic ui a
 
 ## Usage
 
-
 ### AnimatableText
 
 <img src="https://user-images.githubusercontent.com/50905347/197984582-1988a82a-db0a-4e8f-a1f7-f0a134b8e45a.gif" width="250" height="530">
@@ -53,13 +52,13 @@ Column(
 
 ### AnimatableBox
 
-<table border="0">
-<tr>
-<td>
-    <img src="https://user-images.githubusercontent.com/50905347/197984666-b660f0b6-d9fb-469c-af08-b88cb2911deb.gif" width="250" height="530">
-</td>
-<td>
-    
+<img src="https://user-images.githubusercontent.com/50905347/197984666-b660f0b6-d9fb-469c-af08-b88cb2911deb.gif" width="250" height="530">
+
+<details open>
+<summary>State</summary>
+<br>
+
+        
 ```kotlin
 // Simply create box state and pass it to AnimatableBox
 val state = rememberAnimatableBoxState(
@@ -69,6 +68,14 @@ val state = rememberAnimatableBoxState(
     targetOffset = DpOffset(x = 0.dp, y = - Dp.Infinity) // set target offset
     // Dp.Infinity will take the maximum value according to the screen size
 )
+```
+</details>
+<details open>
+<summary>Component</summary>
+<br>
+
+        
+```kotlin
 AnimatableBox(
     modifier = Modifier
         .border(1.dp, Color.Red)
@@ -84,9 +91,7 @@ AnimatableBox(
     )
 }
 ```
-</td>
-</tr>
-</table>
+</details>
 
 ### AnimatableCard
 
