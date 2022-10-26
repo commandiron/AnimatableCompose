@@ -157,7 +157,6 @@ val animatableCardState = rememberAnimatableCardState(
     initialShape = RoundedCornerShape(32.dp),
     targetShape = RoundedCornerShape(0.dp),
     toTargetShapeAnimationSpec = tween(500, 500),
-    toTargetAlphaAnimationSpec = tween(500, 500),
     initialOffset = DpOffset(0.dp, 0.dp),
     targetOffset = DpOffset(0.dp, - Dp.Infinity),
     toInitialOffsetAnimationSpec = tween(500, 500),
