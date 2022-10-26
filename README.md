@@ -192,6 +192,8 @@ Box(
 </details>
         
 ## How to use
+        
+You can learn to use it step by step
 
 ### AnimatableText
 
