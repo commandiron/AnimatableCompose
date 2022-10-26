@@ -66,10 +66,10 @@ AnimatableBox(
     modifier = Modifier
         .border(1.dp, Color.Red)
         .clickable {
-            state.animate() // animate
+            state.animate()
         },
     contentAlignment = Alignment.TopEnd,
-    state = state, // pass state
+    state = state,
 ) {
     Icon(
         modifier = Modifier.padding(8.dp),
@@ -92,14 +92,13 @@ AnimatableBox(
 <td>
     
 ```kotlin
-// Simply create card state and pass it to AnimatableCard
 val animatableCardState = rememberAnimatableCardState(
-    initialSize = DpSize(width = 70.dp, height = 70.dp), // set initial size
-    targetSize = DpSize(width = 200.dp, height = 70.dp), // set target size
-    initialShape = CircleShape, // set initial shape
-    targetShape = RoundedCornerShape(0.dp, 0.dp, 24.dp, 0.dp), // set target shape
-    initialOffset = DpOffset(x = 0.dp, y = 0.dp), // set initial offset
-    targetOffset = DpOffset(x = - Dp.Infinity, y = - Dp.Infinity) // set target offset
+    initialSize = DpSize(width = 70.dp, height = 70.dp),
+    targetSize = DpSize(width = 200.dp, height = 70.dp),
+    initialShape = CircleShape,
+    targetShape = RoundedCornerShape(0.dp, 0.dp, 24.dp, 0.dp),
+    initialOffset = DpOffset(x = 0.dp, y = 0.dp),
+    targetOffset = DpOffset(x = - Dp.Infinity, y = - Dp.Infinity)
 )
 Box(
     modifier = Modifier
@@ -114,7 +113,7 @@ Box(
         onClick = {
             animatableCardState.animateToTarget() // animate to target
         },
-        state = animatableCardState // pass state
+        state = animatableCardState
     ) {}
 }
 ```
