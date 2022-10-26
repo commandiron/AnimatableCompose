@@ -1,147 +1,14 @@
 # AnimatableCompose [![](https://jitpack.io/v/commandiron/AnimatableCompose.svg)](https://jitpack.io/#commandiron/AnimatableCompose)
 
-Add Animatable Material Components in Android Jetpack Compose. Create basic ui animations painless.
+Add Animatable Material Components in Android Jetpack Compose. 
+
+Create jetpack compose animations painless.
 
 ## How it looks
 
-<img src="https://user-images.githubusercontent.com/50905347/197984728-7bfe5536-b78e-41e1-91cb-5bc167e51850.gif" width="250" height="530">
+<img src="https://user-images.githubusercontent.com/50905347/197984728-7bfe5536-b78e-41e1-91cb-5bc167e51850.gif" width="250" height="530">&nbsp;&nbsp;<img src="https://user-images.githubusercontent.com/50905347/198032696-f78f2b66-964c-494d-9614-14107ecde244.gif" width="250" height="530">
 
-## AnimatableText
-
-<img src="https://user-images.githubusercontent.com/50905347/197984582-1988a82a-db0a-4e8f-a1f7-f0a134b8e45a.gif" width="250" height="530">
-
-<details closed>
-<summary>State</summary>
-<br>
-
-        
-```kotlin
-// Simply create state and pass it to AnimatableText
-val state = rememberAnimatableTextState(
-    initialFontSize = 12.sp,
-    targetFontSize = 60.sp
-)
-```
-</details>
-<details closed>
-<summary>Component</summary>
-<br>
-
-        
-```kotlin
-Column(
-    modifier = Modifier
-        .fillMaxSize()
-        .clickable {
-            state.animate() // animate
-        },
-    verticalArrangement = Arrangement.Center,
-    horizontalAlignment = Alignment.CenterHorizontally
-) {
-    AnimatableText(
-        text = "Animatable",
-        state = state // pass state
-    )
-    AnimatableText(
-        text = "Compose",
-        state = state // pass state
-    )
-}
-```
-</details>
-
-## AnimatableBox
-
-<img src="https://user-images.githubusercontent.com/50905347/197984666-b660f0b6-d9fb-469c-af08-b88cb2911deb.gif" width="250" height="530">
-
-<details closed>
-<summary>State</summary>
-<br>
-
-        
-```kotlin
-// Simply create box state and pass it to AnimatableBox
-val state = rememberAnimatableBoxState(
-    initialSize = DpSize(60.dp, 60.dp), // set initial size
-    targetSize = DpSize(Dp.Infinity, 120.dp), // set target size
-    initialOffset = DpOffset(x = 0.dp, y = 0.dp), // set initial offset
-    targetOffset = DpOffset(x = 0.dp, y = - Dp.Infinity) // set target offset
-    // Dp.Infinity will take the maximum value according to the screen size
-)
-```
-</details>
-<details closed>
-<summary>Component</summary>
-<br>
-
-        
-```kotlin
-AnimatableBox(
-    modifier = Modifier
-        .border(1.dp, Color.Red)
-        .clickable {
-            state.animate()
-        },
-    state = state
-) {
-    Icon(
-        modifier = Modifier.padding(8.dp),
-        imageVector = Icons.Default.Add,
-        contentDescription = null
-    )
-}
-```
-</details>
-
-## AnimatableCard
-
-<img src="https://user-images.githubusercontent.com/50905347/197984698-12536dc4-9a5b-40e1-9627-484738600b60.gif" width="250" height="530">
-
-<details closed>
-<summary>State</summary>
-<br>
-
-        
-```kotlin
-// Simply create box state and pass it to AnimatableBox
-val animatableCardState = rememberAnimatableCardState(
-    initialSize = DpSize(width = 70.dp, height = 70.dp),
-    targetSize = DpSize(width = 200.dp, height = 70.dp),
-    initialShape = CircleShape,
-    targetShape = RoundedCornerShape(0.dp, 0.dp, 24.dp, 0.dp),
-    initialOffset = DpOffset(x = 0.dp, y = 0.dp),
-    targetOffset = DpOffset(x = - Dp.Infinity, y = - Dp.Infinity)
-)
-```
-</details>
-<details closed>
-<summary>Component</summary>
-<br>
-
-        
-```kotlin
-Box(
-    modifier = Modifier
-        .fillMaxSize()
-        .clickable {
-            animatableCardState.animateToInitial() // animate to initial
-        },
-    contentAlignment = Alignment.Center
-) {
-    AnimatableCard(
-        modifier = Modifier.size(100.dp),
-        onClick = {
-            animatableCardState.animateToTarget() // animate to target
-        },
-        state = animatableCardState
-    ) {}
-}
-```
-</details>
-
-## Multiple Animatable Components at the same time (Shared State)
-
-<img src="https://user-images.githubusercontent.com/50905347/197984728-7bfe5536-b78e-41e1-91cb-5bc167e51850.gif" width="250" height="530">
+### Expandable Phone Number
 
 <details closed>
 <summary>States</summary>
@@ -238,6 +105,228 @@ AnimatableCard(
             stateIndex = 1 // specify index for same components
         )
     }
+}
+```
+</details>
+
+### Card Dealer (just a few code)
+
+<details closed>
+<summary>States</summary>
+<br>
+
+        
+```kotlin
+val cards by remember  { 
+    mutableStateOf(listOf("A","K","Q","J","10","9","8","7","6","5","4","3","2"))
+}
+var deck by remember {
+    mutableStateOf(cards + cards + cards + cards)
+}
+
+val animatableCardState = rememberAnimatableCardState(
+    initialSize = DpSize(64.dp, 64.dp),
+    targetSize = DpSize(64.dp, 64.dp),
+    initialOffset = DpOffset(0.dp, 120.dp),
+    targetOffset = DpOffset(-Dp.Infinity, -Dp.Infinity)
+)
+val animatableTextState = rememberAnimatableTextState(
+    initialFontSize = 0.sp,
+    targetFontSize = 24.sp
+)
+
+val cardStates = mutableListOf<AnimatableState>()
+val textStates = mutableListOf<AnimatableState>()
+
+deck.indices.forEach {
+    cardStates.add(
+        animatableCardState.copy(
+            index = it,
+            toTargetOffsetAnimationSpec = tween(400, (it * 400)),
+            targetOffset = DpOffset(if(it % 2 == 0) (-100).dp else 100.dp, (-150).dp)
+        )
+    )
+    textStates.add(
+        animatableTextState.copy(
+            index = it,
+            toTargetFontSizeAnimationSpec = tween(400, (it * 400))
+        )
+    )
+
+}
+
+val sharedAnimatableState = rememberSharedAnimatableState(cardStates + textStates)
+```
+</details>
+<details closed>
+<summary>Components</summary>
+<br>
+
+        
+```kotlin
+Box(
+    modifier = Modifier
+        .fillMaxSize()
+        .clickable {
+            deck = deck.shuffled()
+            sharedAnimatableState.animate()
+        },
+    contentAlignment = Alignment.Center
+) {
+    deck.indices.forEach {
+        AnimatableCard(
+            onClick = {},
+            state = sharedAnimatableState,
+            stateIndex = it,
+            fixedShape = RoundedCornerShape(16.dp)
+        ) {
+            Box(Modifier.fillMaxSize(), Alignment.Center) {
+                AnimatableText(
+                    text = deck[it],
+                    state = sharedAnimatableState,
+                    stateIndex = it
+                )
+            }
+        }
+    }
+}
+```
+</details>
+        
+## How to use
+        
+You can learn to use it step by step, you need to use state and components together.
+
+### AnimatableText
+
+<img src="https://user-images.githubusercontent.com/50905347/197984582-1988a82a-db0a-4e8f-a1f7-f0a134b8e45a.gif" width="250" height="530">
+
+<details closed>
+<summary>State</summary>
+<br>
+
+        
+```kotlin
+// Simply create state and pass it to AnimatableText
+val state = rememberAnimatableTextState(
+    initialFontSize = 12.sp,
+    targetFontSize = 60.sp
+)
+```
+</details>
+<details closed>
+<summary>Component</summary>
+<br>
+
+        
+```kotlin
+Column(
+    modifier = Modifier
+        .fillMaxSize()
+        .clickable {
+            state.animate() // animate
+        },
+    verticalArrangement = Arrangement.Center,
+    horizontalAlignment = Alignment.CenterHorizontally
+) {
+    AnimatableText(
+        text = "Animatable",
+        state = state // pass state
+    )
+    AnimatableText(
+        text = "Compose",
+        state = state // pass state
+    )
+}
+```
+</details>
+
+### AnimatableBox
+
+<img src="https://user-images.githubusercontent.com/50905347/197984666-b660f0b6-d9fb-469c-af08-b88cb2911deb.gif" width="250" height="530">
+
+<details closed>
+<summary>State</summary>
+<br>
+
+        
+```kotlin
+// Simply create box state and pass it to AnimatableBox
+val state = rememberAnimatableBoxState(
+    initialSize = DpSize(60.dp, 60.dp), // set initial size
+    targetSize = DpSize(Dp.Infinity, 120.dp), // set target size
+    initialOffset = DpOffset(x = 0.dp, y = 0.dp), // set initial offset
+    targetOffset = DpOffset(x = 0.dp, y = - Dp.Infinity) // set target offset
+    // Dp.Infinity will take the maximum value according to the screen size, 
+    // ps: Dp.Infinity for offset needs centered component and sizes, however you may not use it if you want.
+)
+```
+</details>
+<details closed>
+<summary>Component</summary>
+<br>
+
+        
+```kotlin
+AnimatableBox(
+    modifier = Modifier
+        .border(1.dp, Color.Red)
+        .clickable {
+            state.animate()
+        },
+    state = state
+) {
+    Icon(
+        modifier = Modifier.padding(8.dp),
+        imageVector = Icons.Default.Add,
+        contentDescription = null
+    )
+}
+```
+</details>
+
+### AnimatableCard
+
+<img src="https://user-images.githubusercontent.com/50905347/197984698-12536dc4-9a5b-40e1-9627-484738600b60.gif" width="250" height="530">
+
+<details closed>
+<summary>State</summary>
+<br>
+
+        
+```kotlin
+// Simply create card state and pass it to AnimatableCard
+val animatableCardState = rememberAnimatableCardState(
+    initialSize = DpSize(width = 70.dp, height = 70.dp),
+    targetSize = DpSize(width = 200.dp, height = 70.dp),
+    initialShape = CircleShape,
+    targetShape = RoundedCornerShape(0.dp, 0.dp, 24.dp, 0.dp),
+    initialOffset = DpOffset(x = 0.dp, y = 0.dp),
+    targetOffset = DpOffset(x = - Dp.Infinity, y = - Dp.Infinity)
+)
+```
+</details>
+<details closed>
+<summary>Component</summary>
+<br>
+
+        
+```kotlin
+Box(
+    modifier = Modifier
+        .fillMaxSize()
+        .clickable {
+            animatableCardState.animateToInitial() // animate to initial
+        },
+    contentAlignment = Alignment.Center
+) {
+    AnimatableCard(
+        modifier = Modifier.size(100.dp),
+        onClick = {
+            animatableCardState.animateToTarget() // animate to target
+        },
+        state = animatableCardState
+    ) {}
 }
 ```
 </details>
