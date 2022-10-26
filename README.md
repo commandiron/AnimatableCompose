@@ -95,14 +95,15 @@ AnimatableBox(
 
 ### AnimatableCard
 
-<table border="0">
-<tr>
-<td>
-    <img src="https://user-images.githubusercontent.com/50905347/197984698-12536dc4-9a5b-40e1-9627-484738600b60.gif" width="250" height="530">
-</td>
-<td>
-    
+<img src="https://user-images.githubusercontent.com/50905347/197984698-12536dc4-9a5b-40e1-9627-484738600b60.gif" width="250" height="530">
+
+<details open>
+<summary>State</summary>
+<br>
+
+        
 ```kotlin
+// Simply create box state and pass it to AnimatableBox
 val animatableCardState = rememberAnimatableCardState(
     initialSize = DpSize(width = 70.dp, height = 70.dp),
     targetSize = DpSize(width = 200.dp, height = 70.dp),
@@ -111,6 +112,14 @@ val animatableCardState = rememberAnimatableCardState(
     initialOffset = DpOffset(x = 0.dp, y = 0.dp),
     targetOffset = DpOffset(x = - Dp.Infinity, y = - Dp.Infinity)
 )
+```
+</details>
+<details open>
+<summary>Component</summary>
+<br>
+
+        
+```kotlin
 Box(
     modifier = Modifier
         .fillMaxSize()
@@ -128,9 +137,7 @@ Box(
     ) {}
 }
 ```
-</td>
-</tr>
-</table>
+</details>
 
 ### Multiple Animatable Components at the same time (Shared State)
 
