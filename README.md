@@ -1,6 +1,8 @@
 # AnimatableCompose [![](https://jitpack.io/v/commandiron/AnimatableCompose.svg)](https://jitpack.io/#commandiron/AnimatableCompose)
 
-Add Animatable Material Components in Android Jetpack Compose. Create basic ui animations painless.
+Add Animatable Material Components in Android Jetpack Compose. 
+
+Create jetpack compose animations painless.
 
 ## How it looks
 
