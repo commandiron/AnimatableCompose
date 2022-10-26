@@ -6,21 +6,30 @@ Add Animatable Material Components in Android Jetpack Compose. Create basic ui a
 
 ## Usage
 
+
 ### AnimatableText
 
-<table border="0">
-<tr>
-<td>
-    <img src="https://user-images.githubusercontent.com/50905347/197984582-1988a82a-db0a-4e8f-a1f7-f0a134b8e45a.gif" width="250" height="530">
-</td>
-<td>
-    
+<img src="https://user-images.githubusercontent.com/50905347/197984582-1988a82a-db0a-4e8f-a1f7-f0a134b8e45a.gif" width="250" height="530">
+
+<details open>
+<summary>State</summary>
+<br>
+
+        
 ```kotlin
 // Simply create state and pass it to AnimatableText
 val state = rememberAnimatableTextState(
     initialFontSize = 12.sp,
     targetFontSize = 60.sp
 )
+```
+</details>
+<details open>
+<summary>Component</summary>
+<br>
+
+        
+```kotlin
 Column(
     modifier = Modifier
         .fillMaxSize()
@@ -40,9 +49,7 @@ Column(
     )
 }
 ```
-</td>
-</tr>
-</table>
+</details>
 
 ### AnimatableBox
 
