@@ -4,6 +4,8 @@ Add Animatable Material Components in Android Jetpack Compose. Create basic ui a
 
 ## How it looks
 
+<img src="https://user-images.githubusercontent.com/50905347/197984728-7bfe5536-b78e-41e1-91cb-5bc167e51850.gif" width="250" height="530">
+
 ## AnimatableText
 
 <img src="https://user-images.githubusercontent.com/50905347/197984582-1988a82a-db0a-4e8f-a1f7-f0a134b8e45a.gif" width="250" height="530">
