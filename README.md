@@ -6,6 +6,92 @@ Add Animatable Material Components in Android Jetpack Compose. Create basic ui a
 
 <img src="https://user-images.githubusercontent.com/50905347/197984728-7bfe5536-b78e-41e1-91cb-5bc167e51850.gif" width="250" height="530">
 
+## Card Dealer (just a few code)
+
+<img src="https://user-images.githubusercontent.com/50905347/197984582-1988a82a-db0a-4e8f-a1f7-f0a134b8e45a.gif" width="250" height="530">
+
+<details closed>
+<summary>States</summary>
+<br>
+
+        
+```kotlin
+val cards by remember  { 
+    mutableStateOf(listOf("A","K","Q","J","10","9","8","7","6","5","4","3","2"))
+}
+var deck by remember {
+    mutableStateOf(cards + cards + cards + cards)
+}
+
+val animatableCardState = rememberAnimatableCardState(
+    initialSize = DpSize(64.dp, 64.dp),
+    targetSize = DpSize(64.dp, 64.dp),
+    initialOffset = DpOffset(0.dp, 120.dp),
+    targetOffset = DpOffset(-Dp.Infinity, -Dp.Infinity)
+)
+val animatableTextState = rememberAnimatableTextState(
+    initialFontSize = 0.sp,
+    targetFontSize = 24.sp
+)
+
+val cardStates = mutableListOf<AnimatableState>()
+val textStates = mutableListOf<AnimatableState>()
+
+deck.indices.forEach {
+    cardStates.add(
+        animatableCardState.copy(
+            index = it,
+            toTargetOffsetAnimationSpec = tween(400, (it * 400)),
+            targetOffset = DpOffset(if(it % 2 == 0) (-100).dp else 100.dp, (-150).dp)
+        )
+    )
+    textStates.add(
+        animatableTextState.copy(
+            index = it,
+            toTargetFontSizeAnimationSpec = tween(400, (it * 400))
+        )
+    )
+
+}
+
+val sharedAnimatableState = rememberSharedAnimatableState(cardStates + textStates)
+```
+</details>
+<details closed>
+<summary>Components</summary>
+<br>
+
+        
+```kotlin
+Box(
+    modifier = Modifier
+        .fillMaxSize()
+        .clickable {
+            deck = deck.shuffled()
+            sharedAnimatableState.animate()
+        },
+    contentAlignment = Alignment.Center
+) {
+    for(i in deck.indices) {
+        AnimatableCard(
+            onClick = {},
+            state = sharedAnimatableState,
+            stateIndex = i,
+            fixedShape = RoundedCornerShape(16.dp)
+        ) {
+            Box(Modifier.fillMaxSize(), Alignment.Center) {
+                AnimatableText(
+                    text = deck[i],
+                    state = sharedAnimatableState,
+                    stateIndex = i
+                )
+            }
+        }
+    }
+}
+```
+</details>
+
 ## AnimatableText
 
 <img src="https://user-images.githubusercontent.com/50905347/197984582-1988a82a-db0a-4e8f-a1f7-f0a134b8e45a.gif" width="250" height="530">
