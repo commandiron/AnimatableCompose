@@ -32,7 +32,7 @@ Column(
 ) {
     AnimatableText(
         text = "Animatable",
-        state = state // pass state.
+        state = state // pass state
     )
     AnimatableText(
         text = "Compose",
@@ -56,10 +56,10 @@ Column(
 ```kotlin
 // Simply create box state and pass it to AnimatableBox
 val state = rememberAnimatableBoxState(
-    initialSize = DpSize(60.dp, 60.dp), // set initial size.
-    targetSize = DpSize(Dp.Infinity, 120.dp), // set target size.
-    initialOffset = DpOffset(x = 0.dp, y = 0.dp), // set initial offset.
-    targetOffset = DpOffset(x = 0.dp, y = - Dp.Infinity) // set target offset.
+    initialSize = DpSize(60.dp, 60.dp), // set initial size
+    targetSize = DpSize(Dp.Infinity, 120.dp), // set target size
+    initialOffset = DpOffset(x = 0.dp, y = 0.dp), // set initial offset
+    targetOffset = DpOffset(x = 0.dp, y = - Dp.Infinity) // set target offset
     // Dp.Infinity will take the maximum value according to the screen size
 )
 AnimatableBox(
@@ -94,10 +94,10 @@ AnimatableBox(
 ```kotlin
 // Simply create box state and pass it to AnimatableBox
 val state = rememberAnimatableBoxState(
-    initialSize = DpSize(60.dp, 60.dp), // set initial size.
-    targetSize = DpSize(Dp.Infinity, 120.dp), // set target size.
-    initialOffset = DpOffset(x = 0.dp, y = 0.dp), // set initial offset.
-    targetOffset = DpOffset(x = 0.dp, y = - Dp.Infinity) // set target offset.
+    initialSize = DpSize(60.dp, 60.dp), // set initial size
+    targetSize = DpSize(Dp.Infinity, 120.dp), // set target size
+    initialOffset = DpOffset(x = 0.dp, y = 0.dp), // set initial offset
+    targetOffset = DpOffset(x = 0.dp, y = - Dp.Infinity) // set target offset
     // Dp.Infinity will take the maximum value according to the screen size
 )
 AnimatableBox(
