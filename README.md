@@ -8,7 +8,7 @@ Add Animatable Material Components in Android Jetpack Compose. Create basic ui a
 
 ## Card Dealer (just a few code)
 
-<img src="https://user-images.githubusercontent.com/50905347/197984582-1988a82a-db0a-4e8f-a1f7-f0a134b8e45a.gif" width="250" height="530">
+<img src="https://user-images.githubusercontent.com/50905347/198032696-f78f2b66-964c-494d-9614-14107ecde244.gif" width="250" height="530">
 
 <details closed>
 <summary>States</summary>
