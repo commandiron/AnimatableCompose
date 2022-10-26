@@ -90,7 +90,7 @@ Box(
 ```
 </details>
         
-## How it looks
+## How to use
 
 # AnimatableText
 
