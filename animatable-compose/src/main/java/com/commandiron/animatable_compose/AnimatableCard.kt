@@ -20,8 +20,8 @@ import com.commandiron.animatable_compose.state.SharedAnimatableState
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AnimatableCard(
-    onClick: () -> Unit,
     modifier: Modifier = Modifier,
+    onClick: () -> Unit = {},
     enabled: Boolean = true,
     interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
     border: BorderStroke? = null,
@@ -82,8 +82,8 @@ fun AnimatableCard(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AnimatableCard(
-    onClick: () -> Unit,
     modifier: Modifier = Modifier,
+    onClick: () -> Unit = {},
     enabled: Boolean = true,
     interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
     border: BorderStroke? = null,
