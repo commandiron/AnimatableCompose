@@ -4,6 +4,13 @@ Add Animatable Material Components in Android Jetpack Compose.
 
 Create jetpack compose animations painless.
 
+What you can create from Material 3 components right now;
+* Text Animation
+* Box Animation
+* Card Animation
+* Icon Animation
+* and combinations
+
 ## How it looks
 
 <img src="https://user-images.githubusercontent.com/50905347/197984728-7bfe5536-b78e-41e1-91cb-5bc167e51850.gif" width="250" height="530">&nbsp;&nbsp;<img src="https://user-images.githubusercontent.com/50905347/198032696-f78f2b66-964c-494d-9614-14107ecde244.gif" width="250" height="530">
@@ -336,12 +343,12 @@ Box(
 <img src="https://user-images.githubusercontent.com/50905347/198940886-d2107020-4043-424a-85b2-dfeb7fccf41e.gif" width="250" height="530">
 
 <details closed>
-<summary>State</summary>
+<summary>States</summary>
 <br>
 
         
 ```kotlin
-// Simply create shared state and pass it to AnimatableCard and AnimatableText
+// Simply create card state and text state
 val animatableCardState = rememberAnimatableCardState(
     initialSize = DpSize(width = 50.dp, height = 25.dp),
     targetSize = DpSize(width = 300.dp, height = 150.dp),
@@ -355,6 +362,7 @@ val animatableTextState = rememberAnimatableTextState(
     targetFontSize = 36.sp,
     toTargetFontSizeAnimationSpec = spring(Spring.DampingRatioHighBouncy, Spring.StiffnessVeryLow)
 )
+// Merge the states you created into sharedState and pass it to AnimatableCard and AnimatableText
 val sharedAnimatableState = rememberSharedAnimatableState(
     listOf(
         animatableCardState,
@@ -364,7 +372,7 @@ val sharedAnimatableState = rememberSharedAnimatableState(
 ```
 </details>
 <details closed>
-<summary>Component</summary>
+<summary>Components</summary>
 <br>
 
         
@@ -377,12 +385,12 @@ Box(
 ) {
     AnimatableCard(
         modifier = Modifier.size(100.dp),
-        state = sharedAnimatableState
+        state = sharedAnimatableState // pass shared state
     ) {
         Box(Modifier.fillMaxSize(), Alignment.Center) {
             AnimatableText(
                 text = "Animatable",
-                state = sharedAnimatableState
+                state = sharedAnimatableState // pass shared state
             )
         }
     }
