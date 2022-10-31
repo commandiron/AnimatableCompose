@@ -40,18 +40,18 @@ fun Show6CardDealer() {
     val cardStates = mutableListOf<AnimatableState>()
     val textStates = mutableListOf<AnimatableState>()
 
-    deck.indices.forEach {
+    deck.indices.forEach { index ->
         cardStates.add(
             animatableCardState.copy(
-                index = it,
-                toTargetOffsetAnimationSpec = tween(400, (it * 400)),
-                targetOffset = DpOffset(if(it % 2 == 0) (-100).dp else 100.dp, (-150).dp)
+                index = index,
+                toTargetOffsetAnimationSpec = tween(400, (index * 400)),
+                targetOffset = DpOffset(if(index % 2 == 0) (-100).dp else 100.dp, (-150).dp)
             )
         )
         textStates.add(
             animatableTextState.copy(
-                index = it,
-                toTargetFontSizeAnimationSpec = tween(400, (it * 400))
+                index = index,
+                toTargetFontSizeAnimationSpec = tween(400, (index * 400))
             )
         )
 
@@ -68,18 +68,18 @@ fun Show6CardDealer() {
             },
         contentAlignment = Alignment.Center
     ) {
-        deck.indices.forEach {
+        deck.indices.forEach { index ->
             AnimatableCard(
                 onClick = {},
                 state = sharedAnimatableState,
-                stateIndex = it,
+                stateIndex = index,
                 fixedShape = RoundedCornerShape(16.dp)
             ) {
                 Box(Modifier.fillMaxSize(), Alignment.Center) {
                     AnimatableText(
-                        text = deck[it],
+                        text = deck[index],
                         state = sharedAnimatableState,
-                        stateIndex = it
+                        stateIndex = index
                     )
                 }
             }
