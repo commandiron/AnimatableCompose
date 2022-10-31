@@ -333,7 +333,7 @@ Box(
 
 ### AnimatableCardWithText
 
-<img src="https://user-images.githubusercontent.com/50905347/197984698-12536dc4-9a5b-40e1-9627-484738600b60.gif" width="250" height="530">
+<img src="https://user-images.githubusercontent.com/50905347/198940886-d2107020-4043-424a-85b2-dfeb7fccf41e.gif" width="250" height="530">
 
 <details closed>
 <summary>State</summary>
