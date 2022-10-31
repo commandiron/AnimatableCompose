@@ -331,6 +331,65 @@ Box(
 ```
 </details>
 
+### AnimatableCardWithText
+
+<img src="https://user-images.githubusercontent.com/50905347/197984698-12536dc4-9a5b-40e1-9627-484738600b60.gif" width="250" height="530">
+
+<details closed>
+<summary>State</summary>
+<br>
+
+        
+```kotlin
+// Simply create shared state and pass it to AnimatableCard and AnimatableText
+val animatableCardState = rememberAnimatableCardState(
+    initialSize = DpSize(width = 50.dp, height = 25.dp),
+    targetSize = DpSize(width = 300.dp, height = 150.dp),
+    toTargetSizeAnimationSpec = spring(Spring.DampingRatioHighBouncy, Spring.StiffnessVeryLow),
+    initialShape =  RoundedCornerShape(4.dp),
+    targetShape = RoundedCornerShape(16.dp),
+    toTargetShapeAnimationSpec = spring(Spring.DampingRatioHighBouncy, Spring.StiffnessVeryLow),
+)
+val animatableTextState = rememberAnimatableTextState(
+    initialFontSize = 4.sp,
+    targetFontSize = 36.sp,
+    toTargetFontSizeAnimationSpec = spring(Spring.DampingRatioHighBouncy, Spring.StiffnessVeryLow)
+)
+val sharedAnimatableState = rememberSharedAnimatableState(
+    listOf(
+        animatableCardState,
+        animatableTextState
+    )
+)
+```
+</details>
+<details closed>
+<summary>Component</summary>
+<br>
+
+        
+```kotlin
+Box(
+    modifier = Modifier
+        .fillMaxSize()
+        .clickable { sharedAnimatableState.animate() },
+    contentAlignment = Alignment.Center
+) {
+    AnimatableCard(
+        modifier = Modifier.size(100.dp),
+        state = sharedAnimatableState
+    ) {
+        Box(Modifier.fillMaxSize(), Alignment.Center) {
+            AnimatableText(
+                text = "Animatable",
+                state = sharedAnimatableState
+            )
+        }
+    }
+}
+```
+</details>
+
 ## Setup
 1. Open the file `settings.gradle` (it looks like that)
 ```groovy
