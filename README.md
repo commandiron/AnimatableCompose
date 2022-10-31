@@ -336,7 +336,7 @@ Box(
 <img src="https://user-images.githubusercontent.com/50905347/198940886-d2107020-4043-424a-85b2-dfeb7fccf41e.gif" width="250" height="530">
 
 <details closed>
-<summary>State</summary>
+<summary>States</summary>
 <br>
 
         
@@ -365,7 +365,7 @@ val sharedAnimatableState = rememberSharedAnimatableState(
 ```
 </details>
 <details closed>
-<summary>Component</summary>
+<summary>Components</summary>
 <br>
 
         
