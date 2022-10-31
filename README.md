@@ -341,7 +341,7 @@ Box(
 
         
 ```kotlin
-// Simply create shared state and pass it to AnimatableCard and AnimatableText
+// Simply create card state and text state
 val animatableCardState = rememberAnimatableCardState(
     initialSize = DpSize(width = 50.dp, height = 25.dp),
     targetSize = DpSize(width = 300.dp, height = 150.dp),
@@ -355,6 +355,7 @@ val animatableTextState = rememberAnimatableTextState(
     targetFontSize = 36.sp,
     toTargetFontSizeAnimationSpec = spring(Spring.DampingRatioHighBouncy, Spring.StiffnessVeryLow)
 )
+// Merge the states you created into sharedState and pass it to AnimatableCard and AnimatableText
 val sharedAnimatableState = rememberSharedAnimatableState(
     listOf(
         animatableCardState,
