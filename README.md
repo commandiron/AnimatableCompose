@@ -378,12 +378,12 @@ Box(
 ) {
     AnimatableCard(
         modifier = Modifier.size(100.dp),
-        state = sharedAnimatableState
+        state = sharedAnimatableState // pass shared state
     ) {
         Box(Modifier.fillMaxSize(), Alignment.Center) {
             AnimatableText(
                 text = "Animatable",
-                state = sharedAnimatableState
+                state = sharedAnimatableState // pass shared state
             )
         }
     }
