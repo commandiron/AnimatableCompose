@@ -4,7 +4,7 @@ Add Animatable Material Components in Android Jetpack Compose.
 
 Create jetpack compose animations painless.
 
-You can create right now (Material 3);
+What you can create from Material 3 components right now;
 * Text Animation
 * Box Animation
 * Card Animation
