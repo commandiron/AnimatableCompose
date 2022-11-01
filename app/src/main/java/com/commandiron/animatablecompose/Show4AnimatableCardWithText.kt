@@ -6,6 +6,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -24,15 +25,14 @@ fun Show4AnimatableCardWithText() {
     val animatableCardState = rememberAnimatableCardState(
         initialSize = DpSize(width = 50.dp, height = 25.dp),
         targetSize = DpSize(width = 300.dp, height = 150.dp),
-        toTargetSizeAnimationSpec = spring(Spring.DampingRatioHighBouncy, Spring.StiffnessVeryLow),
-        initialShape =  RoundedCornerShape(4.dp),
+        initialShape = CircleShape,
         targetShape = RoundedCornerShape(16.dp),
-        toTargetShapeAnimationSpec = spring(Spring.DampingRatioHighBouncy, Spring.StiffnessVeryLow),
+        toTargetAnimationSpec = spring(Spring.DampingRatioHighBouncy, Spring.StiffnessVeryLow)
     )
     val animatableTextState = rememberAnimatableTextState(
         initialFontSize = 4.sp,
         targetFontSize = 36.sp,
-        toTargetFontSizeAnimationSpec = spring(Spring.DampingRatioHighBouncy, Spring.StiffnessVeryLow)
+        toTargetAnimationSpec = spring(Spring.DampingRatioHighBouncy, Spring.StiffnessVeryLow)
     )
     val sharedAnimatableState = rememberSharedAnimatableState(
         listOf(

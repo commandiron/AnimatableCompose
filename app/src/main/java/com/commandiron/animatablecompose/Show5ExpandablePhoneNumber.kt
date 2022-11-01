@@ -38,19 +38,16 @@ fun Show5ExpandablePhoneNumber() {
     val animatableIconState = rememberAnimatableIconState(
         initialSize = DpSize(40.dp, 40.dp),
         targetSize = DpSize(80.dp, 80.dp),
-        toTargetSizeAnimationSpec = tween(500,500),
-        toTargetAlphaAnimationSpec = tween(5000, 500),
         initialOffset = DpOffset(0.dp, 0.dp),
         targetOffset = DpOffset((-50).dp, 0.dp),
-        toTargetOffsetAnimationSpec = tween(500, 500)
+        toTargetAnimationSpec = tween(500, 500)
     )
     val animatableTextState = rememberAnimatableTextState(
         initialFontSize = 0.sp,
         targetFontSize = 26.sp,
-        toTargetFontSizeAnimationSpec = tween(500, 500),
         initialOffset = DpOffset(0.dp, 0.dp),
         targetOffset = DpOffset((-25).dp, 0.dp),
-        toTargetOffsetAnimationSpec = tween(500, 500)
+        toTargetAnimationSpec = tween(500, 500)
     )
 
     // Create shared state

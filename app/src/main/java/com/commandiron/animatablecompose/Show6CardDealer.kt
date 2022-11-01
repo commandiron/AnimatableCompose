@@ -28,7 +28,6 @@ fun Show6CardDealer() {
 
     val animatableCardState = rememberAnimatableCardState(
         initialSize = DpSize(64.dp, 64.dp),
-        targetSize = DpSize(64.dp, 64.dp),
         initialOffset = DpOffset(0.dp, 120.dp),
         targetOffset = DpOffset(-Dp.Infinity, -Dp.Infinity)
     )

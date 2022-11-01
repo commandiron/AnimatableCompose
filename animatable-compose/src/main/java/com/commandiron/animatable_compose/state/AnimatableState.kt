@@ -1,6 +1,9 @@
 package com.commandiron.animatable_compose.state
 
-import androidx.compose.animation.core.*
+import androidx.compose.animation.core.AnimationSpec
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.animateSizeAsState
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.*
@@ -9,6 +12,7 @@ import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.*
+import kotlin.math.absoluteValue
 
 @Composable
 fun rememberSharedAnimatableState(
@@ -49,19 +53,22 @@ fun rememberAnimatableTextState(
     index: Int = 0,
     initialFontSize: TextUnit? = null,
     targetFontSize: TextUnit? = null,
-    toTargetFontSizeAnimationSpec: AnimationSpec<Float> = tween(500),
-    toInitialFontSizeAnimationSpec: AnimationSpec<Float> = tween(500),
+    toTargetFontSizeAnimationSpec: AnimationSpec<Float>? = null,
+    toInitialFontSizeAnimationSpec: AnimationSpec<Float>? = null,
     onFontSizeAnimation: (AnimationState) -> Unit = {},
     initialAlpha: Float? = null,
     targetAlpha: Float? = null,
-    toTargetAlphaAnimationSpec: AnimationSpec<Float> = tween(500),
-    toInitialAlphaAnimationSpec: AnimationSpec<Float> = tween(500),
+    toTargetAlphaAnimationSpec: AnimationSpec<Float>? = null,
+    toInitialAlphaAnimationSpec: AnimationSpec<Float>? = null,
     onAlphaAnimation: (AnimationState) -> Unit = {},
     initialOffset: DpOffset? = null,
     targetOffset: DpOffset? = null,
-    toTargetOffsetAnimationSpec: AnimationSpec<Size> = tween(500),
-    toInitialOffsetAnimationSpec: AnimationSpec<Size> = tween(500),
-    onOffsetAnimation: (AnimationState) -> Unit = {}
+    toTargetOffsetAnimationSpec: AnimationSpec<Size>? = null,
+    toInitialOffsetAnimationSpec: AnimationSpec<Size>? = null,
+    onOffsetAnimation: (AnimationState) -> Unit = {},
+    toTargetAnimationSpec: AnimationSpec<Float>? = tween(500),
+    toInitialAnimationSpec: AnimationSpec<Float>? = tween(500),
+    onAnimation: (AnimationState) -> Unit = {}
 ): AnimatableState {
     return remember {
         AnimatableState(
@@ -81,7 +88,10 @@ fun rememberAnimatableTextState(
             targetOffset = targetOffset,
             toTargetOffsetAnimationSpec = toTargetOffsetAnimationSpec,
             toInitialOffsetAnimationSpec = toInitialOffsetAnimationSpec,
-            onOffsetAnimation = onOffsetAnimation
+            onOffsetAnimation = onOffsetAnimation,
+            toTargetAnimationSpec = toTargetAnimationSpec,
+            toInitialAnimationSpec = toInitialAnimationSpec,
+            onAnimation = onAnimation
         )
     }
 }
@@ -91,14 +101,17 @@ fun rememberAnimatableBoxState(
     index: Int = 0,
     initialSize: DpSize? = null,
     targetSize: DpSize? = null,
-    toTargetSizeAnimationSpec: AnimationSpec<Size> = tween(500),
-    toInitialSizeAnimationSpec: AnimationSpec<Size> = tween(500),
+    toTargetSizeAnimationSpec: AnimationSpec<Size>? = null,
+    toInitialSizeAnimationSpec: AnimationSpec<Size>? = null,
     onSizeAnimation: (AnimationState) -> Unit = {},
     initialOffset: DpOffset? = null,
     targetOffset: DpOffset? = null,
-    toTargetOffsetAnimationSpec: AnimationSpec<Size> = tween(500),
-    toInitialOffsetAnimationSpec: AnimationSpec<Size> = tween(500),
+    toTargetOffsetAnimationSpec: AnimationSpec<Size>? = null,
+    toInitialOffsetAnimationSpec: AnimationSpec<Size>? = null,
     onOffsetAnimation: (AnimationState) -> Unit = {},
+    toTargetAnimationSpec: AnimationSpec<Float>? = tween(500),
+    toInitialAnimationSpec: AnimationSpec<Float>? = tween(500),
+    onAnimation: (AnimationState) -> Unit = {}
 ): AnimatableState {
     return remember {
         AnimatableState(
@@ -113,7 +126,10 @@ fun rememberAnimatableBoxState(
             targetOffset = targetOffset,
             toTargetOffsetAnimationSpec = toTargetOffsetAnimationSpec,
             toInitialOffsetAnimationSpec = toInitialOffsetAnimationSpec,
-            onOffsetAnimation = onOffsetAnimation
+            onOffsetAnimation = onOffsetAnimation,
+            toTargetAnimationSpec = toTargetAnimationSpec,
+            toInitialAnimationSpec = toInitialAnimationSpec,
+            onAnimation = onAnimation
         )
     }
 }
@@ -123,24 +139,27 @@ fun rememberAnimatableCardState(
     index: Int = 0,
     initialSize: DpSize? = null,
     targetSize: DpSize? = null,
-    toTargetSizeAnimationSpec: AnimationSpec<Size> = tween(500),
-    toInitialSizeAnimationSpec: AnimationSpec<Size> = tween(500),
+    toTargetSizeAnimationSpec: AnimationSpec<Size>? = null,
+    toInitialSizeAnimationSpec: AnimationSpec<Size>? = null,
     onSizeAnimation: (AnimationState) -> Unit = {},
     initialShape: Shape? = null,
     targetShape: Shape? = null,
-    toTargetShapeAnimationSpec: AnimationSpec<Float> = tween(500),
-    toInitialShapeAnimationSpec: AnimationSpec<Float> = tween(500),
+    toTargetShapeAnimationSpec: AnimationSpec<Float>? = null,
+    toInitialShapeAnimationSpec: AnimationSpec<Float>? = null,
     onShapeAnimation: (AnimationState) -> Unit = {},
     initialAlpha: Float? = null,
     targetAlpha: Float? = null,
-    toTargetAlphaAnimationSpec: AnimationSpec<Float> = tween(500),
-    toInitialAlphaAnimationSpec: AnimationSpec<Float> = tween(500),
+    toTargetAlphaAnimationSpec: AnimationSpec<Float>? = null,
+    toInitialAlphaAnimationSpec: AnimationSpec<Float>? = null,
     onAlphaAnimation: (AnimationState) -> Unit = {},
     initialOffset: DpOffset? = null,
     targetOffset: DpOffset? = null,
-    toTargetOffsetAnimationSpec: AnimationSpec<Size> = tween(500),
-    toInitialOffsetAnimationSpec: AnimationSpec<Size> = tween(500),
+    toTargetOffsetAnimationSpec: AnimationSpec<Size>? = null,
+    toInitialOffsetAnimationSpec: AnimationSpec<Size>? = null,
     onOffsetAnimation: (AnimationState) -> Unit = {},
+    toTargetAnimationSpec: AnimationSpec<Float>? = tween(500),
+    toInitialAnimationSpec: AnimationSpec<Float>? = tween(500),
+    onAnimation: (AnimationState) -> Unit = {}
 ): AnimatableState {
     return remember {
         AnimatableState(
@@ -165,7 +184,10 @@ fun rememberAnimatableCardState(
             targetOffset = targetOffset,
             toTargetOffsetAnimationSpec = toTargetOffsetAnimationSpec,
             toInitialOffsetAnimationSpec = toInitialOffsetAnimationSpec,
-            onOffsetAnimation = onOffsetAnimation
+            onOffsetAnimation = onOffsetAnimation,
+            toTargetAnimationSpec = toTargetAnimationSpec,
+            toInitialAnimationSpec = toInitialAnimationSpec,
+            onAnimation = onAnimation
         )
     }
 }
@@ -175,19 +197,22 @@ fun rememberAnimatableIconState(
     index: Int = 0,
     initialSize: DpSize? = null,
     targetSize: DpSize? = null,
-    toTargetSizeAnimationSpec: AnimationSpec<Size> = tween(500),
-    toInitialSizeAnimationSpec: AnimationSpec<Size> = tween(500),
+    toTargetSizeAnimationSpec: AnimationSpec<Size>? = null,
+    toInitialSizeAnimationSpec: AnimationSpec<Size>? = null,
     onSizeAnimation: (AnimationState) -> Unit = {},
     initialAlpha: Float? = null,
     targetAlpha: Float? = null,
-    toTargetAlphaAnimationSpec: AnimationSpec<Float> = tween(500),
-    toInitialAlphaAnimationSpec: AnimationSpec<Float> = tween(500),
+    toTargetAlphaAnimationSpec: AnimationSpec<Float>? = null,
+    toInitialAlphaAnimationSpec: AnimationSpec<Float>? = null,
     onAlphaAnimation: (AnimationState) -> Unit = {},
     initialOffset: DpOffset? = null,
     targetOffset: DpOffset? = null,
-    toTargetOffsetAnimationSpec: AnimationSpec<Size> = tween(500),
-    toInitialOffsetAnimationSpec: AnimationSpec<Size> = tween(500),
+    toTargetOffsetAnimationSpec: AnimationSpec<Size>? = null,
+    toInitialOffsetAnimationSpec: AnimationSpec<Size>? = null,
     onOffsetAnimation: (AnimationState) -> Unit = {},
+    toTargetAnimationSpec: AnimationSpec<Float>? = tween(500),
+    toInitialAnimationSpec: AnimationSpec<Float>? = tween(500),
+    onAnimation: (AnimationState) -> Unit = {}
 ): AnimatableState {
     return remember {
         AnimatableState(
@@ -207,7 +232,10 @@ fun rememberAnimatableIconState(
             targetOffset = targetOffset,
             toTargetOffsetAnimationSpec = toTargetOffsetAnimationSpec,
             toInitialOffsetAnimationSpec = toInitialOffsetAnimationSpec,
-            onOffsetAnimation = onOffsetAnimation
+            onOffsetAnimation = onOffsetAnimation,
+            toTargetAnimationSpec = toTargetAnimationSpec,
+            toInitialAnimationSpec = toInitialAnimationSpec,
+            onAnimation = onAnimation
         )
     }
 }
@@ -246,10 +274,15 @@ data class AnimatableState(
     private val toInitialFontSizeAnimationSpec: AnimationSpec<Float>? = null,
     private val onFontSizeAnimation: (AnimationState) -> Unit = {},
 
-    private val onAnimation: (AnimationState) -> Unit = {},
+    private val toTargetAnimationSpec: AnimationSpec<Float>? = null,
+    private val toInitialAnimationSpec: AnimationSpec<Float>? = null,
+    private val onAnimation: (AnimationState) -> Unit = {}
+
 ) {
     private var size by mutableStateOf(initialSize)
-    private var sizeAnimationSpec by mutableStateOf(toTargetSizeAnimationSpec)
+    private var sizeAnimationSpec by mutableStateOf(
+        toTargetSizeAnimationSpec ?: toTargetAnimationSpec
+    )
     private var sizeAnimState by mutableStateOf(AnimationState.INITIAL)
     private fun setSizeAnim(animationState: AnimationState) {
         sizeAnimState = animationState
@@ -258,7 +291,9 @@ data class AnimatableState(
     }
 
     private var shape by mutableStateOf(initialShape)
-    private var shapeAnimationSpec by mutableStateOf(toTargetShapeAnimationSpec)
+    private var shapeAnimationSpec by mutableStateOf(
+        toTargetShapeAnimationSpec ?: toTargetAnimationSpec
+    )
     private var shapeAnimState by mutableStateOf(AnimationState.INITIAL)
     private fun setShapeAnim(animationState: AnimationState) {
         shapeAnimState = animationState
@@ -267,7 +302,9 @@ data class AnimatableState(
     }
 
     private var alpha by mutableStateOf(initialAlpha)
-    private var alphaAnimationSpec by mutableStateOf(toTargetAlphaAnimationSpec)
+    private var alphaAnimationSpec by mutableStateOf(
+        toTargetAlphaAnimationSpec ?: toTargetAnimationSpec
+    )
     private var alphaAnimState by mutableStateOf(AnimationState.INITIAL)
     private fun setAlphaAnim(animationState: AnimationState) {
         alphaAnimState = animationState
@@ -276,7 +313,9 @@ data class AnimatableState(
     }
 
     private var offset by mutableStateOf(initialOffset)
-    private var offsetAnimationSpec by mutableStateOf(toTargetOffsetAnimationSpec)
+    private var offsetAnimationSpec by mutableStateOf(
+        toTargetOffsetAnimationSpec ?: toTargetAnimationSpec
+    )
     private var offsetAnimState by mutableStateOf(AnimationState.INITIAL)
     private fun setOffsetAnim(animationState: AnimationState) {
         offsetAnimState = animationState
@@ -285,7 +324,9 @@ data class AnimatableState(
     }
 
     private var fontSize by  mutableStateOf(initialFontSize)
-    private var fontSizeAnimationSpec by mutableStateOf(toTargetFontSizeAnimationSpec)
+    private var fontSizeAnimationSpec by mutableStateOf(
+        toTargetFontSizeAnimationSpec ?: toTargetAnimationSpec
+    )
     private var fontSizeAnimState by mutableStateOf(AnimationState.INITIAL)
     private fun setFontSizeAnim(animationState: AnimationState) {
         fontSizeAnimState = animationState
@@ -307,69 +348,69 @@ data class AnimatableState(
 
     fun animate() {
 
-        if(size != null) {
+        if(initialSize != null && targetSize != null) {
             animateSize()
         }
 
-        if(shape != null) {
+        if(initialShape != null && targetShape != null) {
             animateShape()
         }
 
-        if(alpha != null) {
+        if(initialAlpha != null && targetAlpha != null) {
             animateAlpha()
         }
 
-        if(offset != null) {
+        if(initialOffset != null && targetOffset != null) {
             animateOffset()
         }
 
-        if(fontSize != null) {
+        if(initialFontSize != null && targetFontSize != null) {
             animateFontSize()
         }
     }
 
     fun animateToTarget() {
 
-        if(size != null) {
+        if(initialSize != null && targetSize != null) {
             animateSizeToTarget()
         }
 
-        if(shape != null) {
+        if(initialShape != null && targetShape != null) {
             animateShapeToTarget()
         }
 
-        if(alpha != null) {
+        if(initialAlpha != null && targetAlpha != null) {
             animateAlphaToTarget()
         }
 
-        if(offset != null) {
+        if(initialOffset != null && targetOffset != null) {
             animateOffsetToTarget()
         }
 
-        if(fontSize != null) {
+        if(initialFontSize != null && targetFontSize != null) {
             animateFontSizeToTarget()
         }
     }
 
     fun animateToInitial() {
 
-        if(size != null) {
+        if(initialSize != null && targetSize != null) {
             animateSizeToInitial()
         }
 
-        if(shape != null) {
+        if(initialShape != null && targetShape != null) {
             animateShapeToInitial()
         }
 
-        if(alpha != null) {
+        if(initialAlpha != null && targetAlpha != null) {
             animateAlphaToInitial()
         }
 
-        if(offset != null) {
+        if(initialOffset != null && targetOffset != null) {
             animateOffsetToInitial()
         }
 
-        if(fontSize != null) {
+        if(initialFontSize != null && targetFontSize != null) {
             animateFontSizeToInitial()
         }
     }
@@ -387,12 +428,12 @@ data class AnimatableState(
     private fun animateSizeToTarget() {
         setSizeAnim(AnimationState.INITIAL_TO_TARGET)
         size = targetSize
-        sizeAnimationSpec = toTargetSizeAnimationSpec
+        sizeAnimationSpec = toTargetSizeAnimationSpec ?: toTargetAnimationSpec
     }
     private fun animateSizeToInitial() {
         setSizeAnim(AnimationState.TARGET_TO_INITIAL)
         size = initialSize
-        sizeAnimationSpec = toInitialSizeAnimationSpec
+        sizeAnimationSpec = toInitialSizeAnimationSpec ?: toInitialAnimationSpec
     }
     internal val animatedSize: DpSize
         @Composable
@@ -405,7 +446,7 @@ data class AnimatableState(
                             width = if(size.width == Dp.Infinity) screenWidth.value else size.width.value,
                             height = if(size.height == Dp.Infinity) screenHeight.value else size.height.value
                         ),
-                        animationSpec = spec,
+                        animationSpec = spec as AnimationSpec<Size>,
                         finishedListener = {
                             when(sizeAnimState) {
                                 AnimationState.INITIAL_TO_TARGET -> {
@@ -442,16 +483,17 @@ data class AnimatableState(
     private fun animateShapeToTarget() {
         setShapeAnim(AnimationState.INITIAL_TO_TARGET)
         shape = targetShape
-        shapeAnimationSpec = toTargetShapeAnimationSpec
+        shapeAnimationSpec = toTargetShapeAnimationSpec ?: toTargetAnimationSpec
     }
     private fun animateShapeToInitial() {
         setShapeAnim(AnimationState.TARGET_TO_INITIAL)
         shape = initialShape
-        shapeAnimationSpec = toInitialShapeAnimationSpec
+        shapeAnimationSpec = toInitialShapeAnimationSpec ?: toInitialAnimationSpec
     }
     internal val animatedShape: RoundedCornerShape
         @Composable
         get() {
+
             shape?.let { shape ->
 
                 shapeAnimationSpec?.let { spec ->
@@ -534,10 +576,18 @@ data class AnimatableState(
                         )
 
                         return RoundedCornerShape(
-                            topStart = animatedTopStartCornerSize.value,
-                            topEnd = animatedTopEndCornerSize.value,
-                            bottomStart =  animatedBottomStartCornerSize.value,
-                            bottomEnd = animatedBottomEndCornerSize.value,
+                            topStart = if(animatedTopStartCornerSize.value < 0f) {
+                                0f
+                            } else animatedTopStartCornerSize.value.absoluteValue,
+                            topEnd = if(animatedTopEndCornerSize.value < 0f) {
+                                0f
+                            } else animatedTopEndCornerSize.value.absoluteValue,
+                            bottomStart = if(animatedBottomStartCornerSize.value < 0f) {
+                                0f
+                            } else animatedBottomStartCornerSize.value.absoluteValue,
+                            bottomEnd = if(animatedBottomEndCornerSize.value < 0f) {
+                                0f
+                            } else animatedBottomEndCornerSize.value.absoluteValue,
                         )
                     }
                 }
@@ -558,12 +608,12 @@ data class AnimatableState(
     private fun animateAlphaToTarget() {
         setAlphaAnim(AnimationState.INITIAL_TO_TARGET)
         alpha = targetAlpha
-        alphaAnimationSpec = toTargetAlphaAnimationSpec
+        alphaAnimationSpec = toTargetAlphaAnimationSpec ?: toTargetAnimationSpec
     }
     private fun animateAlphaToInitial() {
         setAlphaAnim(AnimationState.TARGET_TO_INITIAL)
         alpha = initialAlpha
-        alphaAnimationSpec = toInitialAlphaAnimationSpec
+        alphaAnimationSpec = toInitialAlphaAnimationSpec ?: toInitialAnimationSpec
     }
     internal val animatedAlpha: Float
         @Composable
@@ -604,12 +654,12 @@ data class AnimatableState(
     private fun animateOffsetToTarget() {
         setOffsetAnim(AnimationState.INITIAL_TO_TARGET)
         offset = targetOffset
-        offsetAnimationSpec = toTargetOffsetAnimationSpec
+        offsetAnimationSpec = toTargetOffsetAnimationSpec ?: toTargetAnimationSpec
     }
     private fun animateOffsetToInitial() {
         setOffsetAnim(AnimationState.TARGET_TO_INITIAL)
         offset = initialOffset
-        offsetAnimationSpec =  toInitialOffsetAnimationSpec
+        offsetAnimationSpec = toInitialOffsetAnimationSpec ?: toInitialAnimationSpec
     }
     internal val animatedOffset: DpOffset
         @Composable
@@ -668,7 +718,7 @@ data class AnimatableState(
                                         else -> offset.y.value
                                     }
                                 ),
-                                animationSpec = spec,
+                                animationSpec = spec as AnimationSpec<Size>,
                                 finishedListener = {
                                     when(offsetAnimState) {
                                         AnimationState.INITIAL_TO_TARGET -> {
@@ -706,12 +756,12 @@ data class AnimatableState(
     private fun animateFontSizeToTarget() {
         setFontSizeAnim(AnimationState.INITIAL_TO_TARGET)
         fontSize = targetFontSize
-        fontSizeAnimationSpec = toTargetFontSizeAnimationSpec
+        fontSizeAnimationSpec = toTargetFontSizeAnimationSpec ?: toTargetAnimationSpec
     }
     private fun animateFontSizeToInitial() {
         setFontSizeAnim(AnimationState.TARGET_TO_INITIAL)
         fontSize = initialFontSize
-        fontSizeAnimationSpec =  toInitialFontSizeAnimationSpec
+        fontSizeAnimationSpec =  toInitialFontSizeAnimationSpec ?: toInitialAnimationSpec
     }
     internal val animatedFontSize: TextUnit
         @Composable
@@ -739,13 +789,25 @@ data class AnimatableState(
         }
 
     private fun calculateSharedAnimationState() {
-        val animationStates = listOf(
-            sizeAnimState,
-            shapeAnimState,
-            alphaAnimState,
-            offsetAnimState,
-            fontSizeAnimState
-        )
+
+        val animationStates = mutableListOf<AnimationState>()
+
+        if(size != null ) {
+            animationStates.add(sizeAnimState)
+        }
+        if(shape != null ) {
+            animationStates.add(shapeAnimState)
+        }
+        if(alpha != null ) {
+            animationStates.add(alphaAnimState)
+        }
+        if(offset != null ) {
+            animationStates.add(offsetAnimState)
+        }
+        if(fontSize != null ) {
+            animationStates.add(fontSizeAnimState)
+        }
+
         if(animationStates.all { it == AnimationState.INITIAL }) {
             onAnimation(AnimationState.INITIAL)
             return
