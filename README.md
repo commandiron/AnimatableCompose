@@ -421,4 +421,3 @@ dependencies {
 
 ## Todo ✔️
    * SharedAnimationSpec ✔️
-   * Animation State callback from animate() ❌
