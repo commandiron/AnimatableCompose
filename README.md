@@ -15,7 +15,7 @@ What you can create from Material 3 components right now;
 
 <img src="https://user-images.githubusercontent.com/50905347/197984728-7bfe5536-b78e-41e1-91cb-5bc167e51850.gif" width="250" height="530">&nbsp;&nbsp;<img src="https://user-images.githubusercontent.com/50905347/198032696-f78f2b66-964c-494d-9614-14107ecde244.gif" width="250" height="530">
 
-### Expandable Phone Number
+### Expandable Phone Number Animation
 
 <details closed>
 <summary>States</summary>
@@ -116,7 +116,7 @@ AnimatableCard(
 ```
 </details>
 
-### Card Dealer (just a few code)
+### Card Dealer Animation (just a few code)
 
 <details closed>
 <summary>States</summary>
