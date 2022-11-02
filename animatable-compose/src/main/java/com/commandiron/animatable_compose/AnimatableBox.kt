@@ -1,5 +1,7 @@
 package com.commandiron.animatable_compose
 
+import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -19,6 +21,7 @@ fun AnimatableBox(
     stateIndex: Int = 0,
     fixedWidth: Dp = Dp.Unspecified,
     fixedHeight: Dp = Dp.Unspecified,
+    fixedBorder: BorderStroke? = null,
     fixedOffset: DpOffset = DpOffset.Unspecified,
     content: @Composable BoxScope.() -> Unit,
 ) {
@@ -41,6 +44,7 @@ fun AnimatableBox(
                     else -> fixedHeight
                 }
             )
+            .border(fixedBorder ?: stateIn.animatedBorder)
             .offset(
                 x = when(fixedOffset) {
                     DpOffset.Unspecified -> stateIn.animatedOffset.x
@@ -67,6 +71,7 @@ fun AnimatableBox(
     state: AnimatableState,
     fixedWidth: Dp = Dp.Unspecified,
     fixedHeight: Dp = Dp.Unspecified,
+    fixedBorder: BorderStroke? = null,
     fixedOffset: DpOffset = DpOffset.Unspecified,
     content: @Composable BoxScope.() -> Unit,
 ) {
@@ -86,6 +91,7 @@ fun AnimatableBox(
                     else -> fixedHeight
                 }
             )
+            .border(fixedBorder ?: state.animatedBorder)
             .offset(
                 x = when(fixedOffset) {
                     DpOffset.Unspecified -> state.animatedOffset.x

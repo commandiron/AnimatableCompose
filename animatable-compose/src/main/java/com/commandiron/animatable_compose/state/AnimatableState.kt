@@ -1,13 +1,12 @@
 package com.commandiron.animatable_compose.state
 
-import androidx.compose.animation.core.AnimationSpec
-import androidx.compose.animation.core.animateFloatAsState
-import androidx.compose.animation.core.animateSizeAsState
-import androidx.compose.animation.core.tween
+import androidx.compose.animation.core.*
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.*
 import androidx.compose.ui.geometry.Size
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
@@ -137,6 +136,11 @@ fun rememberAnimatableBoxState(
     toTargetSizeAnimationSpec: AnimationSpec<Size>? = null,
     toInitialSizeAnimationSpec: AnimationSpec<Size>? = null,
     onSizeAnimation: (AnimationState) -> Unit = {},
+    initialBorder: BorderStroke? = null,
+    targetBorder: BorderStroke? = null,
+    toTargetBorderAnimationSpec: AnimationSpec<Float>? = null,
+    toInitialBorderAnimationSpec: AnimationSpec<Float>? = null,
+    onBorderAnimation: (AnimationState) -> Unit = {},
     initialOffset: DpOffset? = null,
     targetOffset: DpOffset? = null,
     toTargetOffsetAnimationSpec: AnimationSpec<Size>? = null,
@@ -155,6 +159,11 @@ fun rememberAnimatableBoxState(
             toTargetSizeAnimationSpec = toTargetSizeAnimationSpec,
             toInitialSizeAnimationSpec = toInitialSizeAnimationSpec,
             onSizeAnimation = onSizeAnimation,
+            initialBorder = initialBorder,
+            targetBorder = targetBorder,
+            toTargetBorderAnimationSpec = toTargetBorderAnimationSpec,
+            toInitialBorderAnimationSpec = toInitialBorderAnimationSpec,
+            onBorderAnimation = onBorderAnimation,
             initialOffset = initialOffset,
             targetOffset = targetOffset,
             toTargetOffsetAnimationSpec = toTargetOffsetAnimationSpec,
@@ -180,6 +189,11 @@ fun rememberAnimatableCardState(
     toTargetShapeAnimationSpec: AnimationSpec<Float>? = null,
     toInitialShapeAnimationSpec: AnimationSpec<Float>? = null,
     onShapeAnimation: (AnimationState) -> Unit = {},
+    initialBorder: BorderStroke? = null,
+    targetBorder: BorderStroke? = null,
+    toTargetBorderAnimationSpec: AnimationSpec<Float>? = null,
+    toInitialBorderAnimationSpec: AnimationSpec<Float>? = null,
+    onBorderAnimation: (AnimationState) -> Unit = {},
     initialAlpha: Float? = null,
     targetAlpha: Float? = null,
     toTargetAlphaAnimationSpec: AnimationSpec<Float>? = null,
@@ -208,6 +222,11 @@ fun rememberAnimatableCardState(
             toTargetShapeAnimationSpec = toTargetShapeAnimationSpec,
             toInitialShapeAnimationSpec = toInitialShapeAnimationSpec,
             onShapeAnimation = onShapeAnimation,
+            initialBorder = initialBorder,
+            targetBorder = targetBorder,
+            toTargetBorderAnimationSpec = toTargetBorderAnimationSpec,
+            toInitialBorderAnimationSpec = toInitialBorderAnimationSpec,
+            onBorderAnimation = onBorderAnimation,
             initialAlpha = initialAlpha,
             targetAlpha = targetAlpha,
             toTargetAlphaAnimationSpec = toTargetAlphaAnimationSpec,
@@ -289,6 +308,12 @@ data class AnimatableState(
     private val toInitialShapeAnimationSpec: AnimationSpec<Float>? = null,
     private val onShapeAnimation: (AnimationState) -> Unit = {},
 
+    private val initialBorder: BorderStroke? = null,
+    private val targetBorder: BorderStroke? = null,
+    private val toTargetBorderAnimationSpec: AnimationSpec<Float>? = null,
+    private val toInitialBorderAnimationSpec: AnimationSpec<Float>? = null,
+    private val onBorderAnimation: (AnimationState) -> Unit = {},
+
     private val initialAlpha: Float? = null,
     private val targetAlpha: Float? = null,
     private val toTargetAlphaAnimationSpec: AnimationSpec<Float>? = null,
@@ -331,6 +356,17 @@ data class AnimatableState(
     private fun setShapeAnim(animationState: AnimationState) {
         shapeAnimState = animationState
         onShapeAnimation(animationState)
+        calculateSharedAnimationState()
+    }
+
+    private var border by mutableStateOf(initialBorder)
+    private var borderAnimationSpec by mutableStateOf(
+        toTargetBorderAnimationSpec ?: toTargetAnimationSpec
+    )
+    private var borderAnimState by mutableStateOf(AnimationState.INITIAL)
+    private fun setBorderAnim(animationState: AnimationState) {
+        borderAnimState = animationState
+        onBorderAnimation(animationState)
         calculateSharedAnimationState()
     }
 
@@ -389,6 +425,10 @@ data class AnimatableState(
             animateShape()
         }
 
+        if(initialBorder != null && targetBorder != null) {
+            animateBorder()
+        }
+
         if(initialAlpha != null && targetAlpha != null) {
             animateAlpha()
         }
@@ -412,6 +452,10 @@ data class AnimatableState(
             animateShapeToTarget()
         }
 
+        if(initialBorder != null && targetBorder != null) {
+            animateBorderToTarget()
+        }
+
         if(initialAlpha != null && targetAlpha != null) {
             animateAlphaToTarget()
         }
@@ -433,6 +477,10 @@ data class AnimatableState(
 
         if(initialShape != null && targetShape != null) {
             animateShapeToInitial()
+        }
+
+        if(initialBorder != null && targetBorder != null) {
+            animateBorderToInitial()
         }
 
         if(initialAlpha != null && targetAlpha != null) {
@@ -626,6 +674,57 @@ data class AnimatableState(
                 }
             }
             return RoundedCornerShape(0.dp)
+        }
+
+    private fun animateBorder() {
+        when(borderAnimState) {
+            AnimationState.INITIAL, AnimationState.TARGET_TO_INITIAL  -> {
+                animateBorderToTarget()
+            }
+            AnimationState.TARGET, AnimationState.INITIAL_TO_TARGET -> {
+                animateBorderToInitial()
+            }
+        }
+    }
+    private fun animateBorderToTarget() {
+        setBorderAnim(AnimationState.INITIAL_TO_TARGET)
+        border = targetBorder
+        borderAnimationSpec = toTargetBorderAnimationSpec ?: toTargetAnimationSpec
+    }
+    private fun animateBorderToInitial() {
+        setBorderAnim(AnimationState.TARGET_TO_INITIAL)
+        border = initialBorder
+        borderAnimationSpec = toInitialBorderAnimationSpec ?: toInitialAnimationSpec
+    }
+    internal val animatedBorder: BorderStroke
+        @Composable
+        get() {
+            border?.let { border ->
+                borderAnimationSpec?.let { spec ->
+
+                    val animatedBorderWidth = animateDpAsState(
+                        targetValue = border.width,
+                        animationSpec = spec as AnimationSpec<Dp>,
+                        finishedListener = {
+                            when(sizeAnimState) {
+                                AnimationState.INITIAL_TO_TARGET -> {
+                                    setBorderAnim(AnimationState.TARGET)
+                                }
+
+                                AnimationState.TARGET_TO_INITIAL -> {
+                                    setBorderAnim(AnimationState.INITIAL)
+                                }
+                                else -> {}
+                            }
+                        }
+                    )
+
+                    return border.copy(
+                        width = animatedBorderWidth.value
+                    )
+                }
+            }
+            return BorderStroke(0.dp, Color.Unspecified)
         }
 
     private fun animateAlpha() {
@@ -830,6 +929,9 @@ data class AnimatableState(
         }
         if(shape != null ) {
             animationStates.add(shapeAnimState)
+        }
+        if(border != null ) {
+            animationStates.add(borderAnimState)
         }
         if(alpha != null ) {
             animationStates.add(alphaAnimState)

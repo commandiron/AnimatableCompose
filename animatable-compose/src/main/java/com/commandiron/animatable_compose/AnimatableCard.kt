@@ -3,7 +3,10 @@ package com.commandiron.animatable_compose
 import androidx.annotation.FloatRange
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.interaction.MutableInteractionSource
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.ColumnScope
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
+import androidx.compose.foundation.layout.width
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
@@ -24,13 +27,13 @@ fun AnimatableCard(
     onClick: () -> Unit = {},
     enabled: Boolean = true,
     interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
-    border: BorderStroke? = null,
+    fixedShape: Shape? = null,
+    fixedBorder: BorderStroke? = null,
     elevation: CardElevation = CardDefaults.cardElevation(),
     colors: CardColors = CardDefaults.cardColors(),
     state: AnimatableState,
     fixedWidth: Dp = Dp.Unspecified,
     fixedHeight: Dp = Dp.Unspecified,
-    fixedShape: Shape? = null,
     @FloatRange(from = 0.0, to = 1.0)
     fixedAlpha: Float? = null,
     fixedOffset: DpOffset = DpOffset.Unspecified,
@@ -72,7 +75,7 @@ fun AnimatableCard(
         enabled = enabled,
         interactionSource = interactionSource,
         shape = fixedShape ?: state.animatedShape,
-        border = border,
+        border = fixedBorder ?: state.animatedBorder,
         elevation = elevation,
         colors = colors,
         content = content
@@ -86,14 +89,14 @@ fun AnimatableCard(
     onClick: () -> Unit = {},
     enabled: Boolean = true,
     interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
-    border: BorderStroke? = null,
+    fixedShape: Shape? = null,
+    fixedBorder: BorderStroke? = null,
     elevation: CardElevation = CardDefaults.cardElevation(),
     colors: CardColors = CardDefaults.cardColors(),
     state: SharedAnimatableState,
     stateIndex: Int = 0,
     fixedWidth: Dp = Dp.Unspecified,
     fixedHeight: Dp = Dp.Unspecified,
-    fixedShape: Shape? = null,
     @FloatRange(from = 0.0, to = 1.0)
     fixedAlpha: Float? = null,
     fixedOffset: DpOffset = DpOffset.Unspecified,
@@ -138,7 +141,7 @@ fun AnimatableCard(
         enabled = enabled,
         interactionSource = interactionSource,
         shape = fixedShape ?: stateIn.animatedShape,
-        border = border,
+        border = fixedBorder ?: stateIn.animatedBorder,
         elevation = elevation,
         colors = colors,
         content = content
