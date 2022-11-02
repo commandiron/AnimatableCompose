@@ -250,7 +250,7 @@ Column(
 
 ### AnimatableBox
 
-<img src="https://user-images.githubusercontent.com/50905347/197984666-b660f0b6-d9fb-469c-af08-b88cb2911deb.gif" width="250" height="530">
+<img src="https://user-images.githubusercontent.com/50905347/199469778-3164046f-25d6-4199-863a-7a41f93fb608.gif" width="250" height="530">
 
 <details closed>
 <summary>State</summary>
