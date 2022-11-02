@@ -13,285 +13,6 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.*
 import kotlin.math.absoluteValue
 
-@Composable
-fun rememberSharedAnimatableState(
-    animatableStates: List<AnimatableState>,
-    toTargetAnimationSpec: AnimationSpec<Float>? = null,
-    toInitialAnimationSpec: AnimationSpec<Float>? = null,
-): SharedAnimatableState {
-    return remember {
-        SharedAnimatableState(
-            animatableStates = animatableStates,
-            toTargetAnimationSpec = toTargetAnimationSpec,
-            toInitialAnimationSpec = toInitialAnimationSpec
-        )
-    }
-}
-
-data class SharedAnimatableState(
-    private var animatableStates: List<AnimatableState>,
-    private val toTargetAnimationSpec: AnimationSpec<Float>? = null,
-    private val toInitialAnimationSpec: AnimationSpec<Float>? = null,
-) {
-    private val states by mutableStateOf(
-        if(toTargetAnimationSpec != null && toInitialAnimationSpec != null) {
-            animatableStates.map {
-                it.copy(
-                    toTargetAnimationSpec = toTargetAnimationSpec,
-                    toInitialAnimationSpec = toInitialAnimationSpec
-                )
-            }
-        } else {
-            if(toTargetAnimationSpec != null && toInitialAnimationSpec == null) {
-                animatableStates.map {
-                    it.copy(
-                        toTargetAnimationSpec = toTargetAnimationSpec
-                    )
-                }
-            } else if(toTargetAnimationSpec == null && toInitialAnimationSpec != null) {
-                animatableStates.map {
-                    it.copy(
-                        toTargetAnimationSpec = toTargetAnimationSpec
-                    )
-                }
-            } else {
-                animatableStates
-            }
-        }
-    )
-
-    fun getState(
-        animatableStateTag: AnimatableStateTag,
-        index: Int
-    ): AnimatableState? {
-        val filteredStates = states.filter { it.animatableStateTag == animatableStateTag }
-        return filteredStates.getOrNull(index)
-    }
-
-    fun animate() {
-        states.forEach { it.animate() }
-    }
-
-    fun animateToTarget() {
-        animatableStates.forEach { it.animateToTarget() }
-    }
-    fun animateToInitial() {
-        animatableStates.forEach { it.animateToInitial() }
-    }
-}
-
-@Composable
-fun rememberAnimatableTextState(
-    index: Int = 0,
-    initialFontSize: TextUnit? = null,
-    targetFontSize: TextUnit? = null,
-    toTargetFontSizeAnimationSpec: AnimationSpec<Float>? = null,
-    toInitialFontSizeAnimationSpec: AnimationSpec<Float>? = null,
-    onFontSizeAnimation: (AnimationState) -> Unit = {},
-    initialAlpha: Float? = null,
-    targetAlpha: Float? = null,
-    toTargetAlphaAnimationSpec: AnimationSpec<Float>? = null,
-    toInitialAlphaAnimationSpec: AnimationSpec<Float>? = null,
-    onAlphaAnimation: (AnimationState) -> Unit = {},
-    initialOffset: DpOffset? = null,
-    targetOffset: DpOffset? = null,
-    toTargetOffsetAnimationSpec: AnimationSpec<Size>? = null,
-    toInitialOffsetAnimationSpec: AnimationSpec<Size>? = null,
-    onOffsetAnimation: (AnimationState) -> Unit = {},
-    toTargetAnimationSpec: AnimationSpec<Float>? = tween(500),
-    toInitialAnimationSpec: AnimationSpec<Float>? = tween(500),
-    onAnimation: (AnimationState) -> Unit = {}
-): AnimatableState {
-    return remember {
-        AnimatableState(
-            animatableStateTag = AnimatableStateTag.TEXT,
-            index = index,
-            initialFontSize = initialFontSize,
-            targetFontSize = targetFontSize,
-            toTargetFontSizeAnimationSpec = toTargetFontSizeAnimationSpec,
-            toInitialFontSizeAnimationSpec = toInitialFontSizeAnimationSpec,
-            onFontSizeAnimation = onFontSizeAnimation,
-            initialAlpha = initialAlpha,
-            targetAlpha = targetAlpha,
-            toTargetAlphaAnimationSpec = toTargetAlphaAnimationSpec,
-            toInitialAlphaAnimationSpec = toInitialAlphaAnimationSpec,
-            onAlphaAnimation = onAlphaAnimation,
-            initialOffset = initialOffset,
-            targetOffset = targetOffset,
-            toTargetOffsetAnimationSpec = toTargetOffsetAnimationSpec,
-            toInitialOffsetAnimationSpec = toInitialOffsetAnimationSpec,
-            onOffsetAnimation = onOffsetAnimation,
-            toTargetAnimationSpec = toTargetAnimationSpec,
-            toInitialAnimationSpec = toInitialAnimationSpec,
-            onAnimation = onAnimation
-        )
-    }
-}
-
-@Composable
-fun rememberAnimatableBoxState(
-    index: Int = 0,
-    initialSize: DpSize? = null,
-    targetSize: DpSize? = null,
-    toTargetSizeAnimationSpec: AnimationSpec<Size>? = null,
-    toInitialSizeAnimationSpec: AnimationSpec<Size>? = null,
-    onSizeAnimation: (AnimationState) -> Unit = {},
-    initialBorder: BorderStroke? = null,
-    targetBorder: BorderStroke? = null,
-    toTargetBorderAnimationSpec: AnimationSpec<Float>? = null,
-    toInitialBorderAnimationSpec: AnimationSpec<Float>? = null,
-    onBorderAnimation: (AnimationState) -> Unit = {},
-    initialOffset: DpOffset? = null,
-    targetOffset: DpOffset? = null,
-    toTargetOffsetAnimationSpec: AnimationSpec<Size>? = null,
-    toInitialOffsetAnimationSpec: AnimationSpec<Size>? = null,
-    onOffsetAnimation: (AnimationState) -> Unit = {},
-    toTargetAnimationSpec: AnimationSpec<Float>? = tween(500),
-    toInitialAnimationSpec: AnimationSpec<Float>? = tween(500),
-    onAnimation: (AnimationState) -> Unit = {}
-): AnimatableState {
-    return remember {
-        AnimatableState(
-            animatableStateTag = AnimatableStateTag.BOX,
-            index = index,
-            initialSize = initialSize,
-            targetSize = targetSize,
-            toTargetSizeAnimationSpec = toTargetSizeAnimationSpec,
-            toInitialSizeAnimationSpec = toInitialSizeAnimationSpec,
-            onSizeAnimation = onSizeAnimation,
-            initialBorder = initialBorder,
-            targetBorder = targetBorder,
-            toTargetBorderAnimationSpec = toTargetBorderAnimationSpec,
-            toInitialBorderAnimationSpec = toInitialBorderAnimationSpec,
-            onBorderAnimation = onBorderAnimation,
-            initialOffset = initialOffset,
-            targetOffset = targetOffset,
-            toTargetOffsetAnimationSpec = toTargetOffsetAnimationSpec,
-            toInitialOffsetAnimationSpec = toInitialOffsetAnimationSpec,
-            onOffsetAnimation = onOffsetAnimation,
-            toTargetAnimationSpec = toTargetAnimationSpec,
-            toInitialAnimationSpec = toInitialAnimationSpec,
-            onAnimation = onAnimation
-        )
-    }
-}
-
-@Composable
-fun rememberAnimatableCardState(
-    index: Int = 0,
-    initialSize: DpSize? = null,
-    targetSize: DpSize? = null,
-    toTargetSizeAnimationSpec: AnimationSpec<Size>? = null,
-    toInitialSizeAnimationSpec: AnimationSpec<Size>? = null,
-    onSizeAnimation: (AnimationState) -> Unit = {},
-    initialShape: Shape? = null,
-    targetShape: Shape? = null,
-    toTargetShapeAnimationSpec: AnimationSpec<Float>? = null,
-    toInitialShapeAnimationSpec: AnimationSpec<Float>? = null,
-    onShapeAnimation: (AnimationState) -> Unit = {},
-    initialBorder: BorderStroke? = null,
-    targetBorder: BorderStroke? = null,
-    toTargetBorderAnimationSpec: AnimationSpec<Float>? = null,
-    toInitialBorderAnimationSpec: AnimationSpec<Float>? = null,
-    onBorderAnimation: (AnimationState) -> Unit = {},
-    initialAlpha: Float? = null,
-    targetAlpha: Float? = null,
-    toTargetAlphaAnimationSpec: AnimationSpec<Float>? = null,
-    toInitialAlphaAnimationSpec: AnimationSpec<Float>? = null,
-    onAlphaAnimation: (AnimationState) -> Unit = {},
-    initialOffset: DpOffset? = null,
-    targetOffset: DpOffset? = null,
-    toTargetOffsetAnimationSpec: AnimationSpec<Size>? = null,
-    toInitialOffsetAnimationSpec: AnimationSpec<Size>? = null,
-    onOffsetAnimation: (AnimationState) -> Unit = {},
-    toTargetAnimationSpec: AnimationSpec<Float>? = tween(500),
-    toInitialAnimationSpec: AnimationSpec<Float>? = tween(500),
-    onAnimation: (AnimationState) -> Unit = {}
-): AnimatableState {
-    return remember {
-        AnimatableState(
-            animatableStateTag = AnimatableStateTag.CARD,
-            index = index,
-            initialSize = initialSize,
-            targetSize = targetSize,
-            toTargetSizeAnimationSpec = toTargetSizeAnimationSpec,
-            toInitialSizeAnimationSpec = toInitialSizeAnimationSpec,
-            onSizeAnimation = onSizeAnimation,
-            initialShape = initialShape,
-            targetShape = targetShape,
-            toTargetShapeAnimationSpec = toTargetShapeAnimationSpec,
-            toInitialShapeAnimationSpec = toInitialShapeAnimationSpec,
-            onShapeAnimation = onShapeAnimation,
-            initialBorder = initialBorder,
-            targetBorder = targetBorder,
-            toTargetBorderAnimationSpec = toTargetBorderAnimationSpec,
-            toInitialBorderAnimationSpec = toInitialBorderAnimationSpec,
-            onBorderAnimation = onBorderAnimation,
-            initialAlpha = initialAlpha,
-            targetAlpha = targetAlpha,
-            toTargetAlphaAnimationSpec = toTargetAlphaAnimationSpec,
-            toInitialAlphaAnimationSpec = toInitialAlphaAnimationSpec,
-            onAlphaAnimation = onAlphaAnimation,
-            initialOffset = initialOffset,
-            targetOffset = targetOffset,
-            toTargetOffsetAnimationSpec = toTargetOffsetAnimationSpec,
-            toInitialOffsetAnimationSpec = toInitialOffsetAnimationSpec,
-            onOffsetAnimation = onOffsetAnimation,
-            toTargetAnimationSpec = toTargetAnimationSpec,
-            toInitialAnimationSpec = toInitialAnimationSpec,
-            onAnimation = onAnimation
-        )
-    }
-}
-
-@Composable
-fun rememberAnimatableIconState(
-    index: Int = 0,
-    initialSize: DpSize? = null,
-    targetSize: DpSize? = null,
-    toTargetSizeAnimationSpec: AnimationSpec<Size>? = null,
-    toInitialSizeAnimationSpec: AnimationSpec<Size>? = null,
-    onSizeAnimation: (AnimationState) -> Unit = {},
-    initialAlpha: Float? = null,
-    targetAlpha: Float? = null,
-    toTargetAlphaAnimationSpec: AnimationSpec<Float>? = null,
-    toInitialAlphaAnimationSpec: AnimationSpec<Float>? = null,
-    onAlphaAnimation: (AnimationState) -> Unit = {},
-    initialOffset: DpOffset? = null,
-    targetOffset: DpOffset? = null,
-    toTargetOffsetAnimationSpec: AnimationSpec<Size>? = null,
-    toInitialOffsetAnimationSpec: AnimationSpec<Size>? = null,
-    onOffsetAnimation: (AnimationState) -> Unit = {},
-    toTargetAnimationSpec: AnimationSpec<Float>? = tween(500),
-    toInitialAnimationSpec: AnimationSpec<Float>? = tween(500),
-    onAnimation: (AnimationState) -> Unit = {}
-): AnimatableState {
-    return remember {
-        AnimatableState(
-            animatableStateTag = AnimatableStateTag.ICON,
-            index = index,
-            initialSize = initialSize,
-            targetSize = targetSize,
-            toTargetSizeAnimationSpec = toTargetSizeAnimationSpec,
-            toInitialSizeAnimationSpec = toInitialSizeAnimationSpec,
-            initialAlpha = initialAlpha,
-            targetAlpha = targetAlpha,
-            toTargetAlphaAnimationSpec = toTargetAlphaAnimationSpec,
-            toInitialAlphaAnimationSpec = toInitialAlphaAnimationSpec,
-            onAlphaAnimation = onAlphaAnimation,
-            onSizeAnimation = onSizeAnimation,
-            initialOffset = initialOffset,
-            targetOffset = targetOffset,
-            toTargetOffsetAnimationSpec = toTargetOffsetAnimationSpec,
-            toInitialOffsetAnimationSpec = toInitialOffsetAnimationSpec,
-            onOffsetAnimation = onOffsetAnimation,
-            toTargetAnimationSpec = toTargetAnimationSpec,
-            toInitialAnimationSpec = toInitialAnimationSpec,
-            onAnimation = onAnimation
-        )
-    }
-}
-
 data class AnimatableState(
     val animatableStateTag: AnimatableStateTag,
     val index: Int,
@@ -706,7 +427,7 @@ data class AnimatableState(
                         targetValue = border.width,
                         animationSpec = spec as AnimationSpec<Dp>,
                         finishedListener = {
-                            when(sizeAnimState) {
+                            when(borderAnimState) {
                                 AnimationState.INITIAL_TO_TARGET -> {
                                     setBorderAnim(AnimationState.TARGET)
                                 }
@@ -968,4 +689,216 @@ enum class AnimationState {
 
 enum class AnimatableStateTag {
     BOX, TEXT, CARD, ICON,
+}
+
+@Composable
+fun rememberAnimatableTextState(
+    index: Int = 0,
+    initialFontSize: TextUnit? = null,
+    targetFontSize: TextUnit? = null,
+    toTargetFontSizeAnimationSpec: AnimationSpec<Float>? = null,
+    toInitialFontSizeAnimationSpec: AnimationSpec<Float>? = null,
+    onFontSizeAnimation: (AnimationState) -> Unit = {},
+    initialAlpha: Float? = null,
+    targetAlpha: Float? = null,
+    toTargetAlphaAnimationSpec: AnimationSpec<Float>? = null,
+    toInitialAlphaAnimationSpec: AnimationSpec<Float>? = null,
+    onAlphaAnimation: (AnimationState) -> Unit = {},
+    initialOffset: DpOffset? = null,
+    targetOffset: DpOffset? = null,
+    toTargetOffsetAnimationSpec: AnimationSpec<Size>? = null,
+    toInitialOffsetAnimationSpec: AnimationSpec<Size>? = null,
+    onOffsetAnimation: (AnimationState) -> Unit = {},
+    toTargetAnimationSpec: AnimationSpec<Float>? = tween(500),
+    toInitialAnimationSpec: AnimationSpec<Float>? = tween(500),
+    onAnimation: (AnimationState) -> Unit = {}
+): AnimatableState {
+    return remember {
+        AnimatableState(
+            animatableStateTag = AnimatableStateTag.TEXT,
+            index = index,
+            initialFontSize = initialFontSize,
+            targetFontSize = targetFontSize,
+            toTargetFontSizeAnimationSpec = toTargetFontSizeAnimationSpec,
+            toInitialFontSizeAnimationSpec = toInitialFontSizeAnimationSpec,
+            onFontSizeAnimation = onFontSizeAnimation,
+            initialAlpha = initialAlpha,
+            targetAlpha = targetAlpha,
+            toTargetAlphaAnimationSpec = toTargetAlphaAnimationSpec,
+            toInitialAlphaAnimationSpec = toInitialAlphaAnimationSpec,
+            onAlphaAnimation = onAlphaAnimation,
+            initialOffset = initialOffset,
+            targetOffset = targetOffset,
+            toTargetOffsetAnimationSpec = toTargetOffsetAnimationSpec,
+            toInitialOffsetAnimationSpec = toInitialOffsetAnimationSpec,
+            onOffsetAnimation = onOffsetAnimation,
+            toTargetAnimationSpec = toTargetAnimationSpec,
+            toInitialAnimationSpec = toInitialAnimationSpec,
+            onAnimation = onAnimation
+        )
+    }
+}
+
+@Composable
+fun rememberAnimatableBoxState(
+    index: Int = 0,
+    initialSize: DpSize? = null,
+    targetSize: DpSize? = null,
+    toTargetSizeAnimationSpec: AnimationSpec<Size>? = null,
+    toInitialSizeAnimationSpec: AnimationSpec<Size>? = null,
+    onSizeAnimation: (AnimationState) -> Unit = {},
+    initialBorder: BorderStroke? = null,
+    targetBorder: BorderStroke? = null,
+    toTargetBorderAnimationSpec: AnimationSpec<Float>? = null,
+    toInitialBorderAnimationSpec: AnimationSpec<Float>? = null,
+    onBorderAnimation: (AnimationState) -> Unit = {},
+    initialOffset: DpOffset? = null,
+    targetOffset: DpOffset? = null,
+    toTargetOffsetAnimationSpec: AnimationSpec<Size>? = null,
+    toInitialOffsetAnimationSpec: AnimationSpec<Size>? = null,
+    onOffsetAnimation: (AnimationState) -> Unit = {},
+    toTargetAnimationSpec: AnimationSpec<Float>? = tween(500),
+    toInitialAnimationSpec: AnimationSpec<Float>? = tween(500),
+    onAnimation: (AnimationState) -> Unit = {}
+): AnimatableState {
+    return remember {
+        AnimatableState(
+            animatableStateTag = AnimatableStateTag.BOX,
+            index = index,
+            initialSize = initialSize,
+            targetSize = targetSize,
+            toTargetSizeAnimationSpec = toTargetSizeAnimationSpec,
+            toInitialSizeAnimationSpec = toInitialSizeAnimationSpec,
+            onSizeAnimation = onSizeAnimation,
+            initialBorder = initialBorder,
+            targetBorder = targetBorder,
+            toTargetBorderAnimationSpec = toTargetBorderAnimationSpec,
+            toInitialBorderAnimationSpec = toInitialBorderAnimationSpec,
+            onBorderAnimation = onBorderAnimation,
+            initialOffset = initialOffset,
+            targetOffset = targetOffset,
+            toTargetOffsetAnimationSpec = toTargetOffsetAnimationSpec,
+            toInitialOffsetAnimationSpec = toInitialOffsetAnimationSpec,
+            onOffsetAnimation = onOffsetAnimation,
+            toTargetAnimationSpec = toTargetAnimationSpec,
+            toInitialAnimationSpec = toInitialAnimationSpec,
+            onAnimation = onAnimation
+        )
+    }
+}
+
+@Composable
+fun rememberAnimatableCardState(
+    index: Int = 0,
+    initialSize: DpSize? = null,
+    targetSize: DpSize? = null,
+    toTargetSizeAnimationSpec: AnimationSpec<Size>? = null,
+    toInitialSizeAnimationSpec: AnimationSpec<Size>? = null,
+    onSizeAnimation: (AnimationState) -> Unit = {},
+    initialShape: Shape? = null,
+    targetShape: Shape? = null,
+    toTargetShapeAnimationSpec: AnimationSpec<Float>? = null,
+    toInitialShapeAnimationSpec: AnimationSpec<Float>? = null,
+    onShapeAnimation: (AnimationState) -> Unit = {},
+    initialBorder: BorderStroke? = null,
+    targetBorder: BorderStroke? = null,
+    toTargetBorderAnimationSpec: AnimationSpec<Float>? = null,
+    toInitialBorderAnimationSpec: AnimationSpec<Float>? = null,
+    onBorderAnimation: (AnimationState) -> Unit = {},
+    initialAlpha: Float? = null,
+    targetAlpha: Float? = null,
+    toTargetAlphaAnimationSpec: AnimationSpec<Float>? = null,
+    toInitialAlphaAnimationSpec: AnimationSpec<Float>? = null,
+    onAlphaAnimation: (AnimationState) -> Unit = {},
+    initialOffset: DpOffset? = null,
+    targetOffset: DpOffset? = null,
+    toTargetOffsetAnimationSpec: AnimationSpec<Size>? = null,
+    toInitialOffsetAnimationSpec: AnimationSpec<Size>? = null,
+    onOffsetAnimation: (AnimationState) -> Unit = {},
+    toTargetAnimationSpec: AnimationSpec<Float>? = tween(500),
+    toInitialAnimationSpec: AnimationSpec<Float>? = tween(500),
+    onAnimation: (AnimationState) -> Unit = {}
+): AnimatableState {
+    return remember {
+        AnimatableState(
+            animatableStateTag = AnimatableStateTag.CARD,
+            index = index,
+            initialSize = initialSize,
+            targetSize = targetSize,
+            toTargetSizeAnimationSpec = toTargetSizeAnimationSpec,
+            toInitialSizeAnimationSpec = toInitialSizeAnimationSpec,
+            onSizeAnimation = onSizeAnimation,
+            initialShape = initialShape,
+            targetShape = targetShape,
+            toTargetShapeAnimationSpec = toTargetShapeAnimationSpec,
+            toInitialShapeAnimationSpec = toInitialShapeAnimationSpec,
+            onShapeAnimation = onShapeAnimation,
+            initialBorder = initialBorder,
+            targetBorder = targetBorder,
+            toTargetBorderAnimationSpec = toTargetBorderAnimationSpec,
+            toInitialBorderAnimationSpec = toInitialBorderAnimationSpec,
+            onBorderAnimation = onBorderAnimation,
+            initialAlpha = initialAlpha,
+            targetAlpha = targetAlpha,
+            toTargetAlphaAnimationSpec = toTargetAlphaAnimationSpec,
+            toInitialAlphaAnimationSpec = toInitialAlphaAnimationSpec,
+            onAlphaAnimation = onAlphaAnimation,
+            initialOffset = initialOffset,
+            targetOffset = targetOffset,
+            toTargetOffsetAnimationSpec = toTargetOffsetAnimationSpec,
+            toInitialOffsetAnimationSpec = toInitialOffsetAnimationSpec,
+            onOffsetAnimation = onOffsetAnimation,
+            toTargetAnimationSpec = toTargetAnimationSpec,
+            toInitialAnimationSpec = toInitialAnimationSpec,
+            onAnimation = onAnimation
+        )
+    }
+}
+
+@Composable
+fun rememberAnimatableIconState(
+    index: Int = 0,
+    initialSize: DpSize? = null,
+    targetSize: DpSize? = null,
+    toTargetSizeAnimationSpec: AnimationSpec<Size>? = null,
+    toInitialSizeAnimationSpec: AnimationSpec<Size>? = null,
+    onSizeAnimation: (AnimationState) -> Unit = {},
+    initialAlpha: Float? = null,
+    targetAlpha: Float? = null,
+    toTargetAlphaAnimationSpec: AnimationSpec<Float>? = null,
+    toInitialAlphaAnimationSpec: AnimationSpec<Float>? = null,
+    onAlphaAnimation: (AnimationState) -> Unit = {},
+    initialOffset: DpOffset? = null,
+    targetOffset: DpOffset? = null,
+    toTargetOffsetAnimationSpec: AnimationSpec<Size>? = null,
+    toInitialOffsetAnimationSpec: AnimationSpec<Size>? = null,
+    onOffsetAnimation: (AnimationState) -> Unit = {},
+    toTargetAnimationSpec: AnimationSpec<Float>? = tween(500),
+    toInitialAnimationSpec: AnimationSpec<Float>? = tween(500),
+    onAnimation: (AnimationState) -> Unit = {}
+): AnimatableState {
+    return remember {
+        AnimatableState(
+            animatableStateTag = AnimatableStateTag.ICON,
+            index = index,
+            initialSize = initialSize,
+            targetSize = targetSize,
+            toTargetSizeAnimationSpec = toTargetSizeAnimationSpec,
+            toInitialSizeAnimationSpec = toInitialSizeAnimationSpec,
+            onSizeAnimation = onSizeAnimation,
+            initialAlpha = initialAlpha,
+            targetAlpha = targetAlpha,
+            toTargetAlphaAnimationSpec = toTargetAlphaAnimationSpec,
+            toInitialAlphaAnimationSpec = toInitialAlphaAnimationSpec,
+            onAlphaAnimation = onAlphaAnimation,
+            initialOffset = initialOffset,
+            targetOffset = targetOffset,
+            toTargetOffsetAnimationSpec = toTargetOffsetAnimationSpec,
+            toInitialOffsetAnimationSpec = toInitialOffsetAnimationSpec,
+            onOffsetAnimation = onOffsetAnimation,
+            toTargetAnimationSpec = toTargetAnimationSpec,
+            toInitialAnimationSpec = toInitialAnimationSpec,
+            onAnimation = onAnimation
+        )
+    }
 }
