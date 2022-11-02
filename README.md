@@ -27,7 +27,7 @@ What you can create from Material 3 components right now;
 val animatableCardState = rememberAnimatableCardState(
     initialSize = DpSize(80.dp, 80.dp),
     targetSize = DpSize(Dp.Infinity, 120.dp),
-    toTargetSizeAnimationSpec = tween(500, 500), // add delay(500) for target
+    toTargetSizeAnimationSpec = tween(500, 500), //  specify delay(500) for target
     initialShape = RoundedCornerShape(32.dp),
     targetShape = RoundedCornerShape(0.dp),
     toTargetShapeAnimationSpec = tween(500, 500),
