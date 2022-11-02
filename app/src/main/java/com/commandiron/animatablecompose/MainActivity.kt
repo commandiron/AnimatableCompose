@@ -21,7 +21,7 @@ class MainActivity : ComponentActivity() {
                     color = MaterialTheme.colorScheme.background
                 ) {}
                 Box(Modifier.fillMaxSize(), Alignment.Center) {
-                    Show4AnimatableCardWithText()
+                    Show5ExpandablePhoneNumber()
                 }
             }
         }
