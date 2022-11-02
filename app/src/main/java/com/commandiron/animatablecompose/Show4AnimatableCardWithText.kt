@@ -1,7 +1,6 @@
 package com.commandiron.animatablecompose
 
-import androidx.compose.animation.core.Spring
-import androidx.compose.animation.core.spring
+import androidx.compose.animation.core.*
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
@@ -26,19 +25,18 @@ fun Show4AnimatableCardWithText() {
         initialSize = DpSize(width = 50.dp, height = 25.dp),
         targetSize = DpSize(width = 300.dp, height = 150.dp),
         initialShape = CircleShape,
-        targetShape = RoundedCornerShape(16.dp),
-        toTargetAnimationSpec = spring(Spring.DampingRatioHighBouncy, Spring.StiffnessVeryLow)
+        targetShape = RoundedCornerShape(16.dp)
     )
     val animatableTextState = rememberAnimatableTextState(
         initialFontSize = 4.sp,
-        targetFontSize = 36.sp,
-        toTargetAnimationSpec = spring(Spring.DampingRatioHighBouncy, Spring.StiffnessVeryLow)
+        targetFontSize = 36.sp
     )
     val sharedAnimatableState = rememberSharedAnimatableState(
-        listOf(
+        animatableStates = listOf(
             animatableCardState,
             animatableTextState
-        )
+        ),
+        toTargetAnimationSpec = infiniteRepeatable(tween(1000), RepeatMode.Reverse)
     )
     Box(
         modifier = Modifier
