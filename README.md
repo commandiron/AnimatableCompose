@@ -264,6 +264,8 @@ val state = rememberAnimatableBoxState(
     targetSize = DpSize(Dp.Infinity, 120.dp), // set target size
     initialOffset = DpOffset(x = 0.dp, y = 0.dp), // set initial offset
     targetOffset = DpOffset(x = 0.dp, y = - Dp.Infinity) // set target offset
+    initialAlignment = Alignment.Center,  // set initial alignment
+    targetAlignment = Alignment.TopStart // set target alignment
     // Dp.Infinity will take the maximum value according to the screen size, 
     // ps: Dp.Infinity for offset needs centered component and sizes, however you may not use it if you want
 )
