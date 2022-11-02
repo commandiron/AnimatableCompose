@@ -352,22 +352,20 @@ Box(
 val animatableCardState = rememberAnimatableCardState(
     initialSize = DpSize(width = 50.dp, height = 25.dp),
     targetSize = DpSize(width = 300.dp, height = 150.dp),
-    toTargetSizeAnimationSpec = spring(Spring.DampingRatioHighBouncy, Spring.StiffnessVeryLow),
-    initialShape =  RoundedCornerShape(4.dp),
-    targetShape = RoundedCornerShape(16.dp),
-    toTargetShapeAnimationSpec = spring(Spring.DampingRatioHighBouncy, Spring.StiffnessVeryLow),
+    initialShape = CircleShape,
+    targetShape = RoundedCornerShape(16.dp)
 )
 val animatableTextState = rememberAnimatableTextState(
     initialFontSize = 4.sp,
-    targetFontSize = 36.sp,
-    toTargetFontSizeAnimationSpec = spring(Spring.DampingRatioHighBouncy, Spring.StiffnessVeryLow)
+    targetFontSize = 36.sp
 )
 // Merge the states you created into sharedState and pass it to AnimatableCard and AnimatableText
 val sharedAnimatableState = rememberSharedAnimatableState(
-    listOf(
+    animatableStates = listOf(
         animatableCardState,
         animatableTextState
-    )
+    ),
+    toTargetAnimationSpec = infiniteRepeatable(tween(1000), RepeatMode.Reverse) //specify shared animation spec.
 )
 ```
 </details>
