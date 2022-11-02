@@ -7,6 +7,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.Dp
@@ -22,7 +23,9 @@ fun Show2AnimatableBox() {
         initialSize = DpSize(60.dp, 60.dp), // set initial size
         targetSize = DpSize(Dp.Infinity, 120.dp), // set target size
         initialOffset = DpOffset(x = 0.dp, y = 0.dp), // set initial offset
-        targetOffset = DpOffset(x = 0.dp, y = - Dp.Infinity) // set target offset
+        targetOffset = DpOffset(x = 0.dp, y = - Dp.Infinity), // set target offset
+        initialAlignment = Alignment.Center,
+        targetAlignment = Alignment.TopStart
         // Dp.Infinity will take the maximum value according to the screen size
     )
     AnimatableBox(

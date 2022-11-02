@@ -5,6 +5,17 @@ import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Alignment.Companion.BottomCenter
+import androidx.compose.ui.Alignment.Companion.BottomEnd
+import androidx.compose.ui.Alignment.Companion.BottomStart
+import androidx.compose.ui.Alignment.Companion.Center
+import androidx.compose.ui.Alignment.Companion.CenterEnd
+import androidx.compose.ui.Alignment.Companion.CenterStart
+import androidx.compose.ui.Alignment.Companion.TopCenter
+import androidx.compose.ui.Alignment.Companion.TopEnd
+import androidx.compose.ui.Alignment.Companion.TopStart
+import androidx.compose.ui.BiasAlignment
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
@@ -46,6 +57,12 @@ data class AnimatableState(
     private val toTargetOffsetAnimationSpec: AnimationSpec<Size>? = null,
     private val toInitialOffsetAnimationSpec: AnimationSpec<Size>? = null,
     private val onOffsetAnimation: (AnimationState) -> Unit = {},
+
+    private val initialAlignment: Alignment? = null,
+    private val targetAlignment: Alignment? = null,
+    private val toTargetAlignmentAnimationSpec: AnimationSpec<Float>? = null,
+    private val toInitialAlignmentAnimationSpec: AnimationSpec<Float>? = null,
+    private val onAlignmentAnimation: (AnimationState) -> Unit = {},
 
     private val initialFontSize: TextUnit? = null,
     private val targetFontSize: TextUnit? = null,
@@ -113,6 +130,17 @@ data class AnimatableState(
         calculateSharedAnimationState()
     }
 
+    private var alignment by mutableStateOf(initialAlignment)
+    private var alignmentAnimationSpec by mutableStateOf(
+        toTargetAlignmentAnimationSpec ?: toTargetAnimationSpec
+    )
+    private var alignmentAnimState by mutableStateOf(AnimationState.INITIAL)
+    private fun setAlignmentAnim(animationState: AnimationState) {
+        alignmentAnimState = animationState
+        onAlignmentAnimation(animationState)
+        calculateSharedAnimationState()
+    }
+
     private var fontSize by  mutableStateOf(initialFontSize)
     private var fontSizeAnimationSpec by mutableStateOf(
         toTargetFontSizeAnimationSpec ?: toTargetAnimationSpec
@@ -158,6 +186,10 @@ data class AnimatableState(
             animateOffset()
         }
 
+        if(initialAlignment != null && targetAlignment  != null) {
+            animateAlignment()
+        }
+
         if(initialFontSize != null && targetFontSize != null) {
             animateFontSize()
         }
@@ -185,6 +217,10 @@ data class AnimatableState(
             animateOffsetToTarget()
         }
 
+        if(initialAlignment != null && targetAlignment != null) {
+            animateAlignmentToTarget()
+        }
+
         if(initialFontSize != null && targetFontSize != null) {
             animateFontSizeToTarget()
         }
@@ -210,6 +246,10 @@ data class AnimatableState(
 
         if(initialOffset != null && targetOffset != null) {
             animateOffsetToInitial()
+        }
+
+        if(initialAlignment != null && targetAlignment != null) {
+            animateAlignmentToInitial()
         }
 
         if(initialFontSize != null && targetFontSize != null) {
@@ -596,6 +636,85 @@ data class AnimatableState(
             return DpOffset(x = 0.dp, y = 0.dp)
         }
 
+    private fun animateAlignment() {
+        when(alignmentAnimState) {
+            AnimationState.INITIAL, AnimationState.TARGET_TO_INITIAL  -> {
+                animateAlignmentToTarget()
+            }
+            AnimationState.TARGET, AnimationState.INITIAL_TO_TARGET -> {
+                animateAlignmentToInitial()
+            }
+        }
+    }
+    private fun animateAlignmentToTarget() {
+        setAlignmentAnim(AnimationState.INITIAL_TO_TARGET)
+        alignment = targetAlignment
+        alignmentAnimationSpec = toTargetAlignmentAnimationSpec ?: toTargetAnimationSpec
+    }
+    private fun animateAlignmentToInitial() {
+        setAlignmentAnim(AnimationState.TARGET_TO_INITIAL)
+        alignment = initialAlignment
+        alignmentAnimationSpec = toInitialAlignmentAnimationSpec ?: toInitialAnimationSpec
+    }
+    internal val animatedAlignment: Alignment
+        @Composable
+        get() {
+
+            alignment?.let { alignment ->
+
+                alignmentAnimationSpec?.let { spec ->
+
+                    val horizontalBias = 0f
+                    val verticalBias = 0f
+
+                    val animatedHorizontalBias = animateFloatAsState(
+                        targetValue = when(alignment) {
+                            TopStart -> -1f
+                            TopCenter -> 0f
+                            TopEnd -> 1f
+                            CenterStart -> -1f
+                            Center -> 0f
+                            CenterEnd -> 1f
+                            BottomStart -> -1f
+                            BottomCenter -> 0f
+                            BottomEnd -> 1f
+                            else -> 0f
+                        },
+                        animationSpec = spec
+                    )
+                    val animatedVerticalBias = animateFloatAsState(
+                        targetValue = when(alignment) {
+                            TopStart -> -1f
+                            TopCenter -> -1f
+                            TopEnd -> -1f
+                            CenterStart -> 0f
+                            Center -> 0f
+                            CenterEnd -> 0f
+                            BottomStart -> 1f
+                            BottomCenter -> 1f
+                            BottomEnd -> 1f
+                            else -> 0f
+                        },
+                        animationSpec = spec,
+                        finishedListener = {
+                            when(alignmentAnimState) {
+                                AnimationState.INITIAL_TO_TARGET -> {
+                                    setAlignmentAnim(AnimationState.TARGET)
+                                }
+                                AnimationState.TARGET_TO_INITIAL -> {
+                                    setAlignmentAnim(AnimationState.INITIAL)
+                                }
+                                else -> {}
+                            }
+                        }
+                    )
+
+                    return BiasAlignment(animatedHorizontalBias.value, animatedVerticalBias.value)
+                }
+            }
+            return BiasAlignment(0f, 0f)
+        }
+
     private fun animateFontSize() {
         when(fontSizeAnimState) {
             AnimationState.INITIAL, AnimationState.TARGET_TO_INITIAL -> {
@@ -659,6 +778,9 @@ data class AnimatableState(
         }
         if(offset != null ) {
             animationStates.add(offsetAnimState)
+        }
+        if(alignment != null ) {
+            animationStates.add(alignmentAnimState)
         }
         if(fontSize != null ) {
             animationStates.add(fontSizeAnimState)
@@ -757,6 +879,11 @@ fun rememberAnimatableBoxState(
     toTargetOffsetAnimationSpec: AnimationSpec<Size>? = null,
     toInitialOffsetAnimationSpec: AnimationSpec<Size>? = null,
     onOffsetAnimation: (AnimationState) -> Unit = {},
+    initialAlignment: Alignment? = null,
+    targetAlignment: Alignment? = null,
+    toTargetAlignmentAnimationSpec: AnimationSpec<Float>? = null,
+    toInitialAlignmentAnimationSpec: AnimationSpec<Float>? = null,
+    onAlignmentAnimation: (AnimationState) -> Unit = {},
     toTargetAnimationSpec: AnimationSpec<Float>? = tween(500),
     toInitialAnimationSpec: AnimationSpec<Float>? = tween(500),
     onAnimation: (AnimationState) -> Unit = {}
@@ -780,6 +907,11 @@ fun rememberAnimatableBoxState(
             toTargetOffsetAnimationSpec = toTargetOffsetAnimationSpec,
             toInitialOffsetAnimationSpec = toInitialOffsetAnimationSpec,
             onOffsetAnimation = onOffsetAnimation,
+            initialAlignment = initialAlignment,
+            targetAlignment = targetAlignment,
+            toTargetAlignmentAnimationSpec = toTargetAlignmentAnimationSpec,
+            toInitialAlignmentAnimationSpec = toInitialAlignmentAnimationSpec,
+            onAlignmentAnimation = onAlignmentAnimation,
             toTargetAnimationSpec = toTargetAnimationSpec,
             toInitialAnimationSpec = toInitialAnimationSpec,
             onAnimation = onAnimation

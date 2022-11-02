@@ -15,7 +15,7 @@ import com.commandiron.animatable_compose.state.SharedAnimatableState
 @Composable
 fun AnimatableBox(
     modifier: Modifier = Modifier,
-    contentAlignment: Alignment = Alignment.TopStart,
+    fixedContentAlignment: Alignment = Alignment.TopStart,
     propagateMinConstraints: Boolean = false,
     state: SharedAnimatableState,
     stateIndex: Int = 0,
@@ -56,7 +56,7 @@ fun AnimatableBox(
                 }
             )
             .then(modifier),
-        contentAlignment = contentAlignment,
+        contentAlignment = fixedContentAlignment ?: stateIn.animatedAlignment,
         propagateMinConstraints = propagateMinConstraints,
     ) {
         content()
@@ -66,7 +66,7 @@ fun AnimatableBox(
 @Composable
 fun AnimatableBox(
     modifier: Modifier = Modifier,
-    contentAlignment: Alignment = Alignment.TopStart,
+    fixedContentAlignment: Alignment? = null,
     propagateMinConstraints: Boolean = false,
     state: AnimatableState,
     fixedWidth: Dp = Dp.Unspecified,
@@ -103,7 +103,7 @@ fun AnimatableBox(
                 }
             )
             .then(modifier),
-        contentAlignment = contentAlignment,
+        contentAlignment = fixedContentAlignment ?: state.animatedAlignment,
         propagateMinConstraints = propagateMinConstraints,
     ) {
         content()
