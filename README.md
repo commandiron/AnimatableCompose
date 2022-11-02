@@ -15,7 +15,7 @@ What you can create from Material 3 components right now;
 
 <img src="https://user-images.githubusercontent.com/50905347/197984728-7bfe5536-b78e-41e1-91cb-5bc167e51850.gif" width="250" height="530">&nbsp;&nbsp;<img src="https://user-images.githubusercontent.com/50905347/198032696-f78f2b66-964c-494d-9614-14107ecde244.gif" width="250" height="530">
 
-### Expandable Phone Number
+### Expandable Phone Number Animation
 
 <details closed>
 <summary>States</summary>
@@ -27,7 +27,7 @@ What you can create from Material 3 components right now;
 val animatableCardState = rememberAnimatableCardState(
     initialSize = DpSize(80.dp, 80.dp),
     targetSize = DpSize(Dp.Infinity, 120.dp),
-    toTargetSizeAnimationSpec = tween(500, 500), // add delay(500) for target
+    toTargetSizeAnimationSpec = tween(500, 500), //  specify delay(500) for target
     initialShape = RoundedCornerShape(32.dp),
     targetShape = RoundedCornerShape(0.dp),
     toTargetShapeAnimationSpec = tween(500, 500),
@@ -116,7 +116,7 @@ AnimatableCard(
 ```
 </details>
 
-### Card Dealer (just a few code)
+### Card Dealer Animation (just a few code)
 
 <details closed>
 <summary>States</summary>
@@ -340,7 +340,7 @@ Box(
 
 ### AnimatableCardWithText
 
-<img src="https://user-images.githubusercontent.com/50905347/198940886-d2107020-4043-424a-85b2-dfeb7fccf41e.gif" width="250" height="530">
+<img src="https://user-images.githubusercontent.com/50905347/199411703-02d14430-853a-430a-a7a3-2d920eaa5fe3.gif" width="250" height="530">
 
 <details closed>
 <summary>States</summary>
@@ -352,22 +352,20 @@ Box(
 val animatableCardState = rememberAnimatableCardState(
     initialSize = DpSize(width = 50.dp, height = 25.dp),
     targetSize = DpSize(width = 300.dp, height = 150.dp),
-    toTargetSizeAnimationSpec = spring(Spring.DampingRatioHighBouncy, Spring.StiffnessVeryLow),
-    initialShape =  RoundedCornerShape(4.dp),
-    targetShape = RoundedCornerShape(16.dp),
-    toTargetShapeAnimationSpec = spring(Spring.DampingRatioHighBouncy, Spring.StiffnessVeryLow),
+    initialShape = CircleShape,
+    targetShape = RoundedCornerShape(16.dp)
 )
 val animatableTextState = rememberAnimatableTextState(
     initialFontSize = 4.sp,
-    targetFontSize = 36.sp,
-    toTargetFontSizeAnimationSpec = spring(Spring.DampingRatioHighBouncy, Spring.StiffnessVeryLow)
+    targetFontSize = 36.sp
 )
 // Merge the states you created into sharedState and pass it to AnimatableCard and AnimatableText
 val sharedAnimatableState = rememberSharedAnimatableState(
-    listOf(
+    animatableStates = listOf(
         animatableCardState,
         animatableTextState
-    )
+    ),
+    toTargetAnimationSpec = infiniteRepeatable(tween(1000), RepeatMode.Reverse) //specify shared animation spec.
 )
 ```
 </details>
@@ -422,5 +420,5 @@ dependencies {
 ```
 
 ## Todo ✔️
-   * SharedAnimationSpec ❌
+   * SharedAnimationSpec ✔️
    * Animation State callback from animate() ❌
