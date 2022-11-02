@@ -57,7 +57,7 @@ val sharedAnimatableState = rememberSharedAnimatableState(
     listOf(
         animatableCardState,
         animatableIconState, // default index = 0
-        animatableIconState.copy( // create state with copy func. for same params.
+        animatableIconState.copy( // create state with copy func. for same params
             index = 1, // specify index for same components
             initialSize = DpSize(0.dp, 0.dp),
             targetSize = DpSize(36.dp, 36.dp),
@@ -265,7 +265,7 @@ val state = rememberAnimatableBoxState(
     initialOffset = DpOffset(x = 0.dp, y = 0.dp), // set initial offset
     targetOffset = DpOffset(x = 0.dp, y = - Dp.Infinity) // set target offset
     // Dp.Infinity will take the maximum value according to the screen size, 
-    // ps: Dp.Infinity for offset needs centered component and sizes, however you may not use it if you want.
+    // ps: Dp.Infinity for offset needs centered component and sizes, however you may not use it if you want
 )
 ```
 </details>
@@ -365,7 +365,7 @@ val sharedAnimatableState = rememberSharedAnimatableState(
         animatableCardState,
         animatableTextState
     ),
-    toTargetAnimationSpec = infiniteRepeatable(tween(1000), RepeatMode.Reverse) //specify shared animation spec.
+    toTargetAnimationSpec = infiniteRepeatable(tween(1000), RepeatMode.Reverse) //specify shared animation spec
 )
 ```
 </details>
