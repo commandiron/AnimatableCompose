@@ -2,10 +2,7 @@ package com.commandiron.animatablecompose
 
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
@@ -72,7 +69,7 @@ fun Show7InstaStory() {
 
     val sharedAnimatableState = rememberSharedAnimatableState(cardStates)
 
-    Column(
+    Box(
         modifier = Modifier.fillMaxSize(),
     ) {
         LazyRow(
