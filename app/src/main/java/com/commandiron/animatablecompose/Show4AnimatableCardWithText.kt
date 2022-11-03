@@ -36,7 +36,7 @@ fun Show4AnimatableCardWithText() {
             animatableCardState,
             animatableTextState
         ),
-        toTargetAnimationSpec = infiniteRepeatable(tween(1000), RepeatMode.Reverse)
+        toTargetAnimationsSpec = infiniteRepeatable(tween(1000), RepeatMode.Reverse)
     )
     Box(
         modifier = Modifier

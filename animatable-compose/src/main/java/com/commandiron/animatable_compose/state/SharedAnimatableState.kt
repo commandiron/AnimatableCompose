@@ -9,42 +9,42 @@ import androidx.compose.runtime.remember
 @Composable
 fun rememberSharedAnimatableState(
     animatableStates: List<AnimatableState>,
-    toTargetAnimationSpec: AnimationSpec<Float>? = null,
-    toInitialAnimationSpec: AnimationSpec<Float>? = null,
+    toTargetAnimationsSpec: AnimationSpec<Float>? = null,
+    toInitialAnimationsSpec: AnimationSpec<Float>? = null
 ): SharedAnimatableState {
     return remember {
         SharedAnimatableState(
             animatableStates = animatableStates,
-            toTargetAnimationSpec = toTargetAnimationSpec,
-            toInitialAnimationSpec = toInitialAnimationSpec
+            toTargetAnimationsSpec = toTargetAnimationsSpec,
+            toInitialAnimationsSpec = toInitialAnimationsSpec
         )
     }
 }
 
 data class SharedAnimatableState(
     private var animatableStates: List<AnimatableState>,
-    private val toTargetAnimationSpec: AnimationSpec<Float>? = null,
-    private val toInitialAnimationSpec: AnimationSpec<Float>? = null,
+    private val toTargetAnimationsSpec: AnimationSpec<Float>? = null,
+    private val toInitialAnimationsSpec: AnimationSpec<Float>? = null
 ) {
     private val states by mutableStateOf(
-        if(toTargetAnimationSpec != null && toInitialAnimationSpec != null) {
+        if(toTargetAnimationsSpec != null && toInitialAnimationsSpec != null) {
             animatableStates.map {
                 it.copy(
-                    toTargetAnimationSpec = toTargetAnimationSpec,
-                    toInitialAnimationSpec = toInitialAnimationSpec
+                    toTargetAnimationSpec = toTargetAnimationsSpec,
+                    toInitialAnimationSpec = toInitialAnimationsSpec
                 )
             }
         } else {
-            if(toTargetAnimationSpec != null && toInitialAnimationSpec == null) {
+            if(toTargetAnimationsSpec != null && toInitialAnimationsSpec == null) {
                 animatableStates.map {
                     it.copy(
-                        toTargetAnimationSpec = toTargetAnimationSpec
+                        toTargetAnimationSpec = toTargetAnimationsSpec
                     )
                 }
-            } else if(toTargetAnimationSpec == null && toInitialAnimationSpec != null) {
+            } else if(toTargetAnimationsSpec == null && toInitialAnimationsSpec != null) {
                 animatableStates.map {
                     it.copy(
-                        toTargetAnimationSpec = toTargetAnimationSpec
+                        toInitialAnimationSpec = toInitialAnimationsSpec
                     )
                 }
             } else {

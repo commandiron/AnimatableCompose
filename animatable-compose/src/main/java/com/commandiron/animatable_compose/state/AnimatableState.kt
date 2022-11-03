@@ -73,7 +73,6 @@ data class AnimatableState(
     private val toTargetAnimationSpec: AnimationSpec<Float>? = null,
     private val toInitialAnimationSpec: AnimationSpec<Float>? = null,
     private val onAnimation: (AnimationState) -> Unit = {}
-
 ) {
     private var size by mutableStateOf(initialSize)
     private var sizeAnimationSpec by mutableStateOf(
@@ -663,9 +662,6 @@ data class AnimatableState(
             alignment?.let { alignment ->
 
                 alignmentAnimationSpec?.let { spec ->
-
-                    val horizontalBias = 0f
-                    val verticalBias = 0f
 
                     val animatedHorizontalBias = animateFloatAsState(
                         targetValue = when(alignment) {

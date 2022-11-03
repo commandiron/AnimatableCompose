@@ -24,8 +24,8 @@ fun Show2AnimatableBox() {
         targetSize = DpSize(Dp.Infinity, 120.dp), // set target size
         initialOffset = DpOffset(x = 0.dp, y = 0.dp), // set initial offset
         targetOffset = DpOffset(x = 0.dp, y = - Dp.Infinity), // set target offset
-        initialAlignment = Alignment.Center,
-        targetAlignment = Alignment.TopStart
+        initialAlignment = Alignment.TopStart,  // set initial alignment
+        targetAlignment = Alignment.Center // set target alignment
         // Dp.Infinity will take the maximum value according to the screen size
     )
     AnimatableBox(
