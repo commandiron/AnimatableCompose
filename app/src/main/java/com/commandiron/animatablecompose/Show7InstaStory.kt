@@ -2,7 +2,10 @@ package com.commandiron.animatablecompose
 
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
@@ -26,11 +29,10 @@ import kotlinx.coroutines.launch
 
 @Composable
 fun Show7InstaStory() {
+
     val lazyListState = rememberLazyListState()
     val scope = rememberCoroutineScope()
     var selectedIndex by remember { mutableStateOf(0) }
-
-    val stories by remember { mutableStateOf(Story.stories) }
 
     val animatableCardState = rememberAnimatableCardState(
         initialSize = DpSize(width = 70.dp, height = 70.dp),
@@ -42,6 +44,8 @@ fun Show7InstaStory() {
         initialBorder = BorderStroke(2.dp, Brush.verticalGradient(listOf(Color.Red, Color.Yellow))),
         targetBorder = BorderStroke(0.dp, Color.Unspecified)
     )
+
+    val stories by remember { mutableStateOf(Story.stories) }
 
     val cardStates = mutableListOf<AnimatableState>()
 
