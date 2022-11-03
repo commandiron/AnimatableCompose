@@ -124,6 +124,90 @@ AnimatableCard(
 
         
 ```kotlin
+val cards by remember  { 
+    mutableStateOf(listOf("A","K","Q","J","10","9","8","7","6","5","4","3","2"))
+}
+var deck by remember {
+    mutableStateOf(cards + cards + cards + cards)
+}
+
+val animatableCardState = rememberAnimatableCardState(
+    initialSize = DpSize(64.dp, 64.dp),
+    targetSize = DpSize(64.dp, 64.dp),
+    initialOffset = DpOffset(0.dp, 120.dp),
+    targetOffset = DpOffset(-Dp.Infinity, -Dp.Infinity)
+)
+val animatableTextState = rememberAnimatableTextState(
+    initialFontSize = 0.sp,
+    targetFontSize = 24.sp
+)
+
+val cardStates = mutableListOf<AnimatableState>()
+val textStates = mutableListOf<AnimatableState>()
+
+deck.indices.forEach {
+    cardStates.add(
+        animatableCardState.copy(
+            index = it,
+            toTargetOffsetAnimationSpec = tween(400, (it * 400)),
+            targetOffset = DpOffset(if(it % 2 == 0) (-100).dp else 100.dp, (-150).dp)
+        )
+    )
+    textStates.add(
+        animatableTextState.copy(
+            index = it,
+            toTargetFontSizeAnimationSpec = tween(400, (it * 400))
+        )
+    )
+
+}
+
+val sharedAnimatableState = rememberSharedAnimatableState(cardStates + textStates)
+```
+</details>
+<details closed>
+<summary>Components</summary>
+<br>
+
+        
+```kotlin
+Box(
+    modifier = Modifier
+        .fillMaxSize()
+        .clickable {
+            deck = deck.shuffled()
+            sharedAnimatableState.animate()
+        },
+    contentAlignment = Alignment.Center
+) {
+    deck.indices.forEach {
+        AnimatableCard(
+            onClick = {},
+            state = sharedAnimatableState,
+            stateIndex = it,
+            fixedShape = RoundedCornerShape(16.dp)
+        ) {
+            Box(Modifier.fillMaxSize(), Alignment.Center) {
+                AnimatableText(
+                    text = deck[it],
+                    state = sharedAnimatableState,
+                    stateIndex = it
+                )
+            }
+        }
+    }
+}
+```
+</details>
+
+### Insta Story
+
+<details closed>
+<summary>States</summary>
+<br>
+
+        
+```kotlin
 val lazyListState = rememberLazyListState()
 val scope = rememberCoroutineScope()
 var selectedIndex by remember { mutableStateOf(0) }
@@ -196,90 +280,6 @@ Box(
                     contentDescription = null,
                     contentScale = ContentScale.Crop,
                     modifier = Modifier.fillMaxSize()
-                )
-            }
-        }
-    }
-}
-```
-</details>
-
-### Insta Story
-
-<details closed>
-<summary>States</summary>
-<br>
-
-        
-```kotlin
-val cards by remember  { 
-    mutableStateOf(listOf("A","K","Q","J","10","9","8","7","6","5","4","3","2"))
-}
-var deck by remember {
-    mutableStateOf(cards + cards + cards + cards)
-}
-
-val animatableCardState = rememberAnimatableCardState(
-    initialSize = DpSize(64.dp, 64.dp),
-    targetSize = DpSize(64.dp, 64.dp),
-    initialOffset = DpOffset(0.dp, 120.dp),
-    targetOffset = DpOffset(-Dp.Infinity, -Dp.Infinity)
-)
-val animatableTextState = rememberAnimatableTextState(
-    initialFontSize = 0.sp,
-    targetFontSize = 24.sp
-)
-
-val cardStates = mutableListOf<AnimatableState>()
-val textStates = mutableListOf<AnimatableState>()
-
-deck.indices.forEach {
-    cardStates.add(
-        animatableCardState.copy(
-            index = it,
-            toTargetOffsetAnimationSpec = tween(400, (it * 400)),
-            targetOffset = DpOffset(if(it % 2 == 0) (-100).dp else 100.dp, (-150).dp)
-        )
-    )
-    textStates.add(
-        animatableTextState.copy(
-            index = it,
-            toTargetFontSizeAnimationSpec = tween(400, (it * 400))
-        )
-    )
-
-}
-
-val sharedAnimatableState = rememberSharedAnimatableState(cardStates + textStates)
-```
-</details>
-<details closed>
-<summary>Components</summary>
-<br>
-
-        
-```kotlin
-Box(
-    modifier = Modifier
-        .fillMaxSize()
-        .clickable {
-            deck = deck.shuffled()
-            sharedAnimatableState.animate()
-        },
-    contentAlignment = Alignment.Center
-) {
-    deck.indices.forEach {
-        AnimatableCard(
-            onClick = {},
-            state = sharedAnimatableState,
-            stateIndex = it,
-            fixedShape = RoundedCornerShape(16.dp)
-        ) {
-            Box(Modifier.fillMaxSize(), Alignment.Center) {
-                AnimatableText(
-                    text = deck[it],
-                    state = sharedAnimatableState,
-                    stateIndex = it
                 )
             }
         }
