@@ -13,7 +13,7 @@ What you can create from Material 3 components right now;
 
 ## How it looks
 
-<img src="https://user-images.githubusercontent.com/50905347/197984728-7bfe5536-b78e-41e1-91cb-5bc167e51850.gif" width="250" height="530">&nbsp;&nbsp;<img src="https://user-images.githubusercontent.com/50905347/198032696-f78f2b66-964c-494d-9614-14107ecde244.gif" width="250" height="530">
+<img src="https://user-images.githubusercontent.com/50905347/197984728-7bfe5536-b78e-41e1-91cb-5bc167e51850.gif" width="250" height="530">&nbsp;&nbsp;<img src="https://user-images.githubusercontent.com/50905347/198032696-f78f2b66-964c-494d-9614-14107ecde244.gif" width="250" height="530">&nbsp;&nbsp;<img src="https://user-images.githubusercontent.com/50905347/199718888-823d86d1-68c9-45cd-9844-590480efe71c.gif" width="250" height="530">
 
 ### Expandable Phone Number Animation
 
@@ -116,7 +116,7 @@ AnimatableCard(
 ```
 </details>
 
-### Card Dealer Animation (just a few code)
+### Card Dealer Animation
 
 <details closed>
 <summary>States</summary>
@@ -195,6 +195,119 @@ Box(
                 )
             }
         }
+    }
+}
+```
+</details>
+
+### Insta Story
+
+<details closed>
+<summary>States</summary>
+<br>
+
+        
+```kotlin
+val lazyListState = rememberLazyListState()
+val scope = rememberCoroutineScope()
+var selectedIndex by remember { mutableStateOf(0) }
+
+val stories by remember { mutableStateOf(Story.stories) }
+
+val animatableCardState = rememberAnimatableCardState(
+    initialSize = DpSize(width = 70.dp, height = 70.dp),
+    targetSize = DpSize(width = Dp.Infinity, height = Dp.Infinity),
+    initialShape = CircleShape,
+    targetShape = RoundedCornerShape(0.dp),
+    initialPadding = PaddingValues(4.dp, 8.dp),
+    targetPadding = PaddingValues(0.dp),
+    initialBorder = BorderStroke(2.dp, Brush.verticalGradient(listOf(Color.Red, Color.Yellow))),
+    targetBorder = BorderStroke(0.dp, Color.Unspecified)
+)
+
+val cardStates = mutableListOf<AnimatableState>()
+
+stories.indices.forEach { index ->
+    cardStates.add(
+        animatableCardState.copy(
+            index = index,
+            onAnimation = {
+                when(it) {
+                    AnimationState.INITIAL -> {}
+                    AnimationState.INITIAL_TO_TARGET -> {
+                        scope.launch {
+                            delay(150)
+                            lazyListState.animateScrollToItem(selectedIndex)
+                        }
+                    }
+                    AnimationState.TARGET -> {}
+                    AnimationState.TARGET_TO_INITIAL -> {}
+                }
+            },
+            toTargetAnimationSpec = tween(250)
+        )
+    )
+}
+
+val sharedAnimatableState = rememberSharedAnimatableState(cardStates)
+```
+</details>
+<details closed>
+<summary>Components</summary>
+<br>
+
+        
+```kotlin
+Box(
+    modifier = Modifier.fillMaxSize(),
+) {
+    LazyRow(
+        state = lazyListState
+    ) {
+        items(stories.size) { index ->
+            AnimatableCard(
+                modifier = Modifier
+                    .size(100.dp),
+                onClick = {
+                    selectedIndex = index
+                    cardStates[index].animate()
+                },
+                state = sharedAnimatableState,
+                stateIndex = index
+            ) {
+                AsyncImage(
+                    model = stories[index].url,
+                    contentDescription = null,
+                    contentScale = ContentScale.Crop,
+                    modifier = Modifier.fillMaxSize()
+                )
+            }
+        }
+    }
+}
+```
+</details>
+<details closed>
+<summary>Data</summary>
+<br>
+
+        
+```kotlin
+data class Story(
+    val url: String
+) {
+    companion object {
+        val stories = listOf(
+            Story("https://static.wikia.nocookie.net/metalgear/images/f/fb/MGS1SnakePP.png/revision/latest?cb=20180819204819"),
+            Story("https://static.wikia.nocookie.net/metalgear/images/5/55/Liquid1I2.png/revision/latest?cb=20130211020413"),
+            Story("https://static.wikia.nocookie.net/metalgear/images/c/c2/MGS1OcelotPP.png/revision/latest?cb=20131221073643"),
+            Story("https://static.wikia.nocookie.net/metalgear/images/3/36/Mantis1I1.png/revision/latest?cb=20130211020311"),
+            Story("https://static.wikia.nocookie.net/metalgear/images/6/62/MGSOtaconPP.png/revision/latest?cb=20131222063336"),
+            Story("https://static.wikia.nocookie.net/metalgear/images/a/a8/MGSMerylPP.png/revision/latest?cb=20131222063857"),
+            Story("https://static.wikia.nocookie.net/metalgear/images/c/c8/SolidusHD.jpg/revision/latest/top-crop/width/360/height/360?cb=20140930091309"),
+            Story("https://static.wikia.nocookie.net/metalgear/images/5/5e/GrayFox1I3.png/revision/latest?cb=20130211015925"),
+            Story("https://static.wikia.nocookie.net/metalgear/images/0/0e/Raven1I2.png/revision/latest?cb=20130211020140")
+        )
     }
 }
 ```
