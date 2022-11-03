@@ -60,5 +60,7 @@ dependencies {
     androidTestImplementation "androidx.compose.ui:ui-test-junit4:$compose_ui_version"
     debugImplementation "androidx.compose.ui:ui-tooling:$compose_ui_version"
 
+    implementation("io.coil-kt:coil-compose:2.2.2")
+
     implementation project(':animatable-compose')
 }
