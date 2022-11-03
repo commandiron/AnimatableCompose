@@ -13,9 +13,11 @@ What you can create from Material 3 components right now;
 
 ## How it looks
 
-<img src="https://user-images.githubusercontent.com/50905347/197984728-7bfe5536-b78e-41e1-91cb-5bc167e51850.gif" width="250" height="530">&nbsp;&nbsp;<img src="https://user-images.githubusercontent.com/50905347/198032696-f78f2b66-964c-494d-9614-14107ecde244.gif" width="250" height="530">&nbsp;&nbsp;<img src="https://user-images.githubusercontent.com/50905347/199718888-823d86d1-68c9-45cd-9844-590480efe71c.gif" width="250" height="530">
+|Phone Number|Card Dealer|Insta Story|
+|------------|-----------|-----------|
+|<img src="https://user-images.githubusercontent.com/50905347/197984728-7bfe5536-b78e-41e1-91cb-5bc167e51850.gif" width="250" height="530">|<img src="https://user-images.githubusercontent.com/50905347/198032696-f78f2b66-964c-494d-9614-14107ecde244.gif" width="250" height="530">|<img src="https://user-images.githubusercontent.com/50905347/199718888-823d86d1-68c9-45cd-9844-590480efe71c.gif" width="250" height="530">|
 
-### Expandable Phone Number Animation
+### Phone Number
 
 <details closed>
 <summary>States</summary>
@@ -116,7 +118,7 @@ AnimatableCard(
 ```
 </details>
 
-### Card Dealer Animation
+### Card Dealer
 
 <details closed>
 <summary>States</summary>
@@ -530,7 +532,7 @@ dependencyResolutionManagement {
 3. Add dependencies
 ```groovy
 dependencies {
-    implementation 'com.github.commandiron:AnimatableCompose:1.0.3'
+    implementation 'com.github.commandiron:AnimatableCompose:1.0.4'
 }
 ```
 
