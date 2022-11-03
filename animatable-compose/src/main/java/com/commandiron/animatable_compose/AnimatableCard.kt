@@ -3,10 +3,7 @@ package com.commandiron.animatable_compose
 import androidx.annotation.FloatRange
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.interaction.MutableInteractionSource
-import androidx.compose.foundation.layout.ColumnScope
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.offset
-import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
@@ -16,6 +13,7 @@ import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.DpSize
+import androidx.compose.ui.unit.dp
 import com.commandiron.animatable_compose.state.AnimatableState
 import com.commandiron.animatable_compose.state.AnimatableStateTag
 import com.commandiron.animatable_compose.state.SharedAnimatableState
@@ -32,6 +30,7 @@ fun AnimatableCard(
     elevation: CardElevation = CardDefaults.cardElevation(),
     colors: CardColors = CardDefaults.cardColors(),
     state: AnimatableState,
+    fixedPadding: PaddingValues = PaddingValues(0.dp),
     fixedWidth: Dp = Dp.Unspecified,
     fixedHeight: Dp = Dp.Unspecified,
     @FloatRange(from = 0.0, to = 1.0)
@@ -42,6 +41,12 @@ fun AnimatableCard(
     Card(
         onClick = onClick,
         modifier = Modifier
+            .padding(
+                when (fixedPadding) {
+                    PaddingValues(0.dp) ->  state.animatedPadding
+                    else -> fixedPadding
+                }
+            )
             .width(
                 when (fixedWidth) {
                     Dp.Unspecified -> if (state.animatedSize == DpSize.Unspecified) {
@@ -95,6 +100,7 @@ fun AnimatableCard(
     colors: CardColors = CardDefaults.cardColors(),
     state: SharedAnimatableState,
     stateIndex: Int = 0,
+    fixedPadding: PaddingValues = PaddingValues(0.dp),
     fixedWidth: Dp = Dp.Unspecified,
     fixedHeight: Dp = Dp.Unspecified,
     @FloatRange(from = 0.0, to = 1.0)
@@ -108,6 +114,12 @@ fun AnimatableCard(
     Card(
         onClick = onClick,
         modifier = Modifier
+            .padding(
+                when (fixedPadding) {
+                    PaddingValues(0.dp) ->  stateIn.animatedPadding
+                    else -> fixedPadding
+                }
+            )
             .width(
                 when (fixedWidth) {
                     Dp.Unspecified -> if (stateIn.animatedSize == DpSize.Unspecified) {
