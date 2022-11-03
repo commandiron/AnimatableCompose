@@ -124,45 +124,48 @@ AnimatableCard(
 
         
 ```kotlin
-val cards by remember  { 
-    mutableStateOf(listOf("A","K","Q","J","10","9","8","7","6","5","4","3","2"))
-}
-var deck by remember {
-    mutableStateOf(cards + cards + cards + cards)
-}
+val lazyListState = rememberLazyListState()
+val scope = rememberCoroutineScope()
+var selectedIndex by remember { mutableStateOf(0) }
+
+val stories by remember { mutableStateOf(Story.stories) }
 
 val animatableCardState = rememberAnimatableCardState(
-    initialSize = DpSize(64.dp, 64.dp),
-    targetSize = DpSize(64.dp, 64.dp),
-    initialOffset = DpOffset(0.dp, 120.dp),
-    targetOffset = DpOffset(-Dp.Infinity, -Dp.Infinity)
-)
-val animatableTextState = rememberAnimatableTextState(
-    initialFontSize = 0.sp,
-    targetFontSize = 24.sp
+    initialSize = DpSize(width = 70.dp, height = 70.dp),
+    targetSize = DpSize(width = Dp.Infinity, height = Dp.Infinity),
+    initialShape = CircleShape,
+    targetShape = RoundedCornerShape(0.dp),
+    initialPadding = PaddingValues(4.dp, 8.dp),
+    targetPadding = PaddingValues(0.dp),
+    initialBorder = BorderStroke(2.dp, Brush.verticalGradient(listOf(Color.Red, Color.Yellow))),
+    targetBorder = BorderStroke(0.dp, Color.Unspecified)
 )
 
 val cardStates = mutableListOf<AnimatableState>()
-val textStates = mutableListOf<AnimatableState>()
 
-deck.indices.forEach {
+stories.indices.forEach { index ->
     cardStates.add(
         animatableCardState.copy(
-            index = it,
-            toTargetOffsetAnimationSpec = tween(400, (it * 400)),
-            targetOffset = DpOffset(if(it % 2 == 0) (-100).dp else 100.dp, (-150).dp)
+            index = index,
+            onAnimation = {
+                when(it) {
+                    AnimationState.INITIAL -> {}
+                    AnimationState.INITIAL_TO_TARGET -> {
+                        scope.launch {
+                            delay(150)
+                            lazyListState.animateScrollToItem(selectedIndex)
+                        }
+                    }
+                    AnimationState.TARGET -> {}
+                    AnimationState.TARGET_TO_INITIAL -> {}
+                }
+            },
+            toTargetAnimationSpec = tween(250)
         )
     )
-    textStates.add(
-        animatableTextState.copy(
-            index = it,
-            toTargetFontSizeAnimationSpec = tween(400, (it * 400))
-        )
-    )
-
 }
 
-val sharedAnimatableState = rememberSharedAnimatableState(cardStates + textStates)
+val sharedAnimatableState = rememberSharedAnimatableState(cardStates)
 ```
 </details>
 <details closed>
@@ -172,26 +175,27 @@ val sharedAnimatableState = rememberSharedAnimatableState(cardStates + textState
         
 ```kotlin
 Box(
-    modifier = Modifier
-        .fillMaxSize()
-        .clickable {
-            deck = deck.shuffled()
-            sharedAnimatableState.animate()
-        },
-    contentAlignment = Alignment.Center
+    modifier = Modifier.fillMaxSize(),
 ) {
-    deck.indices.forEach {
-        AnimatableCard(
-            onClick = {},
-            state = sharedAnimatableState,
-            stateIndex = it,
-            fixedShape = RoundedCornerShape(16.dp)
-        ) {
-            Box(Modifier.fillMaxSize(), Alignment.Center) {
-                AnimatableText(
-                    text = deck[it],
-                    state = sharedAnimatableState,
-                    stateIndex = it
+    LazyRow(
+        state = lazyListState
+    ) {
+        items(stories.size) { index ->
+            AnimatableCard(
+                modifier = Modifier
+                    .size(100.dp),
+                onClick = {
+                    selectedIndex = index
+                    cardStates[index].animate()
+                },
+                state = sharedAnimatableState,
+                stateIndex = index
+            ) {
+                AsyncImage(
+                    model = stories[index].url,
+                    contentDescription = null,
+                    contentScale = ContentScale.Crop,
+                    modifier = Modifier.fillMaxSize()
                 )
             }
         }
