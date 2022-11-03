@@ -2,6 +2,9 @@ package com.commandiron.animatable_compose.state
 
 import androidx.compose.animation.core.*
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.calculateEndPadding
+import androidx.compose.foundation.layout.calculateStartPadding
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.*
@@ -27,6 +30,12 @@ import kotlin.math.absoluteValue
 data class AnimatableState(
     val animatableStateTag: AnimatableStateTag,
     val index: Int,
+
+    private val initialPadding: PaddingValues? = null,
+    private val targetPadding: PaddingValues? = null,
+    private val toTargetPaddingAnimationSpec: AnimationSpec<Float>? = null,
+    private val toInitialPaddingAnimationSpec: AnimationSpec<Float>? = null,
+    private val onPaddingAnimation: (AnimationState) -> Unit = {},
 
     private val initialSize: DpSize? = null,
     private val targetSize: DpSize? = null,
@@ -74,6 +83,17 @@ data class AnimatableState(
     private val toInitialAnimationSpec: AnimationSpec<Float>? = null,
     private val onAnimation: (AnimationState) -> Unit = {}
 ) {
+    private var padding by mutableStateOf(initialPadding)
+    private var paddingAnimationSpec by mutableStateOf(
+        toTargetPaddingAnimationSpec ?: toTargetAnimationSpec
+    )
+    private var paddingAnimState by mutableStateOf(AnimationState.INITIAL)
+    private fun setPaddingAnim(animationState: AnimationState) {
+        paddingAnimState = animationState
+        onPaddingAnimation(animationState)
+        calculateSharedAnimationState()
+    }
+
     private var size by mutableStateOf(initialSize)
     private var sizeAnimationSpec by mutableStateOf(
         toTargetSizeAnimationSpec ?: toTargetAnimationSpec
@@ -165,6 +185,10 @@ data class AnimatableState(
 
     fun animate() {
 
+        if(initialPadding != null && targetPadding != null) {
+            animatePadding()
+        }
+
         if(initialSize != null && targetSize != null) {
             animateSize()
         }
@@ -195,6 +219,10 @@ data class AnimatableState(
     }
 
     fun animateToTarget() {
+
+        if(initialPadding != null && targetPadding != null) {
+            animatePaddingToTarget()
+        }
 
         if(initialSize != null && targetSize != null) {
             animateSizeToTarget()
@@ -227,6 +255,10 @@ data class AnimatableState(
 
     fun animateToInitial() {
 
+        if(initialPadding != null && targetPadding != null) {
+            animatePaddingToInitial()
+        }
+
         if(initialSize != null && targetSize != null) {
             animateSizeToInitial()
         }
@@ -255,6 +287,72 @@ data class AnimatableState(
             animateFontSizeToInitial()
         }
     }
+
+    private fun animatePadding() {
+        when(paddingAnimState) {
+            AnimationState.INITIAL, AnimationState.TARGET_TO_INITIAL  -> {
+                animatePaddingToTarget()
+            }
+            AnimationState.TARGET, AnimationState.INITIAL_TO_TARGET -> {
+                animatePaddingToInitial()
+            }
+        }
+    }
+    private fun animatePaddingToTarget() {
+        setPaddingAnim(AnimationState.INITIAL_TO_TARGET)
+        padding = targetPadding
+        paddingAnimationSpec = toTargetPaddingAnimationSpec ?: toTargetAnimationSpec
+    }
+    private fun animatePaddingToInitial() {
+        setPaddingAnim(AnimationState.TARGET_TO_INITIAL)
+        padding = initialPadding
+        paddingAnimationSpec = toInitialPaddingAnimationSpec ?: toInitialAnimationSpec
+    }
+    internal val animatedPadding: PaddingValues
+        @Composable
+        get() {
+            padding?.let { padding ->
+
+                paddingAnimationSpec?.let { spec ->
+
+                    val startPadding = animateFloatAsState(
+                        targetValue = padding.calculateStartPadding(LayoutDirection.Ltr).value,
+                        animationSpec = spec
+                    )
+                    val topPadding = animateFloatAsState(
+                        targetValue = padding.calculateTopPadding().value,
+                        animationSpec = spec
+                    )
+                    val endPadding = animateFloatAsState(
+                        targetValue = padding.calculateEndPadding(LayoutDirection.Rtl).value,
+                        animationSpec = spec
+                    )
+                    val bottomPadding = animateFloatAsState(
+                        targetValue = padding.calculateBottomPadding().value,
+                        animationSpec = spec,
+                        finishedListener = {
+                            when(paddingAnimState) {
+                                AnimationState.INITIAL_TO_TARGET -> {
+                                    setPaddingAnim(AnimationState.TARGET)
+                                }
+
+                                AnimationState.TARGET_TO_INITIAL -> {
+                                    setPaddingAnim(AnimationState.INITIAL)
+                                }
+                                else -> {}
+                            }
+                        }
+                    )
+                    return PaddingValues(
+                        start = Dp(startPadding.value),
+                        top = Dp(topPadding.value),
+                        end = Dp(endPadding.value),
+                        bottom =Dp(bottomPadding.value)
+                    )
+                }
+            }
+            return PaddingValues(0.dp)
+        }
 
     private fun animateSize() {
         when(sizeAnimState) {
@@ -760,6 +858,9 @@ data class AnimatableState(
 
         val animationStates = mutableListOf<AnimationState>()
 
+        if(padding != null ) {
+            animationStates.add(paddingAnimState)
+        }
         if(size != null ) {
             animationStates.add(sizeAnimState)
         }
@@ -918,6 +1019,11 @@ fun rememberAnimatableBoxState(
 @Composable
 fun rememberAnimatableCardState(
     index: Int = 0,
+    initialPadding: PaddingValues? = null,
+    targetPadding: PaddingValues? = null,
+    toTargetPaddingAnimationSpec: AnimationSpec<Float>? = null,
+    toInitialPaddingAnimationSpec: AnimationSpec<Float>? = null,
+    onPaddingAnimation: (AnimationState) -> Unit = {},
     initialSize: DpSize? = null,
     targetSize: DpSize? = null,
     toTargetSizeAnimationSpec: AnimationSpec<Size>? = null,
@@ -951,6 +1057,11 @@ fun rememberAnimatableCardState(
         AnimatableState(
             animatableStateTag = AnimatableStateTag.CARD,
             index = index,
+            initialPadding = initialPadding,
+            targetPadding = targetPadding,
+            toTargetPaddingAnimationSpec = toTargetPaddingAnimationSpec,
+            toInitialPaddingAnimationSpec = toInitialPaddingAnimationSpec,
+            onPaddingAnimation = onPaddingAnimation,
             initialSize = initialSize,
             targetSize = targetSize,
             toTargetSizeAnimationSpec = toTargetSizeAnimationSpec,
