@@ -287,6 +287,31 @@ Box(
 }
 ```
 </details>
+<details closed>
+<summary>Data</summary>
+<br>
+
+        
+```kotlin
+data class Story(
+    val url: String
+) {
+    companion object {
+        val stories = listOf(
+            Story("https://static.wikia.nocookie.net/metalgear/images/f/fb/MGS1SnakePP.png/revision/latest?cb=20180819204819"),
+            Story("https://static.wikia.nocookie.net/metalgear/images/5/55/Liquid1I2.png/revision/latest?cb=20130211020413"),
+            Story("https://static.wikia.nocookie.net/metalgear/images/c/c2/MGS1OcelotPP.png/revision/latest?cb=20131221073643"),
+            Story("https://static.wikia.nocookie.net/metalgear/images/3/36/Mantis1I1.png/revision/latest?cb=20130211020311"),
+            Story("https://static.wikia.nocookie.net/metalgear/images/6/62/MGSOtaconPP.png/revision/latest?cb=20131222063336"),
+            Story("https://static.wikia.nocookie.net/metalgear/images/a/a8/MGSMerylPP.png/revision/latest?cb=20131222063857"),
+            Story("https://static.wikia.nocookie.net/metalgear/images/c/c8/SolidusHD.jpg/revision/latest/top-crop/width/360/height/360?cb=20140930091309"),
+            Story("https://static.wikia.nocookie.net/metalgear/images/5/5e/GrayFox1I3.png/revision/latest?cb=20130211015925"),
+            Story("https://static.wikia.nocookie.net/metalgear/images/0/0e/Raven1I2.png/revision/latest?cb=20130211020140")
+        )
+    }
+}
+```
+</details>
         
 ## How to use
         
