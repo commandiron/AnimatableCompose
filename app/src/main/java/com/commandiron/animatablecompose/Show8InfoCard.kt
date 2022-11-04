@@ -3,6 +3,7 @@ package com.commandiron.animatablecompose
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.CardDefaults
@@ -10,6 +11,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
@@ -35,12 +37,6 @@ fun Show8InfoCard() {
     val scope = rememberCoroutineScope()
     var selectedIndex by remember { mutableStateOf(0) }
 
-    val animatableLazyRowState = rememberAnimatableLazyRowState(
-        initialSize = DpSize(width = Dp.Infinity, height = 180.dp),
-        targetSize = DpSize(width = Dp.Infinity, height = 340.dp),
-        initialOffset = DpOffset(0.dp, 0.dp),
-        targetOffset = DpOffset(0.dp, - Dp.Infinity)
-    )
     val animatableCardState = rememberAnimatableCardState(
         initialSize = DpSize(width = 340.dp, height = 180.dp),
         targetSize = DpSize(width = Dp.Infinity, height = 340.dp),
@@ -49,6 +45,19 @@ fun Show8InfoCard() {
         toTargetShapeAnimationSpec = tween(750),
         initialPadding = PaddingValues(horizontal = 8.dp),
         targetPadding = PaddingValues(0.dp),
+        onAnimation = {
+            when(it) {
+                AnimationState.INITIAL -> {}
+                AnimationState.INITIAL_TO_TARGET -> {
+                    scope.launch {
+                        delay(500)
+                        lazyListState.animateScrollToItem(selectedIndex)
+                    }
+                }
+                AnimationState.TARGET -> {}
+                AnimationState.TARGET_TO_INITIAL -> {}
+            }
+        }
     )
     val animatableBoxState = rememberAnimatableBoxState(
         initialAlignment = Alignment.Center,
@@ -58,13 +67,13 @@ fun Show8InfoCard() {
         initialFontSize = 0.sp,
         targetFontSize = 12.sp,
         initialOffset = DpOffset(x = 0.dp, y = 300.dp),
-        targetOffset = DpOffset(x = 0.dp, y = 0.dp)
+        targetOffset = DpOffset(x = 0.dp, y = 0.dp),
+        toTargetAnimationSpec = tween(250)
     )
     val animatableSpacerState = rememberAnimatableSpacerState(
         initialSize = DpSize(width = 0.dp, height = 0.dp),
-        targetSize = DpSize(width = 0.dp, height = 16.dp),
+        targetSize = DpSize(width = 0.dp, height = 16.dp)
     )
-
 
     val infoCards by remember { mutableStateOf(InfoCard.infoCards) }
 
@@ -76,62 +85,49 @@ fun Show8InfoCard() {
     infoCards.indices.forEach { index ->
         cardStates.add(
             animatableCardState.copy(
-                index = index,
-                onAnimation = {
-                    when(it) {
-                        AnimationState.INITIAL -> {}
-                        AnimationState.INITIAL_TO_TARGET -> {
-                            scope.launch {
-                                delay(150)
-                                lazyListState.animateScrollToItem(selectedIndex)
-                            }
-                        }
-                        AnimationState.TARGET -> {}
-                        AnimationState.TARGET_TO_INITIAL -> {}
-                    }
-                },
-                toTargetAnimationSpec = tween(250)
+                index = index
             )
         )
         boxStates.add(
             animatableBoxState.copy(
-                index = index,
-                toTargetAnimationSpec = tween(250)
+                index = index
             )
         )
         textStates.add(
             animatableTextState.copy(
-                index = index,
-                toTargetAnimationSpec = tween(250)
+                index = index
             )
         )
+        if(index == 0) {
+            spacerStates.add(
+                animatableSpacerState.copy(
+                    index = index,
+                    initialSize = DpSize(width = 0.dp, height = 300.dp),
+                    targetSize = DpSize(width = 0.dp, height = 0.dp)
+                )
+            )
+        }
         spacerStates.add(
             animatableSpacerState.copy(
-                index = index,
-                toTargetAnimationSpec = tween(250),
-                toInitialAnimationSpec = tween(250)
+                index = index + 1,
             )
         )
-
     }
 
     val sharedAnimatableState = rememberSharedAnimatableState(
-        animatableStates = listOf(animatableLazyRowState)
-                + cardStates
-                + boxStates
-                + textStates
-                + spacerStates
+        animatableStates = cardStates + boxStates + textStates + spacerStates
     )
 
-    Box(
+    Column(
         modifier = Modifier.fillMaxSize(),
-        contentAlignment = Alignment.Center
     ) {
-        AnimatableLazyRow(
-            verticalAlignment = Alignment.CenterVertically,
-            lazyListState = lazyListState,
-            flingBehavior = snapperFlingBehavior,
+        AnimatableSpacer(
             state = sharedAnimatableState
+        )
+        LazyRow(
+            verticalAlignment = Alignment.CenterVertically,
+            state = lazyListState,
+            flingBehavior = snapperFlingBehavior
         ) {
             items(infoCards.size) { index ->
                 AnimatableCard(
@@ -165,8 +161,14 @@ fun Show8InfoCard() {
                                         fontSize = 22.sp,
                                         fontWeight = FontWeight.Bold
                                     )
+                                    Text(
+                                        modifier = Modifier.align(Alignment.CenterStart),
+                                        text = "MGS 1",
+                                        fontSize = 12.sp,
+                                        color = Color.Gray
+                                    )
                                     AnimatableSpacer(
-                                        stateIndex = index,
+                                        stateIndex = index + 1,
                                         state = sharedAnimatableState
                                     )
                                     AnimatableText(
@@ -177,10 +179,12 @@ fun Show8InfoCard() {
                                     )
                                 }
                             }
-
                         }
                         AsyncImage(
-                            modifier = Modifier.weight(1f),
+                            modifier = Modifier
+                                .weight(1f)
+                                .padding(8.dp)
+                                .clip(RoundedCornerShape(32.dp)),
                             model = infoCards[index].imageUrl,
                             contentDescription = null,
                             contentScale = ContentScale.Crop
@@ -190,7 +194,6 @@ fun Show8InfoCard() {
             }
         }
     }
-
 }
 
 
@@ -218,7 +221,7 @@ data class InfoCard(
             ),
             InfoCard(
                 "https://static.wikia.nocookie.net/metalgear/images/3/36/Mantis1I1.png/revision/latest?cb=20130211020311",
-                "Psycho Mantis",
+                "Mantis",
                 "\"At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident, similique sunt in culpa qui officia deserunt mollitia animi, id est laborum et dolorum fuga. Et harum quidem rerum facilis est et expedita distinctio."
             ),
             InfoCard(
@@ -233,7 +236,7 @@ data class InfoCard(
             ),
             InfoCard(
                 "https://static.wikia.nocookie.net/metalgear/images/c/c8/SolidusHD.jpg/revision/latest/top-crop/width/360/height/360?cb=20140930091309",
-                "Solidus Snake",
+                "Solidus",
                 "\"At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident, similique sunt in culpa qui officia deserunt mollitia animi, id est laborum et dolorum fuga. Et harum quidem rerum facilis est et expedita distinctio."
             ),
             InfoCard(

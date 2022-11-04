@@ -907,7 +907,29 @@ enum class AnimationState {
 }
 
 enum class AnimatableStateTag {
-    BOX, TEXT, CARD, ICON, LAZY_ROW, SPACER
+    SPACER, TEXT, BOX, CARD, ICON, LAZY_ROW,
+}
+
+@Composable
+fun rememberAnimatableSpacerState(
+    index: Int = 0,
+    initialSize: DpSize? = null,
+    targetSize: DpSize? = null,
+    toTargetSizeAnimationSpec: AnimationSpec<Size>? = tween(500),
+    toInitialSizeAnimationSpec: AnimationSpec<Size>? = tween(500),
+    onSizeAnimation: (AnimationState) -> Unit = {}
+): AnimatableState {
+    return remember {
+        AnimatableState(
+            animatableStateTag = AnimatableStateTag.SPACER,
+            index = index,
+            initialSize = initialSize,
+            targetSize = targetSize,
+            toTargetSizeAnimationSpec = toTargetSizeAnimationSpec,
+            toInitialSizeAnimationSpec = toInitialSizeAnimationSpec,
+            onSizeAnimation = onSizeAnimation
+        )
+    }
 }
 
 @Composable
@@ -1176,28 +1198,6 @@ fun rememberAnimatableLazyRowState(
             toTargetAnimationSpec = toTargetAnimationSpec,
             toInitialAnimationSpec = toInitialAnimationSpec,
             onAnimation = onAnimation
-        )
-    }
-}
-
-@Composable
-fun rememberAnimatableSpacerState(
-    index: Int = 0,
-    initialSize: DpSize? = null,
-    targetSize: DpSize? = null,
-    toTargetSizeAnimationSpec: AnimationSpec<Size>? = null,
-    toInitialSizeAnimationSpec: AnimationSpec<Size>? = null,
-    onSizeAnimation: (AnimationState) -> Unit = {},
-): AnimatableState {
-    return remember {
-        AnimatableState(
-            animatableStateTag = AnimatableStateTag.SPACER,
-            index = index,
-            initialSize = initialSize,
-            targetSize = targetSize,
-            toTargetSizeAnimationSpec = toTargetSizeAnimationSpec,
-            toInitialSizeAnimationSpec = toInitialSizeAnimationSpec,
-            onSizeAnimation = onSizeAnimation
         )
     }
 }
