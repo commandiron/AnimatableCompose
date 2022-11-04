@@ -5,18 +5,19 @@ Add Animatable Material Components in Android Jetpack Compose.
 Create jetpack compose animation painless.
 
 What you can create from Material 3 components right now;
+* Spacer Animation
 * Text Animation
 * Box Animation
 * Card Animation
 * Icon Animation
-* Lazy Row Animation
+* LazyRow Animation
 * and combinations
 
 ## How it looks
 
-|Phone Number|Card Dealer|Insta Story|
-|------------|-----------|-----------|
-|<img src="https://user-images.githubusercontent.com/50905347/197984728-7bfe5536-b78e-41e1-91cb-5bc167e51850.gif" width="250" height="530">|<img src="https://user-images.githubusercontent.com/50905347/198032696-f78f2b66-964c-494d-9614-14107ecde244.gif" width="250" height="530">|<img src="https://user-images.githubusercontent.com/50905347/199718888-823d86d1-68c9-45cd-9844-590480efe71c.gif" width="250" height="530">|
+|Phone Number|Card Dealer|
+|------------|-----------|
+|<img src="https://user-images.githubusercontent.com/50905347/197984728-7bfe5536-b78e-41e1-91cb-5bc167e51850.gif" width="250" height="530">|<img src="https://user-images.githubusercontent.com/50905347/198032696-f78f2b66-964c-494d-9614-14107ecde244.gif" width="250" height="530">|
 
 ### Phone Number
 
@@ -203,6 +204,10 @@ Box(
 ```
 </details>
 
+|Insta Story|Info Card|
+|-----------|---------|
+|<img src="https://user-images.githubusercontent.com/50905347/199718888-823d86d1-68c9-45cd-9844-590480efe71c.gif" width="250" height="530">|<img src="https://user-images.githubusercontent.com/50905347/199983119-bb8bcdbf-81da-4352-8d2c-74571577654a.gif" width="250" height="530">|
+
 ### Insta Story
 
 <details closed>
@@ -301,6 +306,208 @@ data class Story(
 ) {
     companion object {
         val stories = listOf(
+            //
+        )
+    }
+}
+```
+</details>
+       
+### Info Card
+
+<details closed>
+<summary>States</summary>
+<br>
+
+        
+```kotlin
+val lazyListState = rememberLazyListState()
+val snapperFlingBehavior = rememberSnapperFlingBehavior(
+    lazyListState = lazyListState,
+    snapOffsetForItem = SnapOffsets.Start,
+)
+val scope = rememberCoroutineScope()
+var selectedIndex by remember { mutableStateOf(0) }
+
+val animatableCardState = rememberAnimatableCardState(
+    initialSize = DpSize(width = 340.dp, height = 180.dp),
+    targetSize = DpSize(width = Dp.Infinity, height = 340.dp),
+    initialShape = RoundedCornerShape(32.dp),
+    targetShape = RoundedCornerShape(0.dp, 0.dp, 32.dp, 32.dp),
+    toTargetShapeAnimationSpec = tween(750),
+    initialPadding = PaddingValues(horizontal = 8.dp),
+    targetPadding = PaddingValues(0.dp),
+    onAnimation = {
+        when(it) {
+            AnimationState.INITIAL -> {}
+            AnimationState.INITIAL_TO_TARGET -> {
+                scope.launch {
+                    delay(500)
+                    lazyListState.animateScrollToItem(selectedIndex)
+                }
+            }
+            AnimationState.TARGET -> {}
+            AnimationState.TARGET_TO_INITIAL -> {}
+        }
+    }
+)
+val animatableBoxState = rememberAnimatableBoxState(
+    initialAlignment = Alignment.Center,
+    targetAlignment = Alignment.TopCenter
+)
+val animatableTextState = rememberAnimatableTextState(
+    initialFontSize = 0.sp,
+    targetFontSize = 12.sp,
+    initialOffset = DpOffset(x = 0.dp, y = 300.dp),
+    targetOffset = DpOffset(x = 0.dp, y = 0.dp),
+    toTargetAnimationSpec = tween(250)
+)
+val animatableSpacerState = rememberAnimatableSpacerState(
+    initialSize = DpSize(width = 0.dp, height = 0.dp),
+    targetSize = DpSize(width = 0.dp, height = 16.dp)
+)
+
+val infoCards by remember { mutableStateOf(InfoCard.infoCards) }
+
+val cardStates = mutableListOf<AnimatableState>()
+val boxStates = mutableListOf<AnimatableState>()
+val textStates = mutableListOf<AnimatableState>()
+val spacerStates = mutableListOf<AnimatableState>()
+
+infoCards.indices.forEach { index ->
+    cardStates.add(
+        animatableCardState.copy(
+            index = index
+        )
+    )
+    boxStates.add(
+        animatableBoxState.copy(
+            index = index
+        )
+    )
+    textStates.add(
+        animatableTextState.copy(
+            index = index
+        )
+    )
+    if(index == 0) {
+        spacerStates.add(
+            animatableSpacerState.copy(
+                index = index,
+                initialSize = DpSize(width = 0.dp, height = 300.dp),
+                targetSize = DpSize(width = 0.dp, height = 0.dp)
+            )
+        )
+    }
+    spacerStates.add(
+        animatableSpacerState.copy(
+            index = index + 1,
+        )
+    )
+}
+
+val sharedAnimatableState = rememberSharedAnimatableState(
+    animatableStates = cardStates + boxStates + textStates + spacerStates
+)
+```
+</details>
+<details closed>
+<summary>Components</summary>
+<br>
+
+        
+```kotlin
+Column(
+    modifier = Modifier.fillMaxSize(),
+) {
+    AnimatableSpacer(
+        state = sharedAnimatableState
+    )
+    LazyRow(
+        verticalAlignment = Alignment.CenterVertically,
+        state = lazyListState,
+        flingBehavior = snapperFlingBehavior
+    ) {
+        items(infoCards.size) { index ->
+            AnimatableCard(
+                onClick = {
+                    selectedIndex = index
+                    sharedAnimatableState.animate()
+                },
+                state = sharedAnimatableState,
+                stateIndex = index,
+                colors = CardDefaults.cardColors(
+                    containerColor = Color(0xFFE9E7FE)
+                )
+            ) {
+                Row(
+                    modifier = Modifier.fillMaxSize(),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.SpaceBetween
+                ) {
+                    AnimatableBox(
+                        modifier = Modifier
+                            .weight(1f)
+                            .fillMaxHeight()
+                            .padding(16.dp),
+                        stateIndex = index,
+                        state = sharedAnimatableState
+                    ) {
+                        LazyColumn(horizontalAlignment = Alignment.CenterHorizontally) {
+                            item {
+                                Text(
+                                    text = infoCards[index].title,
+                                    fontSize = 22.sp,
+                                    fontWeight = FontWeight.Bold
+                                )
+                                Text(
+                                    modifier = Modifier.align(Alignment.CenterStart),
+                                    text = "MGS 1",
+                                    fontSize = 12.sp,
+                                    color = Color.Gray
+                                )
+                                AnimatableSpacer(
+                                    stateIndex = index + 1,
+                                    state = sharedAnimatableState
+                                )
+                                AnimatableText(
+                                    text = infoCards[index].info,
+                                    stateIndex = index,
+                                    state = sharedAnimatableState,
+                                    fontWeight = FontWeight.Bold
+                                )
+                            }
+                        }
+                    }
+                    AsyncImage(
+                        modifier = Modifier
+                            .weight(1f)
+                            .padding(8.dp)
+                            .clip(RoundedCornerShape(32.dp)),
+                        model = infoCards[index].imageUrl,
+                        contentDescription = null,
+                        contentScale = ContentScale.Crop
+                    )
+                }
+            }
+        }
+    }
+}
+```
+</details>
+<details closed>
+<summary>Data</summary>
+<br>
+
+        
+```kotlin
+data class InfoCard(
+    val imageUrl: String,
+    val title: String,
+    val info: String
+){
+    companion object {
+        val infoCards = listOf(
             //
         )
     }
