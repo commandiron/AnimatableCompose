@@ -9,6 +9,7 @@ What you can create from Material 3 components right now;
 * Box Animation
 * Card Animation
 * Icon Animation
+* Lazy Row Animation
 * and combinations
 
 ## How it looks
