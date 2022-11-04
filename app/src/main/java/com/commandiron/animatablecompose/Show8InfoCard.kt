@@ -6,6 +6,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -57,10 +58,6 @@ fun Show8InfoCard() {
         targetAlignment = Alignment.TopCenter
     )
     val animatableTextState = rememberAnimatableTextState(
-        initialFontSize = 16.sp,
-        targetFontSize = 24.sp
-    )
-    val animatableTextState2 = rememberAnimatableTextState(
         initialFontSize = 0.sp,
         targetFontSize = 12.sp
     )
@@ -71,7 +68,6 @@ fun Show8InfoCard() {
     val cardStates = mutableListOf<AnimatableState>()
     val boxStates = mutableListOf<AnimatableState>()
     val textStates = mutableListOf<AnimatableState>()
-    val textStates2 = mutableListOf<AnimatableState>()
 
     infoCards.indices.forEach { index ->
         cardStates.add(
@@ -108,21 +104,11 @@ fun Show8InfoCard() {
 
     }
 
-    infoCards.indices.forEach { index ->
-        textStates2.add(
-            animatableTextState2.copy(
-                index = infoCards.size + index,
-                toTargetAnimationSpec = tween(250)
-            )
-        )
-    }
-
     val sharedAnimatableState = rememberSharedAnimatableState(
         animatableStates = listOf(animatableLazyRowState)
                 + cardStates
                 + boxStates
                 + textStates
-                + textStates2
     )
 
     Box(
@@ -162,15 +148,14 @@ fun Show8InfoCard() {
                         ) {
                             LazyColumn(horizontalAlignment = Alignment.CenterHorizontally) {
                                 item {
-                                    AnimatableText(
+                                    Text(
                                         text = infoCards[index].title,
-                                        stateIndex = index,
-                                        state = sharedAnimatableState,
+                                        fontSize = 22.sp,
                                         fontWeight = FontWeight.Bold
                                     )
                                     AnimatableText(
                                         text = infoCards[index].info,
-                                        stateIndex = infoCards.size + index,
+                                        stateIndex = index,
                                         state = sharedAnimatableState,
                                         fontWeight = FontWeight.Bold
                                     )
