@@ -194,21 +194,6 @@ fun Show8InfoCard() {
                 }
             }
         }
-        LazyColumn(
-            contentPadding = PaddingValues(16.dp),
-            verticalArrangement = Arrangement.spacedBy(16.dp)
-        ) {
-            items(10) {
-                Card(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(100.dp),
-                    colors = CardDefaults.cardColors(
-                        containerColor = Color(0xFFFFE2DB)
-                    )
-                ) {}
-            }
-        }
     }
 }
 
