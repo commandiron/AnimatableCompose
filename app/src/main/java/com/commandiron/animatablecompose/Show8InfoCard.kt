@@ -15,10 +15,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.*
 import coil.compose.AsyncImage
-import com.commandiron.animatable_compose.AnimatableBox
-import com.commandiron.animatable_compose.AnimatableCard
-import com.commandiron.animatable_compose.AnimatableLazyRow
-import com.commandiron.animatable_compose.AnimatableText
+import com.commandiron.animatable_compose.*
 import com.commandiron.animatable_compose.state.*
 import dev.chrisbanes.snapper.ExperimentalSnapperApi
 import dev.chrisbanes.snapper.SnapOffsets
@@ -63,6 +60,10 @@ fun Show8InfoCard() {
         initialOffset = DpOffset(x = 0.dp, y = 300.dp),
         targetOffset = DpOffset(x = 0.dp, y = 0.dp)
     )
+    val animatableSpacerState = rememberAnimatableSpacerState(
+        initialSize = DpSize(width = 0.dp, height = 0.dp),
+        targetSize = DpSize(width = 0.dp, height = 16.dp),
+    )
 
 
     val infoCards by remember { mutableStateOf(InfoCard.infoCards) }
@@ -70,6 +71,7 @@ fun Show8InfoCard() {
     val cardStates = mutableListOf<AnimatableState>()
     val boxStates = mutableListOf<AnimatableState>()
     val textStates = mutableListOf<AnimatableState>()
+    val spacerStates = mutableListOf<AnimatableState>()
 
     infoCards.indices.forEach { index ->
         cardStates.add(
@@ -103,6 +105,13 @@ fun Show8InfoCard() {
                 toTargetAnimationSpec = tween(250)
             )
         )
+        spacerStates.add(
+            animatableSpacerState.copy(
+                index = index,
+                toTargetAnimationSpec = tween(250),
+                toInitialAnimationSpec = tween(250)
+            )
+        )
 
     }
 
@@ -111,6 +120,7 @@ fun Show8InfoCard() {
                 + cardStates
                 + boxStates
                 + textStates
+                + spacerStates
     )
 
     Box(
@@ -154,6 +164,10 @@ fun Show8InfoCard() {
                                         text = infoCards[index].title,
                                         fontSize = 22.sp,
                                         fontWeight = FontWeight.Bold
+                                    )
+                                    AnimatableSpacer(
+                                        stateIndex = index,
+                                        state = sharedAnimatableState
                                     )
                                     AnimatableText(
                                         text = infoCards[index].info,
