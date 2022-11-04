@@ -69,7 +69,8 @@ fun Show8InfoCard() {
         targetFontSize = 12.sp,
         initialOffset = DpOffset(x = 0.dp, y = 300.dp),
         targetOffset = DpOffset(x = 0.dp, y = 0.dp),
-        toTargetAnimationSpec = tween(250)
+        toTargetAnimationSpec = tween(250),
+        toInitialAnimationSpec = tween(250)
     )
     val animatableSpacerState = rememberAnimatableSpacerState(
         initialSize = DpSize(width = 0.dp, height = 0.dp),
@@ -111,6 +112,8 @@ fun Show8InfoCard() {
         spacerStates.add(
             animatableSpacerState.copy(
                 index = index + 1,
+                toTargetSizeAnimationSpec = tween(250),
+                toInitialSizeAnimationSpec = tween(250)
             )
         )
     }
