@@ -33,7 +33,7 @@ fun Show8InfoCard() {
     val lazyListState = rememberLazyListState()
     val snapperFlingBehavior = rememberSnapperFlingBehavior(
         lazyListState = lazyListState,
-        snapOffsetForItem = SnapOffsets.Start,
+        snapOffsetForItem = SnapOffsets.Start
     )
     val scope = rememberCoroutineScope()
     var selectedIndex by remember { mutableStateOf(0) }
