@@ -18,10 +18,6 @@ What you can create from Material 3 components right now;
 |------------|-----------|
 |<img src="https://user-images.githubusercontent.com/50905347/197984728-7bfe5536-b78e-41e1-91cb-5bc167e51850.gif" width="250" height="530">|<img src="https://user-images.githubusercontent.com/50905347/198032696-f78f2b66-964c-494d-9614-14107ecde244.gif" width="250" height="530">|
 
-|Insta Story|Info Card|
-|-----------|---------|
-|<img src="https://user-images.githubusercontent.com/50905347/199718888-823d86d1-68c9-45cd-9844-590480efe71c.gif" width="250" height="530">|<img src="https://user-images.githubusercontent.com/50905347/199983119-bb8bcdbf-81da-4352-8d2c-74571577654a.gif" width="250" height="530">|
-
 ### Phone Number
 
 <details closed>
@@ -206,6 +202,10 @@ Box(
 }
 ```
 </details>
+
+|Insta Story|Info Card|
+|-----------|---------|
+|<img src="https://user-images.githubusercontent.com/50905347/199718888-823d86d1-68c9-45cd-9844-590480efe71c.gif" width="250" height="530">|<img src="https://user-images.githubusercontent.com/50905347/199983119-bb8bcdbf-81da-4352-8d2c-74571577654a.gif" width="250" height="530">|
 
 ### Insta Story
 
