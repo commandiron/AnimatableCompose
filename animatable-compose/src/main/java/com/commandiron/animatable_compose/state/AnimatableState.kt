@@ -907,7 +907,7 @@ enum class AnimationState {
 }
 
 enum class AnimatableStateTag {
-    BOX, TEXT, CARD, ICON,
+    BOX, TEXT, CARD, ICON, LAZY_ROW
 }
 
 @Composable
@@ -1130,6 +1130,44 @@ fun rememberAnimatableIconState(
             toTargetAlphaAnimationSpec = toTargetAlphaAnimationSpec,
             toInitialAlphaAnimationSpec = toInitialAlphaAnimationSpec,
             onAlphaAnimation = onAlphaAnimation,
+            initialOffset = initialOffset,
+            targetOffset = targetOffset,
+            toTargetOffsetAnimationSpec = toTargetOffsetAnimationSpec,
+            toInitialOffsetAnimationSpec = toInitialOffsetAnimationSpec,
+            onOffsetAnimation = onOffsetAnimation,
+            toTargetAnimationSpec = toTargetAnimationSpec,
+            toInitialAnimationSpec = toInitialAnimationSpec,
+            onAnimation = onAnimation
+        )
+    }
+}
+
+@Composable
+fun rememberAnimatableLazyRowState(
+    index: Int = 0,
+    initialSize: DpSize? = null,
+    targetSize: DpSize? = null,
+    toTargetSizeAnimationSpec: AnimationSpec<Size>? = null,
+    toInitialSizeAnimationSpec: AnimationSpec<Size>? = null,
+    onSizeAnimation: (AnimationState) -> Unit = {},
+    initialOffset: DpOffset? = null,
+    targetOffset: DpOffset? = null,
+    toTargetOffsetAnimationSpec: AnimationSpec<Size>? = null,
+    toInitialOffsetAnimationSpec: AnimationSpec<Size>? = null,
+    onOffsetAnimation: (AnimationState) -> Unit = {},
+    toTargetAnimationSpec: AnimationSpec<Float>? = tween(500),
+    toInitialAnimationSpec: AnimationSpec<Float>? = tween(500),
+    onAnimation: (AnimationState) -> Unit = {}
+): AnimatableState {
+    return remember {
+        AnimatableState(
+            animatableStateTag = AnimatableStateTag.LAZY_ROW,
+            index = index,
+            initialSize = initialSize,
+            targetSize = targetSize,
+            toTargetSizeAnimationSpec = toTargetSizeAnimationSpec,
+            toInitialSizeAnimationSpec = toInitialSizeAnimationSpec,
+            onSizeAnimation = onSizeAnimation,
             initialOffset = initialOffset,
             targetOffset = targetOffset,
             toTargetOffsetAnimationSpec = toTargetOffsetAnimationSpec,

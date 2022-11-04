@@ -8,6 +8,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.DpOffset
+import androidx.compose.ui.unit.DpSize
 import com.commandiron.animatable_compose.state.AnimatableState
 import com.commandiron.animatable_compose.state.AnimatableStateTag
 import com.commandiron.animatable_compose.state.SharedAnimatableState
@@ -15,7 +16,7 @@ import com.commandiron.animatable_compose.state.SharedAnimatableState
 @Composable
 fun AnimatableBox(
     modifier: Modifier = Modifier,
-    fixedContentAlignment: Alignment = Alignment.TopStart,
+    fixedContentAlignment: Alignment? = null,
     propagateMinConstraints: Boolean = false,
     state: SharedAnimatableState,
     stateIndex: Int = 0,
@@ -25,21 +26,25 @@ fun AnimatableBox(
     fixedOffset: DpOffset = DpOffset.Unspecified,
     content: @Composable BoxScope.() -> Unit,
 ) {
-    val stateIn = state.getState(AnimatableStateTag.CARD, stateIndex) ?: throw (
+    val stateIn = state.getState(AnimatableStateTag.BOX, stateIndex) ?: throw (
         IllegalArgumentException("no animatableState has this index: $stateIndex")
     )
     Box(
         modifier = Modifier
             .width(
-                when(fixedWidth) {
-                    Dp.Unspecified -> stateIn.animatedSize.width
+                when (fixedWidth) {
+                    Dp.Unspecified -> if (stateIn.animatedSize == DpSize.Unspecified) {
+                        Dp.Unspecified
+                    } else stateIn.animatedSize.width
                     Dp.Infinity -> stateIn.screenWidth
                     else -> fixedWidth
                 }
             )
             .height(
-                when(fixedHeight) {
-                    Dp.Unspecified -> stateIn.animatedSize.height
+                when (fixedHeight) {
+                    Dp.Unspecified -> if (stateIn.animatedSize == DpSize.Unspecified) {
+                        Dp.Unspecified
+                    } else stateIn.animatedSize.height
                     Dp.Infinity -> stateIn.screenHeight
                     else -> fixedHeight
                 }
