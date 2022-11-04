@@ -21,6 +21,7 @@ import androidx.compose.ui.unit.TextUnit
 import com.commandiron.animatable_compose.state.AnimatableState
 import com.commandiron.animatable_compose.state.AnimatableStateTag
 import com.commandiron.animatable_compose.state.SharedAnimatableState
+import org.w3c.dom.Text
 
 @Composable
 fun AnimatableText(
@@ -41,6 +42,7 @@ fun AnimatableText(
     style: TextStyle = LocalTextStyle.current,
     state: SharedAnimatableState,
     stateIndex: Int = 0,
+    fixedFontSize: TextUnit? = null,
     @FloatRange(from = 0.0, to = 1.0)
     fixedAlpha: Float? = null,
     fixedOffset: DpOffset = DpOffset.Unspecified,
@@ -64,7 +66,7 @@ fun AnimatableText(
             .alpha(fixedAlpha ?: stateIn.animatedAlpha)
             .then(modifier),
         color = color,
-        fontSize = stateIn.animatedFontSize,
+        fontSize = fixedFontSize ?: stateIn.animatedFontSize,
         fontStyle = fontStyle,
         fontWeight = fontWeight,
         fontFamily = fontFamily,
@@ -98,6 +100,7 @@ fun AnimatableText(
     onTextLayout: (TextLayoutResult) -> Unit = {},
     style: TextStyle = LocalTextStyle.current,
     state: AnimatableState,
+    fixedFontSize: TextUnit? = null,
     @FloatRange(from = 0.0, to = 1.0)
     fixedAlpha: Float? = null,
     fixedOffset: DpOffset = DpOffset.Unspecified,
@@ -118,7 +121,7 @@ fun AnimatableText(
             .alpha(fixedAlpha ?: state.animatedAlpha)
             .then(modifier),
         color = color,
-        fontSize = state.animatedFontSize,
+        fontSize = fixedFontSize ?: state.animatedFontSize,
         fontStyle = fontStyle,
         fontWeight = fontWeight,
         fontFamily = fontFamily,

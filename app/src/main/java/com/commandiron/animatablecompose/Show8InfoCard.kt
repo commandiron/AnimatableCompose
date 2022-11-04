@@ -59,7 +59,9 @@ fun Show8InfoCard() {
     )
     val animatableTextState = rememberAnimatableTextState(
         initialFontSize = 0.sp,
-        targetFontSize = 12.sp
+        targetFontSize = 12.sp,
+        initialOffset = DpOffset(x = 0.dp, y = 300.dp),
+        targetOffset = DpOffset(x = 0.dp, y = 0.dp)
     )
 
 
