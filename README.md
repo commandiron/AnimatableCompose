@@ -732,7 +732,7 @@ dependencyResolutionManagement {
 3. Add dependencies
 ```groovy
 dependencies {
-    implementation 'com.github.commandiron:AnimatableCompose:1.0.4'
+    implementation 'com.github.commandiron:AnimatableCompose:1.0.5'
 }
 ```
 
